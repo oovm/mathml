@@ -1,3 +1,3 @@
-mod errors;
+mod ast;
 
-pub use errors::{Error, Result};
+pub use crate::ast::{nodes::MathML, replace, latex_to_mathml, convert_html};
