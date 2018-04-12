@@ -1,0 +1,22 @@
+[package]
+name = "mathml-latex"
+version = "0.0.0"
+authors = ["Aster <192607617@qq.com>"]
+description = "..."
+repository = "https://github.com/oovm/sub_projects"
+documentation = "https://docs.rs/sub_projects"
+readme = "Readme.md"
+license = "MPL-2.0"
+edition = "2021"
+
+[dependencies]
+pex = "0.0.6"
+
+[dependencies.mathml-core]
+#version = "0.0.0"
+path = "../mathml-core"
+
+[dev-dependencies]
+
+[features]
+default = []

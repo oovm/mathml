@@ -1,42 +1,17 @@
-use std::fmt;
-use super::attribute::{Variant, Accent, LineThickness, ColumnAlign};
-use crate::ast::DisplayStyle;
+use super::*;
 
-/// AST node
-#[derive(Debug, Clone, PartialEq)]
-pub enum MathML {
-    Number(String),
-    Letter(char, Variant),
-    Operator(char),
-    Function(String, Option<Box<MathML>>),
-    Space(f32),
-    Subscript(Box<MathML>, Box<MathML>),
-    Superscript(Box<MathML>, Box<MathML>),
-    SubSup { target: Box<MathML>, sub: Box<MathML>, sup: Box<MathML> },
-    OverOp(char, Accent, Box<MathML>),
-    UnderOp(char, Accent, Box<MathML>),
-    Overset { over: Box<MathML>, target: Box<MathML> },
-    Underset { under: Box<MathML>, target: Box<MathML> },
-    Under(Box<MathML>, Box<MathML>),
-    UnderOver { target: Box<MathML>, under: Box<MathML>, over: Box<MathML> },
-    Sqrt(Option<Box<MathML>>, Box<MathML>),
-    Frac(Box<MathML>, Box<MathML>, LineThickness),
-    Row(Vec<MathML>),
-    Fenced { open: &'static str, close: &'static str, content: Box<MathML> },
-    StrechedOp(bool, String),
-    OtherOperator(&'static str),
-    SizedParen { size: &'static str, paren: &'static str },
-    Text(String),
-    Matrix(Vec<MathML>, ColumnAlign),
-    Ampersand,
-    NewLine,
-    Slashed(Box<MathML>),
-    Style(Option<DisplayStyle>, Box<MathML>),
-    Undefined(String),
+
+impl Display for DisplayStyle {
+    fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
+        match self {
+            DisplayStyle::Block => write!(f, "block"),
+            DisplayStyle::Inline => write!(f, "inline"),
+        }
+    }
 }
 
-impl fmt::Display for MathML {
-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+impl Display for MathML {
+    fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
         match self {
             MathML::Number(number) => write!(f, "<mn>{}</mn>", number),
             MathML::Letter(letter, var) => match var {
@@ -109,29 +84,6 @@ impl fmt::Display for MathML {
                 None => write!(f, "<mstyle>{}</mstyle>", content),
             },
             node => write!(f, "<mtext>[PARSE ERROR: {:?}]</mtext>", node),
-        }
-    }
-}
-
-#[cfg(test)]
-mod tests {
-    use super::super::attribute::Variant;
-    use super::MathML;
-
-    #[test]
-    fn node_display() {
-        let problems = vec![
-            (MathML::Number("3.14".to_owned()), "<mn>3.14</mn>"),
-            (MathML::Letter('x', Variant::Italic), "<mi>x</mi>"),
-            (MathML::Letter('α', Variant::Italic), "<mi>α</mi>"),
-            (MathML::Letter('あ', Variant::Normal), r#"<mi mathvariant="normal">あ</mi>"#),
-            (
-                MathML::Row(vec![MathML::Operator('+'), MathML::Operator('-')]),
-                r"<mrow><mo>+</mo><mo>-</mo></mrow>"
-            ),
-        ];
-        for (problem, answer) in problems.iter() {
-            assert_eq!(&format!("{}", problem), answer);
         }
     }
 }

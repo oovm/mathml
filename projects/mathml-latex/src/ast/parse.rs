@@ -1,8 +1,8 @@
+use crate::MathML;
 use super::{
     attribute::{Variant, Accent, LineThickness, ColumnAlign},
     token::Token,
     lexer::Lexer,
-    nodes::MathML,
     error::LatexError,
 };
 

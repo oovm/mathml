@@ -1,4 +1,4 @@
-use std::fmt;
+use super::*;
 
 /// mi mathvariant attribute
 #[derive(Debug, Clone, Copy, PartialEq)]
@@ -19,8 +19,9 @@ pub enum Variant {
     Monospace,
 }
 
-impl fmt::Display for Variant {
-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+#[rustfmt::skip]
+impl Display for Variant {
+    fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
         match self {
             Variant::Normal              => write!(f, "normal"),
             Variant::Italic              => write!(f, "italic"),
@@ -46,8 +47,8 @@ pub enum Accent {
     False,
 }
 
-impl fmt::Display for Accent {
-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+impl Display for Accent {
+    fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
         match self {
             Accent::True => write!(f, "true"),
             Accent::False => write!(f, "false"),
@@ -62,12 +63,12 @@ pub enum LineThickness {
     Thick,
     Length(u8),
 }
-impl fmt::Display for LineThickness {
-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+impl Display for LineThickness {
+    fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
         match self {
-            LineThickness::Thin      => write!(f, r#" linethickness="thin""#),
-            LineThickness::Medium    => write!(f, r#""#),
-            LineThickness::Thick     => write!(f, r#" linethickness="medium""#),
+            LineThickness::Thin => write!(f, r#" linethickness="thin""#),
+            LineThickness::Medium => write!(f, r#""#),
+            LineThickness::Thick => write!(f, r#" linethickness="medium""#),
             LineThickness::Length(l) => write!(f, r#" linethickness="{}""#, l),
         }
     }
@@ -80,8 +81,8 @@ pub enum ColumnAlign {
     Right,
 }
 
-impl fmt::Display for ColumnAlign {
-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+impl Display for ColumnAlign {
+    fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
         match self {
             ColumnAlign::Center => write!(f, r#""#),
             ColumnAlign::Left => write!(f, r#" columnalign=left"#),
