@@ -1,6 +1,5 @@
 use super::*;
 
-
 impl Display for DisplayStyle {
     fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
         match self {
@@ -14,13 +13,15 @@ impl Display for MathML {
     fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
         match self {
             MathML::Number(number) => write!(f, "<mn>{}</mn>", number),
-            MathML::Letter(letter, var) => match var {
-                Variant::Italic => write!(f, "<mi>{}</mi>", letter),
-                var => write!(f, r#"<mi mathvariant="{}">{}</mi>"#, var, letter),
-            },
-            MathML::Operator(op) => if op == &'∂' {
-                write!(f, r#"<mo mathvariant="italic">∂</mo>"#)
-            } else { write!(f, r#"<mo>{}</mo>"#, op) },
+            MathML::Letter(v) => Display::fmt(v, f),
+            MathML::Operator(op) => {
+                if op == &'∂' {
+                    write!(f, r#"<mo mathvariant="italic">∂</mo>"#)
+                }
+                else {
+                    write!(f, r#"<mo>{}</mo>"#, op)
+                }
+            }
             MathML::Function(fun, arg) => match arg {
                 Some(arg) => write!(f, "<mi>{}</mi><mo>&#x2061;</mo>{}", fun, arg),
                 None => write!(f, "<mi>{}</mi>", fun),
@@ -40,15 +41,19 @@ impl Display for MathML {
                 None => write!(f, "<msqrt>{}</msqrt>", content),
             },
             MathML::Frac(num, denom, lt) => write!(f, "<mfrac{}>{}{}</mfrac>", lt, num, denom),
-            MathML::Row(vec) => write!(f, "<mrow>{}</mrow>",
-                                       vec.iter().map(|node| format!("{}", node)).collect::<String>()
-            ),
+            MathML::Row(vec) => write!(f, "<mrow>{}</mrow>", vec.iter().map(|node| format!("{}", node)).collect::<String>()),
             MathML::Fenced { open, close, content } => {
-                write!(f, r#"<mrow><mo stretchy="true" form="prefix">{}</mo>{}<mo stretchy="true" form="postfix">{}</mo></mrow>"#, open, content, close)
+                write!(
+                    f,
+                    r#"<mrow><mo stretchy="true" form="prefix">{}</mo>{}<mo stretchy="true" form="postfix">{}</mo></mrow>"#,
+                    open, content, close
+                )
             }
             MathML::StrechedOp(stretchy, op) => write!(f, r#"<mo stretchy="{}">{}</mo>"#, stretchy, op),
             MathML::OtherOperator(op) => write!(f, "<mo>{}</mo>", op),
-            MathML::SizedParen { size, paren } => write!(f, r#"<mrow><mo maxsize="{0}" minsize="{0}">{1}</mro></mrow>"#, size, paren),
+            MathML::SizedParen { size, paren } => {
+                write!(f, r#"<mrow><mo maxsize="{0}" minsize="{0}">{1}</mro></mrow>"#, size, paren)
+            }
             MathML::Slashed(node) => match &**node {
                 MathML::Letter(x, var) => write!(f, "<mi mathvariant=\"{}\">{}&#x0338;</mi>", var, x),
                 MathML::Operator(x) => write!(f, "<mo>{}&#x0338;</mo>", x),
@@ -70,7 +75,9 @@ impl Display for MathML {
                                 mathml.push_str("<mtd>")
                             }
                         }
-                        node => { mathml = format!("{}{}", mathml, node); }
+                        node => {
+                            mathml = format!("{}{}", mathml, node);
+                        }
                     }
                 }
                 mathml.push_str("</mtd></mtr></mtable>");

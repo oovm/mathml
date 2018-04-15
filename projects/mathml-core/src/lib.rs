@@ -1,3 +1,4 @@
 mod ast;
+mod variants;
 
-pub use crate::ast::{attribute::Variant, MathML};
+pub use crate::ast::{attribute::MathVariant, MathML};

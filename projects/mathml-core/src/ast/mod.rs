@@ -1,15 +1,14 @@
 pub mod attribute;
 mod display;
 
-use std::{path::Path, io::Write};
-use crate::ast::attribute::{Accent, ColumnAlign, LineThickness, Variant};
+use crate::ast::attribute::{Accent, ColumnAlign, LineThickness, MathVariant};
 use std::fmt::{Display, Formatter};
 
 /// AST node
 #[derive(Debug, Clone, PartialEq)]
 pub enum MathML {
     Number(String),
-    Letter(char, Variant),
+    Letter(MathLetter),
     Operator(char),
     Function(String, Option<Box<MathML>>),
     Space(f32),
