@@ -1,4 +1,7 @@
 mod ast;
-mod variants;
+mod identifiers;
 
-pub use crate::ast::{attribute::MathVariant, MathML};
+pub use crate::{
+    ast::MathML,
+    identifiers::{MathIdentifier, MathVariant},
+};

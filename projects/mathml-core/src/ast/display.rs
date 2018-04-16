@@ -55,7 +55,9 @@ impl Display for MathML {
                 write!(f, r#"<mrow><mo maxsize="{0}" minsize="{0}">{1}</mro></mrow>"#, size, paren)
             }
             MathML::Slashed(node) => match &**node {
-                MathML::Letter(x, var) => write!(f, "<mi mathvariant=\"{}\">{}&#x0338;</mi>", var, x),
+                MathML::Letter(MathIdentifier { letter, variant }) => {
+                    write!(f, "<mi mathvariant=\"{}\">{}&#x0338;</mi>", variant, letter)
+                }
                 MathML::Operator(x) => write!(f, "<mo>{}&#x0338;</mo>", x),
                 n => write!(f, "{}", n),
             },

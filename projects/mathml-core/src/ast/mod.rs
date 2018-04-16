@@ -1,14 +1,18 @@
 pub mod attribute;
 mod display;
 
-use crate::ast::attribute::{Accent, ColumnAlign, LineThickness, MathVariant};
+use crate::{
+    ast::attribute::{Accent, ColumnAlign, LineThickness},
+    MathIdentifier,
+};
 use std::fmt::{Display, Formatter};
 
 /// AST node
 #[derive(Debug, Clone, PartialEq)]
 pub enum MathML {
     Number(String),
-    Letter(MathLetter),
+    Letter(MathIdentifier),
+    Text(String),
     Operator(char),
     Function(String, Option<Box<MathML>>),
     Space(f32),
@@ -28,7 +32,6 @@ pub enum MathML {
     StrechedOp(bool, String),
     OtherOperator(&'static str),
     SizedParen { size: &'static str, paren: &'static str },
-    Text(String),
     Matrix(Vec<MathML>, ColumnAlign),
     Ampersand,
     NewLine,
