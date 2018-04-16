@@ -10,6 +10,7 @@ license = "MPL-2.0"
 edition = "2021"
 
 [dependencies]
+html-escape = "0.2.13"
 
 [dev-dependencies]
 

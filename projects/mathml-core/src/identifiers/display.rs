@@ -2,9 +2,13 @@ use super::*;
 
 impl Display for MathIdentifier {
     fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
-        match self.variant {
-            MathVariant::Italic => write!(f, "<mi>{}</mi>", self.letter),
-            var => write!(f, r#"<mi mathvariant="{}">{}</mi>"#, var, self.letter),
+        // maybe short form
+        if !f.alternate() && self.variant == MathVariant::Italic {
+            html_escape::encode_text("a > b && a < c");
+            write!(f, "<mi>{}</mi>", self.identifier)
+        }
+        else {
+            write!(f, r#"<mi mathvariant="{}">{}</mi>"#, self.variant, self.identifier)
         }
     }
 }

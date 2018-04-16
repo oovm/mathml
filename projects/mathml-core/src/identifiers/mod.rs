@@ -2,10 +2,10 @@ use std::fmt::{Display, Formatter};
 mod display;
 
 /// math identifier, `<mi>`
-#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct MathIdentifier {
-    pub letter: char,
-    pub variant: MathVariant,
+    identifier: String,
+    variant: MathVariant,
 }
 
 /// mi mathvariant attribute
@@ -28,10 +28,28 @@ pub enum MathVariant {
 }
 
 impl MathIdentifier {
-    pub fn normal(letter: char) -> Self {
-        Self { letter, variant: MathVariant::Normal }
+    pub fn new<S>(text: S, variant: MathVariant) -> Self
+    where
+        S: ToString,
+    {
+        Self { identifier: text.to_string(), variant }
     }
-    pub fn italic(letter: char) -> Self {
-        Self { letter, variant: MathVariant::Italic }
+    pub fn normal<S>(text: S) -> Self
+    where
+        S: ToString,
+    {
+        Self { identifier: text.to_string(), variant: MathVariant::Normal }
+    }
+    pub fn italic<S>(text: S) -> Self
+    where
+        S: ToString,
+    {
+        Self { identifier: text.to_string(), variant: MathVariant::Italic }
+    }
+    pub fn get_variant(&self) -> MathVariant {
+        self.variant
+    }
+    pub fn get_identifier(&self) -> &str {
+        &self.identifier
     }
 }
