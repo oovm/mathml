@@ -6,4 +6,5 @@ mod operators;
 pub use crate::{
     ast::MathML,
     identifiers::{MathIdentifier, MathVariant},
+    numbers::MathNumber,
 };

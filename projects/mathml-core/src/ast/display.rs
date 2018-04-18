@@ -12,7 +12,7 @@ impl Display for DisplayStyle {
 impl Display for MathML {
     fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
         match self {
-            MathML::Number(number) => write!(f, "<mn>{}</mn>", number),
+            MathML::Number(v) => Display::fmt(v, f),
             MathML::Letter(v) => Display::fmt(v, f),
             MathML::Operator(op) => {
                 if op == &'∂' {
@@ -55,8 +55,9 @@ impl Display for MathML {
                 write!(f, r#"<mrow><mo maxsize="{0}" minsize="{0}">{1}</mro></mrow>"#, size, paren)
             }
             MathML::Slashed(node) => match &**node {
-                MathML::Letter(MathIdentifier { letter, variant }) => {
-                    write!(f, "<mi mathvariant=\"{}\">{}&#x0338;</mi>", variant, letter)
+                // force set math-variant here
+                MathML::Letter(mi) => {
+                    write!(f, "{:}", mi)
                 }
                 MathML::Operator(x) => write!(f, "<mo>{}&#x0338;</mo>", x),
                 n => write!(f, "{}", n),

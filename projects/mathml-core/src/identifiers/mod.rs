@@ -1,5 +1,6 @@
 use std::fmt::{Display, Formatter};
 mod display;
+use html_escape::encode_text;
 
 /// math identifier, `<mi>`
 #[derive(Debug, Clone, PartialEq, Eq)]
