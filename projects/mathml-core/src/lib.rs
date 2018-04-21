@@ -7,4 +7,5 @@ pub use crate::{
     ast::MathML,
     identifiers::{MathIdentifier, MathVariant},
     numbers::MathNumber,
+    operators::MathOperator,
 };

@@ -10,11 +10,14 @@ license = "MPL-2.0"
 edition = "2021"
 
 [dependencies]
-pex = "0.0.6"
 tracing = "0.1.37"
 
+[dependencies.pex]
+version = "0.0.6"
+path = "C:\\Users\\Dell\\CLionProjects\\pex\\projects\\pex-core"
+
 [dependencies.mathml-core]
-#version = "0.0.0"
+version = "0.0.0"
 path = "../mathml-core"
 
 [dev-dependencies]

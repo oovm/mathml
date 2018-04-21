@@ -4,7 +4,6 @@ use pex::{
     helpers::{make_from_str, whitespace},
     ParseResult, ParseState, StopBecause,
 };
-use std::{collections::BTreeSet, str::FromStr};
 
 mod as_mathml;
 
@@ -19,19 +18,39 @@ pub fn parse_latex(s: &str) -> Result<LaTeXNode, StopBecause> {
 
 pub enum LaTeXNode<'i> {
     Root { children: Vec<LaTeXNode<'i>> },
+    Row { children: Vec<LaTeXNode<'i>> },
     Block(LaTeXBlock<'i>),
     Command { name: &'i str, children: Vec<LaTeXNode<'i>> },
     Text { text: &'i str },
     Number { number: &'i str },
-    Identifier { identifier: &'i str },
+    Operation { operator: &'i str },
+    Letter { identifier: &'i str },
 }
 
 impl<'i> LaTeXNode<'i> {
     pub fn parse(input: ParseState<'i>) -> ParseResult<LaTeXNode<'i>> {
         let (state, node) = input
             .begin_choice()
-            // .or_else(parse_command)
+            .or_else(Self::parse_block)
             // .or_else(parse_text)
+            .or_else(Self::parse_row)
+            .end_choice()?;
+        state.finish(node)
+    }
+    fn parse_block(input: ParseState<'i>) -> ParseResult<LaTeXNode<'i>> {
+        let (state, block) = LaTeXBlock::parse(input)?;
+        state.finish(LaTeXNode::Block(block))
+    }
+    fn parse_row(input: ParseState<'i>) -> ParseResult<LaTeXNode<'i>> {
+        let (state, mut children) = input.skip(whitespace).match_repeats(LaTeXNode::parse_atomic)?;
+        state.finish(LaTeXNode::Row { children })
+    }
+    fn parse_atomic(input: ParseState<'i>) -> ParseResult<LaTeXNode<'i>> {
+        let (state, node) = input
+            .skip(whitespace)
+            .begin_choice()
+            .or_else(Self::parse_letter)
+            .or_else(Self::parse_operator)
             .or_else(Self::parse_number)
             .end_choice()?;
         state.finish(node)
@@ -39,8 +58,22 @@ impl<'i> LaTeXNode<'i> {
     // 1
     // 1.0
     fn parse_number(input: ParseState<'i>) -> ParseResult<LaTeXNode<'i>> {
-        let (state, dec) = input.begin_choice().or_else(parse_decimal).end_choice()?;
+        let (state, dec) = input.begin_choice().or_else(pex::helpers::dec_str).end_choice()?;
         state.finish(LaTeXNode::Number { number: dec })
+    }
+    /// a
+    /// ax
+    pub fn parse_letter(input: ParseState<'i>) -> ParseResult<LaTeXNode<'i>> {
+        let (state, x) = input.match_str_if(|c| c.is_ascii_alphabetic(), "ASCII_ALPHA")?;
+        state.finish(LaTeXNode::Letter { identifier: x })
+    }
+    fn parse_operator(input: ParseState<'i>) -> ParseResult<LaTeXNode<'i>> {
+        let (state, dec) = input
+            .begin_choice()
+            .or_else(|state| state.match_str("+", false))
+            .or_else(|state| state.match_str("-", false))
+            .end_choice()?;
+        state.finish(LaTeXNode::Operation { operator: dec })
     }
 }
 
@@ -69,33 +102,6 @@ impl<'i> LaTeXBlock<'i> {
         let (state, _) = state.skip(whitespace).match_char('}')?;
         state.finish(kind)
     }
-}
-
-fn parse_decimal<'i>(input: ParseState<'i>) -> ParseResult<&'i str> {
-    let mut offset = 0;
-    let mut first_dot = true;
-    for char in input.rest_text.chars() {
-        match char {
-            '.' if first_dot => {
-                first_dot = false;
-                offset += 1;
-            }
-            '0'..='9' => {
-                offset += 1;
-            }
-            _ => {
-                break;
-            }
-        }
-    }
-    input.advance_view(offset)
-}
-
-/// a
-/// ax
-pub fn parse_letter(input: ParseState) -> ParseResult<MathIdentifier> {
-    let (state, x) = input.match_str_if(|c| c.is_ascii_alphabetic(), "ASCII_ALPHA")?;
-    state.finish(MathIdentifier::italic(x))
 }
 
 fn parse_command_head<'i>(input: ParseState<'i>) -> ParseResult<&'i str> {

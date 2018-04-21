@@ -1,5 +1,6 @@
 use std::fmt::{Display, Formatter};
 mod display;
+use crate::MathML;
 use html_escape::encode_text;
 
 /// math identifier, `<mi>`
@@ -26,6 +27,12 @@ pub enum MathVariant {
     SansSerifItalic,
     SansSerifBoldItalic,
     Monospace,
+}
+
+impl From<MathIdentifier> for MathML {
+    fn from(value: MathIdentifier) -> Self {
+        MathML::Letter(Box::new(value))
+    }
 }
 
 impl MathIdentifier {

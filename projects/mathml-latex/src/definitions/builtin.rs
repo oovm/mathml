@@ -10,7 +10,7 @@ impl Default for LaTeXDefinition {
 
 impl LaTeXDefinition {
     fn empty() -> Self {
-        Self { functions: BTreeSet::new() }
+        Self { functions: BTreeSet::new(), operators: Default::default() }
     }
 }
 

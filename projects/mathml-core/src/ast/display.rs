@@ -14,14 +14,7 @@ impl Display for MathML {
         match self {
             MathML::Number(v) => Display::fmt(v, f),
             MathML::Letter(v) => Display::fmt(v, f),
-            MathML::Operator(op) => {
-                if op == &'∂' {
-                    write!(f, r#"<mo mathvariant="italic">∂</mo>"#)
-                }
-                else {
-                    write!(f, r#"<mo>{}</mo>"#, op)
-                }
-            }
+            MathML::Operator(v) => Display::fmt(v, f),
             MathML::Function(fun, arg) => match arg {
                 Some(arg) => write!(f, "<mi>{}</mi><mo>&#x2061;</mo>{}", fun, arg),
                 None => write!(f, "<mi>{}</mi>", fun),
