@@ -1,6 +1,6 @@
 use super::*;
 use crate::LaTeXDefinition;
-use mathml_core::MathOperator;
+use mathml_core::{MathBinary, MathOperator};
 
 impl<'i> LaTeXNode<'i> {
     pub fn as_mathml(&self, context: &LaTeXDefinition) -> MathML {
@@ -23,6 +23,9 @@ impl<'i> LaTeXNode<'i> {
 
             LaTeXNode::Letter { identifier } => MathIdentifier::italic(identifier).into(),
             LaTeXNode::Operation { operator } => MathOperator::new(operator).into(),
+            LaTeXNode::Superscript { lhs, rhs } => {
+                MathBinary::super_script(lhs.as_mathml(context), rhs.as_mathml(context)).into()
+            }
         }
     }
 }

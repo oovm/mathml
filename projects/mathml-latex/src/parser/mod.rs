@@ -24,6 +24,7 @@ pub enum LaTeXNode<'i> {
     Text { text: &'i str },
     Number { number: &'i str },
     Operation { operator: &'i str },
+    Superscript { lhs: Box<LaTeXNode<'i>>, rhs: Box<LaTeXNode<'i>> },
     Letter { identifier: &'i str },
 }
 
