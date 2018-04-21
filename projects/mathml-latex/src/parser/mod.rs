@@ -1,3 +1,4 @@
+use crate::LaTeXBlock;
 use mathml_core::{MathIdentifier, MathML, MathNumber};
 use pex::{
     helpers::{make_from_str, whitespace},
@@ -18,17 +19,11 @@ pub fn parse_latex(s: &str) -> Result<LaTeXNode, StopBecause> {
 
 pub enum LaTeXNode<'i> {
     Root { children: Vec<LaTeXNode<'i>> },
-    Block { kind: &'i str, children: Vec<LaTeXNode<'i>> },
+    Block(LaTeXBlock<'i>),
     Command { name: &'i str, children: Vec<LaTeXNode<'i>> },
     Text { text: &'i str },
     Number { number: &'i str },
     Identifier { identifier: &'i str },
-}
-
-/// `\begin{kind}` ... `\end{kind}`
-pub struct LaTeXBlock<'i> {
-    kind: &'i str,
-    children: Vec<LaTeXNode<'i>>,
 }
 
 impl<'i> LaTeXNode<'i> {
@@ -46,6 +41,33 @@ impl<'i> LaTeXNode<'i> {
     fn parse_number(input: ParseState<'i>) -> ParseResult<LaTeXNode<'i>> {
         let (state, dec) = input.begin_choice().or_else(parse_decimal).end_choice()?;
         state.finish(LaTeXNode::Number { number: dec })
+    }
+}
+
+impl<'i> LaTeXBlock<'i> {
+    pub fn parse(input: ParseState<'i>) -> ParseResult<LaTeXBlock<'i>> {
+        let (state, begin) = input.skip(whitespace).match_fn(Self::parse_begin)?;
+        let (state, children) = state.skip(whitespace).match_repeats(LaTeXNode::parse)?;
+        let (state, end) = state.skip(whitespace).match_fn(Self::parse_end)?;
+        if begin != end {
+            tracing::warn!("Mismatched begin/end: {} vs {}", begin, end);
+        }
+        state.finish(LaTeXBlock { kind: begin, children })
+    }
+
+    fn parse_begin(input: ParseState<'i>) -> ParseResult<&'i str> {
+        let (state, _) = input.match_str("\\begin", false)?;
+        let (state, _) = state.skip(whitespace).match_char('{')?;
+        let (state, kind) = state.skip(whitespace).match_str_if(|c| c.is_ascii_alphabetic(), "ASCII_ALPHA")?;
+        let (state, _) = state.skip(whitespace).match_char('}')?;
+        state.finish(kind)
+    }
+    fn parse_end(input: ParseState<'i>) -> ParseResult<&'i str> {
+        let (state, _) = input.match_str("\\end", false)?;
+        let (state, _) = state.skip(whitespace).match_char('{')?;
+        let (state, kind) = state.skip(whitespace).match_str_if(|c| c.is_ascii_alphabetic(), "ASCII_ALPHA")?;
+        let (state, _) = state.skip(whitespace).match_char('}')?;
+        state.finish(kind)
     }
 }
 

@@ -11,6 +11,7 @@ edition = "2021"
 
 [dependencies]
 pex = "0.0.6"
+tracing = "0.1.37"
 
 [dependencies.mathml-core]
 #version = "0.0.0"
