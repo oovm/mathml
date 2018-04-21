@@ -1,5 +1,13 @@
 use super::*;
 
+impl Default for LaTeXDefinition {
+    fn default() -> Self {
+        let mut empty = Self::empty();
+        empty.set_functions(Self::builtin_functions());
+        empty
+    }
+}
+
 impl LaTeXDefinition {
     fn empty() -> Self {
         Self { functions: BTreeSet::new() }

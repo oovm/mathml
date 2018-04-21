@@ -5,7 +5,14 @@ pub struct MathNumber {
     number: String,
 }
 
-impl MathNumber {}
+impl MathNumber {
+    pub fn new<S>(text: S) -> Self
+    where
+        S: ToString,
+    {
+        Self { number: text.to_string() }
+    }
+}
 
 macro_rules! make_number {
     ($($t:ty),*) => {
