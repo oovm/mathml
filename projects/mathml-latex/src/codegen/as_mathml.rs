@@ -1,9 +1,8 @@
 use super::*;
-use crate::LaTeXDefinition;
-use mathml_core::{MathBinary, MathOperator};
+use mathml_core::{MathBinary, MathIdentifier, MathML, MathNumber, MathOperator};
 
 impl<'i> LaTeXNode<'i> {
-    pub fn as_mathml(&self, context: &LaTeXDefinition) -> MathML {
+    pub fn as_mathml(&self, context: &LaTeXEngine) -> MathML {
         match self {
             LaTeXNode::Root { children } => MathML::Root(Vec::from_iter(children.iter().map(|node| node.as_mathml(context)))),
             LaTeXNode::Row { children } => match children.as_slice() {

@@ -1,7 +1,7 @@
 use std::collections::BTreeSet;
 mod builtin;
 
-pub struct LaTeXDefinition {
+pub struct LaTeXEngine {
     functions: BTreeSet<String>,
     operators: BTreeSet<String>,
 }

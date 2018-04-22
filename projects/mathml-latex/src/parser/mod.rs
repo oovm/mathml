@@ -5,7 +5,7 @@ use pex::{
     ParseResult, ParseState, StopBecause,
 };
 
-mod as_mathml;
+mod sup_sub;
 
 pub fn parse_latex(s: &str) -> Result<LaTeXNode, StopBecause> {
     let state = ParseState::new(s.trim_end()).skip(whitespace);
@@ -30,26 +30,30 @@ pub enum LaTeXNode<'i> {
 
 impl<'i> LaTeXNode<'i> {
     pub fn parse(input: ParseState<'i>) -> ParseResult<LaTeXNode<'i>> {
-        let (state, node) = input
-            .begin_choice()
-            .or_else(Self::parse_block)
-            // .or_else(parse_text)
-            .or_else(Self::parse_row)
-            .end_choice()?;
+        let (state, node) = input.begin_choice().or_else(Self::parse_block).or_else(Self::parse_row).end_choice()?;
         state.finish(node)
     }
     fn parse_block(input: ParseState<'i>) -> ParseResult<LaTeXNode<'i>> {
         let (state, block) = LaTeXBlock::parse(input)?;
         state.finish(LaTeXNode::Block(block))
     }
+    /// `group := '{' atomic* '}'`
+    fn parse_group(input: ParseState<'i>) -> ParseResult<LaTeXNode<'i>> {
+        let (state, _) = input.match_char('{')?;
+        let (state, mut children) = state.match_repeats(LaTeXNode::parse_atomic)?;
+        let (state, _) = state.skip(whitespace).match_char('}')?;
+        state.finish(LaTeXNode::Row { children })
+    }
+    /// `row := atomic*`
     fn parse_row(input: ParseState<'i>) -> ParseResult<LaTeXNode<'i>> {
-        let (state, mut children) = input.skip(whitespace).match_repeats(LaTeXNode::parse_atomic)?;
+        let (state, mut children) = input.match_repeats(LaTeXNode::parse_atomic)?;
         state.finish(LaTeXNode::Row { children })
     }
     fn parse_atomic(input: ParseState<'i>) -> ParseResult<LaTeXNode<'i>> {
         let (state, node) = input
             .skip(whitespace)
             .begin_choice()
+            .or_else(Self::parse_group)
             .or_else(Self::parse_letter)
             .or_else(Self::parse_operator)
             .or_else(Self::parse_number)

@@ -1,6 +1,6 @@
 use super::*;
 
-impl Default for LaTeXDefinition {
+impl Default for LaTeXEngine {
     fn default() -> Self {
         let mut empty = Self::empty();
         empty.set_functions(Self::builtin_functions());
@@ -8,13 +8,13 @@ impl Default for LaTeXDefinition {
     }
 }
 
-impl LaTeXDefinition {
+impl LaTeXEngine {
     fn empty() -> Self {
         Self { functions: BTreeSet::new(), operators: Default::default() }
     }
 }
 
-impl LaTeXDefinition {
+impl LaTeXEngine {
     pub fn get_functions(&self) -> &BTreeSet<String> {
         &self.functions
     }
