@@ -1,5 +1,5 @@
 use super::*;
-use mathml_core::{MathBinary, MathIdentifier, MathML, MathNumber, MathOperator, MathRoot};
+use mathml_core::{MathIdentifier, MathML, MathNumber, MathOperator, MathRoot, MathSup};
 
 impl<'i> LaTeXNode<'i> {
     pub fn as_mathml(&self, context: &LaTeXEngine) -> MathML {
@@ -22,9 +22,7 @@ impl<'i> LaTeXNode<'i> {
 
             LaTeXNode::Letter { identifier } => MathIdentifier::italic(identifier).into(),
             LaTeXNode::Operation { operator } => MathOperator::new(operator).into(),
-            LaTeXNode::Superscript { lhs, rhs } => {
-                MathBinary::super_script(lhs.as_mathml(context), rhs.as_mathml(context)).into()
-            }
+            LaTeXNode::Superscript { lhs, rhs } => MathSup::new(lhs.as_mathml(context), rhs.as_mathml(context)).into(),
             LaTeXNode::Fraction { .. } => {
                 todo!()
             }

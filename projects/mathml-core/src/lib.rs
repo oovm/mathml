@@ -1,5 +1,6 @@
 mod ast;
 mod blocks;
+mod fractions;
 mod identifiers;
 mod numbers;
 mod operators;
@@ -9,5 +10,5 @@ pub use crate::{
     blocks::MathRoot,
     identifiers::{MathIdentifier, MathVariant},
     numbers::MathNumber,
-    operators::{MathBinary, MathBinaryKind, MathOperator},
+    operators::{MathOperator, MathSub, MathSubSup, MathSup},
 };

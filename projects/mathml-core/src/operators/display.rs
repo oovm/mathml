@@ -11,15 +11,20 @@ impl Display for MathOperator {
     }
 }
 
-impl Display for MathBinary {
+impl Display for MathSup {
     fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
-        match self.kind {
-            MathBinaryKind::SuperScript => {
-                write!(f, "<msup>{}{}</msup>", self.lhs, self.rhs)
-            }
-            MathBinaryKind::SubScript => {
-                write!(f, "<msub>{}{}</msub>", self.lhs, self.rhs)
-            }
-        }
+        write!(f, "<msup>{}{}</msup>", self.base, self.sup)
+    }
+}
+
+impl Display for MathSub {
+    fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
+        write!(f, "<msub>{}{}</msub>", self.base, self.sub)
+    }
+}
+
+impl Display for MathSubSup {
+    fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
+        write!(f, "<msubsup>{}{}{}</msubsup>", self.base, self.sub, self.sup)
     }
 }

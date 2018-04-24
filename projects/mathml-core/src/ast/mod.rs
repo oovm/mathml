@@ -3,8 +3,8 @@ mod display;
 
 use crate::{
     ast::attribute::{Accent, ColumnAlign, LineThickness},
-    operators::{MathBinary, MathOperator},
-    MathIdentifier, MathNumber, MathRoot,
+    operators::MathOperator,
+    MathIdentifier, MathNumber, MathRoot, MathSub, MathSubSup, MathSup,
 };
 use std::fmt::{Display, Formatter};
 
@@ -17,14 +17,11 @@ pub enum MathML {
     Letter(Box<MathIdentifier>),
     Text(String),
     Operator(Box<MathOperator>),
-    Binary(Box<MathBinary>),
+    SubScript(Box<MathSub>),
+    SupScript(Box<MathSup>),
+    SubSupScript(Box<MathSubSup>),
     Function(String, Option<Box<MathML>>),
     Space(f32),
-    SubSup {
-        target: Box<MathML>,
-        sub: Box<MathML>,
-        sup: Box<MathML>,
-    },
     OverOp(char, Accent, Box<MathML>),
     UnderOp(char, Accent, Box<MathML>),
     Overset {

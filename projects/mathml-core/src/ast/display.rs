@@ -12,16 +12,18 @@ impl Display for DisplayStyle {
 impl Display for MathML {
     fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
         match self {
+            MathML::Root(v) => Display::fmt(v, f),
             MathML::Number(v) => Display::fmt(v, f),
             MathML::Letter(v) => Display::fmt(v, f),
             MathML::Operator(v) => Display::fmt(v, f),
-            MathML::Binary(v) => Display::fmt(v, f),
+            MathML::SubScript(v) => Display::fmt(v, f),
+            MathML::SupScript(v) => Display::fmt(v, f),
+            MathML::SubSupScript(v) => Display::fmt(v, f),
             MathML::Function(fun, arg) => match arg {
                 Some(arg) => write!(f, "<mi>{}</mi><mo>&#x2061;</mo>{}", fun, arg),
                 None => write!(f, "<mi>{}</mi>", fun),
             },
             MathML::Space(space) => write!(f, r#"<mspace width="{}em"/>"#, space),
-            MathML::SubSup { target, sub, sup } => write!(f, "<msubsup>{}{}{}</msubsup>", target, sub, sup),
             MathML::OverOp(op, acc, target) => write!(f, r#"<mover>{}<mo accent="{}">{}</mo></mover>"#, target, acc, op),
             MathML::UnderOp(op, acc, target) => write!(f, r#"<munder>{}<mo accent="{}">{}</mo></munder>"#, target, acc, op),
             MathML::Overset { over, target } => write!(f, r#"<mover>{}{}</mover>"#, target, over),
@@ -85,7 +87,15 @@ impl Display for MathML {
                 Some(DisplayStyle::Inline) => write!(f, r#"<mstyle displaystyle="false">{}</mstyle>"#, content),
                 None => write!(f, "<mstyle>{}</mstyle>", content),
             },
-            node => write!(f, "<mtext>[PARSE ERROR: {:?}]</mtext>", node),
+            MathML::Ampersand => {
+                todo!()
+            }
+            MathML::NewLine => {
+                todo!()
+            }
+            MathML::Undefined(_) => {
+                todo!()
+            }
         }
     }
 }
