@@ -25,17 +25,27 @@ pub enum LaTeXNode<'i> {
     Number { number: &'i str },
     Operation { operator: &'i str },
     Superscript { lhs: Box<LaTeXNode<'i>>, rhs: Box<LaTeXNode<'i>> },
+    Fraction { numerator: Box<LaTeXNode<'i>>, denominator: Box<LaTeXNode<'i>> },
     Letter { identifier: &'i str },
 }
 
 impl<'i> LaTeXNode<'i> {
     pub fn parse(input: ParseState<'i>) -> ParseResult<LaTeXNode<'i>> {
-        let (state, node) = input.begin_choice().or_else(Self::parse_block).or_else(Self::parse_row).end_choice()?;
+        let (state, node) = input
+            .begin_choice()
+            .or_else(Self::parse_block)
+            .or_else(Self::parse_combined)
+            .or_else(Self::parse_row)
+            .end_choice()?;
         state.finish(node)
     }
     fn parse_block(input: ParseState<'i>) -> ParseResult<LaTeXNode<'i>> {
         let (state, block) = LaTeXBlock::parse(input)?;
         state.finish(LaTeXNode::Block(block))
+    }
+    fn parse_combined(input: ParseState<'i>) -> ParseResult<LaTeXNode<'i>> {
+        let (state, lhs) = input.begin_choice().or_else(Self::parse_super_script).end_choice()?;
+        state.finish(lhs)
     }
     /// `group := '{' atomic* '}'`
     fn parse_group(input: ParseState<'i>) -> ParseResult<LaTeXNode<'i>> {

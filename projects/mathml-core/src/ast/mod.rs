@@ -4,14 +4,14 @@ mod display;
 use crate::{
     ast::attribute::{Accent, ColumnAlign, LineThickness},
     operators::{MathBinary, MathOperator},
-    MathIdentifier, MathNumber,
+    MathIdentifier, MathNumber, MathRoot,
 };
 use std::fmt::{Display, Formatter};
 
 /// AST node
 #[derive(Debug, Clone, PartialEq)]
 pub enum MathML {
-    Root(Vec<MathML>),
+    Root(Box<MathRoot>),
     Number(Box<MathNumber>),
     /// `<mi>`
     Letter(Box<MathIdentifier>),

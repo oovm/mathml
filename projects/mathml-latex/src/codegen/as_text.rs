@@ -33,6 +33,13 @@ impl<'i> Display for LaTeXNode<'i> {
             LaTeXNode::Letter { .. } => {
                 todo!()
             }
+            LaTeXNode::Fraction { numerator, denominator } => {
+                f.write_str("\\frac{")?;
+                numerator.fmt(f)?;
+                f.write_str("}{")?;
+                denominator.fmt(f)?;
+                f.write_str("}")
+            }
         }
     }
 }
