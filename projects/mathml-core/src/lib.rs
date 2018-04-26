@@ -7,7 +7,8 @@ mod operators;
 
 pub use crate::{
     ast::MathML,
-    blocks::MathRoot,
+    blocks::{MathPhantom, MathRoot},
+    fractions::{LineThickness, MathFraction},
     identifiers::{MathIdentifier, MathVariant},
     numbers::MathNumber,
     operators::{MathOperator, MathSub, MathSubSup, MathSup},

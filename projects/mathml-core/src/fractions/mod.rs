@@ -1,18 +1,16 @@
+use crate::MathML;
+use std::fmt::{Display, Formatter};
+
 mod display;
 
-impl MathFraction {
-    pub fn new(numerator: MathML, denominator: MathML) -> Self {
-        Self { numerator, denominator, line_thickness: None }
-    }
-    pub fn with_thickness(mut self, line_thickness: f32) -> Self {
-        self.line_thickness = Some(line_thickness);
-        self
-    }
-}
-impl From<MathFraction> for MathML {
-    fn from(value: MathFraction) -> Self {
-        MathML::Frac(Box::new(value))
-    }
+/// The [`<mfrac>`](https://developer.mozilla.org/en-US/docs/Web/MathML/Element/mfrac) element is used to display fractions.
+///
+/// It can also be used to mark up fraction-like objects such as binomial coefficients and Legendre symbols.
+#[derive(Clone, Debug, PartialEq)]
+pub struct MathFraction {
+    numerator: MathML,
+    denominator: MathML,
+    line_thickness: LineThickness,
 }
 
 #[derive(Debug, Clone, Copy, PartialEq)]
@@ -23,15 +21,50 @@ pub enum LineThickness {
     Length(u8),
 }
 
-impl Display for LineThickness {
-    fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
-        match self {
-            LineThickness::Thin => write!(f, r#" linethickness="thin""#),
-            LineThickness::Medium => write!(f, r#""#),
-            LineThickness::Thick => write!(f, r#" linethickness="medium""#),
-            LineThickness::Length(l) => write!(f, r#" linethickness="{}""#, l),
-        }
+impl Default for LineThickness {
+    fn default() -> Self {
+        LineThickness::Medium
     }
 }
 
-impl MathML {}
+impl From<MathFraction> for MathML {
+    fn from(value: MathFraction) -> Self {
+        MathML::Frac(Box::new(value))
+    }
+}
+
+impl MathFraction {
+    pub fn new(numerator: MathML, denominator: MathML) -> Self {
+        Self { numerator, denominator, line_thickness: Default::default() }
+    }
+    pub fn with_thickness<T>(mut self, line_thickness: T) -> Self
+    where
+        T: Into<LineThickness>,
+    {
+        self.line_thickness = line_thickness.into();
+        self
+    }
+}
+
+impl MathML {
+    pub fn fraction(numerator: MathML, denominator: MathML) -> Self {
+        MathFraction::new(numerator, denominator).into()
+    }
+    //  binomial coefficients and Legendre symbols
+
+    //   <mrow>
+    //     <mo>(</mo>
+    //     <mfrac linethickness="0">
+    //       <mi>n</mi>
+    //       <mi>k</mi>
+    //     </mfrac>
+    //     <mo>)</mo>
+    //   </mrow>
+    // pub fn binomial(numerator: MathML, denominator: MathML) -> Self {
+    //     let mut row = vec![];
+    //     row.push(MathML::Op("("));
+    //     row.push(MathML::fraction(numerator, denominator).with_thickness(LineThickness::Length(0)));
+    //     row.push(MathML::mo(")"));
+    //     row
+    // }
+}

@@ -13,3 +13,11 @@ impl Display for MathRoot {
         write!(f, "</math>")
     }
 }
+
+impl Display for MathPhantom {
+    fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
+        write!(f, "<mphantom>")?;
+        write!(f, "{}", self.inner)?;
+        write!(f, "</mphantom>")
+    }
+}

@@ -3,6 +3,7 @@ use std::{
     collections::BTreeMap,
     fmt::{Display, Formatter},
 };
+mod constructors;
 mod display;
 
 /// <https://developer.mozilla.org/en-US/docs/Web/MathML/Element/math>
@@ -12,37 +13,8 @@ pub struct MathRoot {
     attributes: BTreeMap<String, String>,
 }
 
-impl Default for MathRoot {
-    fn default() -> Self {
-        Self { children: Vec::new(), attributes: BTreeMap::new() }
-    }
-}
-
-impl MathRoot {
-    pub fn new<I>(children: I) -> Self
-    where
-        I: IntoIterator<Item = MathML>,
-    {
-        Self { children: children.into_iter().collect(), ..Default::default() }
-    }
-    pub fn with_attribute<K, V>(mut self, key: K, value: V) -> MathRoot
-    where
-        K: ToString,
-        V: ToString,
-    {
-        self.attributes.insert(key.to_string(), value.to_string());
-        self
-    }
-    pub fn with_display_style(mut self) -> Self {
-        self.with_attribute("display", "block")
-    }
-    pub fn with_inline_style(mut self) -> Self {
-        self.with_attribute("display", "inline")
-    }
-}
-
-impl From<MathRoot> for MathML {
-    fn from(value: MathRoot) -> Self {
-        Self::Root(Box::new(value))
-    }
+/// The [`<mphantom>`](https://developer.mozilla.org/en-US/docs/Web/MathML/Element/mphantom) element is rendered invisibly, but dimensions (such as height, width, and baseline position) are still kept.
+#[derive(Debug, Clone, PartialEq)]
+pub struct MathPhantom {
+    inner: MathML,
 }

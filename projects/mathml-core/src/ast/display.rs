@@ -16,9 +16,9 @@ impl Display for MathML {
             MathML::Number(v) => Display::fmt(v, f),
             MathML::Letter(v) => Display::fmt(v, f),
             MathML::Operator(v) => Display::fmt(v, f),
-            MathML::SubScript(v) => Display::fmt(v, f),
-            MathML::SupScript(v) => Display::fmt(v, f),
-            MathML::SubSupScript(v) => Display::fmt(v, f),
+            MathML::Sub(v) => Display::fmt(v, f),
+            MathML::Sup(v) => Display::fmt(v, f),
+            MathML::SubSup(v) => Display::fmt(v, f),
             MathML::Function(fun, arg) => match arg {
                 Some(arg) => write!(f, "<mi>{}</mi><mo>&#x2061;</mo>{}", fun, arg),
                 None => write!(f, "<mi>{}</mi>", fun),
@@ -34,8 +34,9 @@ impl Display for MathML {
                 Some(deg) => write!(f, "<mroot>{}{}</mroot>", content, deg),
                 None => write!(f, "<msqrt>{}</msqrt>", content),
             },
-            MathML::Frac(num, denom, lt) => write!(f, "<mfrac{}>{}{}</mfrac>", lt, num, denom),
+            MathML::Frac(v) => Display::fmt(v, f),
             MathML::Row(vec) => write!(f, "<mrow>{}</mrow>", vec.iter().map(|node| format!("{}", node)).collect::<String>()),
+            MathML::Phantom(v) => Display::fmt(v, f),
             MathML::Fenced { open, close, content } => {
                 write!(
                     f,

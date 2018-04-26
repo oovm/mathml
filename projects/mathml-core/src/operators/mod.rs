@@ -8,12 +8,6 @@ mod display;
 pub struct MathOperator {
     operator: String,
 }
-#[derive(Clone, Debug, PartialEq)]
-pub struct MathFraction {
-    numerator: MathML,
-    denominator: MathML,
-    line_thickness: Option<f32>,
-}
 
 /// <https://developer.mozilla.org/en-US/docs/Web/MathML/Element/msub>
 #[derive(Clone, Debug, PartialEq)]

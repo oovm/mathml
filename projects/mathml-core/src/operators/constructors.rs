@@ -27,6 +27,15 @@ impl MathSubSup {
     }
 }
 
+impl MathML {
+    pub fn operation<S>(text: S) -> Self
+    where
+        S: ToString,
+    {
+        MathOperator::new(text).into()
+    }
+}
+
 impl From<MathOperator> for MathML {
     fn from(value: MathOperator) -> Self {
         MathML::Operator(Box::new(value))
@@ -35,18 +44,18 @@ impl From<MathOperator> for MathML {
 
 impl From<MathSub> for MathML {
     fn from(value: MathSub) -> Self {
-        MathML::SubScript(Box::new(value))
+        MathML::Sub(Box::new(value))
     }
 }
 
 impl From<MathSup> for MathML {
     fn from(value: MathSup) -> Self {
-        MathML::SupScript(Box::new(value))
+        MathML::Sup(Box::new(value))
     }
 }
 
 impl From<MathSubSup> for MathML {
     fn from(value: MathSubSup) -> Self {
-        MathML::SubSupScript(Box::new(value))
+        MathML::SubSup(Box::new(value))
     }
 }

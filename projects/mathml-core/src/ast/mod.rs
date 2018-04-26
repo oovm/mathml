@@ -2,9 +2,9 @@ pub mod attribute;
 mod display;
 
 use crate::{
-    ast::attribute::{Accent, ColumnAlign, LineThickness},
+    ast::attribute::{Accent, ColumnAlign},
     operators::MathOperator,
-    MathIdentifier, MathNumber, MathRoot, MathSub, MathSubSup, MathSup,
+    MathFraction, MathIdentifier, MathNumber, MathPhantom, MathRoot, MathSub, MathSubSup, MathSup,
 };
 use std::fmt::{Display, Formatter};
 
@@ -17,9 +17,9 @@ pub enum MathML {
     Letter(Box<MathIdentifier>),
     Text(String),
     Operator(Box<MathOperator>),
-    SubScript(Box<MathSub>),
-    SupScript(Box<MathSup>),
-    SubSupScript(Box<MathSubSup>),
+    Sub(Box<MathSub>),
+    Sup(Box<MathSup>),
+    SubSup(Box<MathSubSup>),
     Function(String, Option<Box<MathML>>),
     Space(f32),
     OverOp(char, Accent, Box<MathML>),
@@ -39,7 +39,8 @@ pub enum MathML {
         over: Box<MathML>,
     },
     Sqrt(Option<Box<MathML>>, Box<MathML>),
-    Frac(Box<MathML>, Box<MathML>, LineThickness),
+    Frac(Box<MathFraction>),
+    Phantom(Box<MathPhantom>),
     Row(Vec<MathML>),
     Fenced {
         open: &'static str,
