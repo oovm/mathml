@@ -34,15 +34,3 @@ impl MathPhantom {
         Self { inner }
     }
 }
-
-impl From<MathRoot> for MathML {
-    fn from(value: MathRoot) -> Self {
-        Self::Root(Box::new(value))
-    }
-}
-
-impl From<MathPhantom> for MathML {
-    fn from(value: MathPhantom) -> Self {
-        Self::Phantom(Box::new(value))
-    }
-}

@@ -11,6 +11,19 @@ impl Display for MathOperator {
     }
 }
 
+impl Display for MathSqrt {
+    fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
+        match &self.surd {
+            Some(power) => {
+                write!(f, "<mroot>{}{}</mroot>", self.base, power)
+            }
+            None => {
+                write!(f, "<msqrt>{}</msqrt>", self.base)
+            }
+        }
+    }
+}
+
 impl Display for MathSup {
     fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
         write!(f, "<msup>{}{}</msup>", self.base, self.sup)

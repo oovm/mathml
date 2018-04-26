@@ -7,12 +7,6 @@ pub struct MathNumber {
     number: String,
 }
 
-impl From<MathNumber> for MathML {
-    fn from(value: MathNumber) -> Self {
-        MathML::Number(Box::new(value))
-    }
-}
-
 impl MathNumber {
     pub fn new<S>(text: S) -> Self
     where

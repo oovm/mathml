@@ -30,10 +30,7 @@ impl Display for MathML {
             MathML::Underset { under, target } => write!(f, r#"<munder>{}{}</munder>"#, target, under),
             MathML::Under(target, under) => write!(f, r#"<munder>{}{}</munder>"#, target, under),
             MathML::UnderOver { target, under, over } => write!(f, r#"<munderover>{}{}{}</munderover>"#, target, under, over),
-            MathML::Sqrt(degree, content) => match degree {
-                Some(deg) => write!(f, "<mroot>{}{}</mroot>", content, deg),
-                None => write!(f, "<msqrt>{}</msqrt>", content),
-            },
+            MathML::Sqrt(v) => Display::fmt(v, f),
             MathML::Frac(v) => Display::fmt(v, f),
             MathML::Row(vec) => write!(f, "<mrow>{}</mrow>", vec.iter().map(|node| format!("{}", node)).collect::<String>()),
             MathML::Phantom(v) => Display::fmt(v, f),
@@ -45,7 +42,6 @@ impl Display for MathML {
                 )
             }
             MathML::StrechedOp(stretchy, op) => write!(f, r#"<mo stretchy="{}">{}</mo>"#, stretchy, op),
-            MathML::OtherOperator(op) => write!(f, "<mo>{}</mo>", op),
             MathML::SizedParen { size, paren } => {
                 write!(f, r#"<mrow><mo maxsize="{0}" minsize="{0}">{1}</mro></mrow>"#, size, paren)
             }

@@ -9,6 +9,15 @@ impl MathOperator {
     }
 }
 
+impl MathSqrt {
+    pub fn new(base: MathML) -> Self {
+        Self { base, surd: None }
+    }
+    pub fn surd(base: MathML, power: MathML) -> Self {
+        Self { base, surd: Some(power) }
+    }
+}
+
 impl MathSub {
     pub fn new(base: MathML, sub: MathML) -> Self {
         Self { base, sub }
@@ -33,29 +42,5 @@ impl MathML {
         S: ToString,
     {
         MathOperator::new(text).into()
-    }
-}
-
-impl From<MathOperator> for MathML {
-    fn from(value: MathOperator) -> Self {
-        MathML::Operator(Box::new(value))
-    }
-}
-
-impl From<MathSub> for MathML {
-    fn from(value: MathSub) -> Self {
-        MathML::Sub(Box::new(value))
-    }
-}
-
-impl From<MathSup> for MathML {
-    fn from(value: MathSup) -> Self {
-        MathML::Sup(Box::new(value))
-    }
-}
-
-impl From<MathSubSup> for MathML {
-    fn from(value: MathSubSup) -> Self {
-        MathML::SubSup(Box::new(value))
     }
 }

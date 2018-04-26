@@ -29,12 +29,6 @@ pub enum MathVariant {
     Monospace,
 }
 
-impl From<MathIdentifier> for MathML {
-    fn from(value: MathIdentifier) -> Self {
-        MathML::Letter(Box::new(value))
-    }
-}
-
 impl MathIdentifier {
     pub fn new<S>(text: S, variant: MathVariant) -> Self
     where

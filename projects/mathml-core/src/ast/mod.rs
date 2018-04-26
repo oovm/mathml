@@ -3,7 +3,7 @@ mod display;
 
 use crate::{
     ast::attribute::{Accent, ColumnAlign},
-    operators::MathOperator,
+    operators::{MathOperator, MathSqrt},
     MathFraction, MathIdentifier, MathNumber, MathPhantom, MathRoot, MathSub, MathSubSup, MathSup,
 };
 use std::fmt::{Display, Formatter};
@@ -38,7 +38,7 @@ pub enum MathML {
         under: Box<MathML>,
         over: Box<MathML>,
     },
-    Sqrt(Option<Box<MathML>>, Box<MathML>),
+    Sqrt(Box<MathSqrt>),
     Frac(Box<MathFraction>),
     Phantom(Box<MathPhantom>),
     Row(Vec<MathML>),
@@ -48,7 +48,6 @@ pub enum MathML {
         content: Box<MathML>,
     },
     StrechedOp(bool, String),
-    OtherOperator(&'static str),
     SizedParen {
         size: &'static str,
         paren: &'static str,
@@ -66,4 +65,30 @@ pub enum MathML {
 pub enum DisplayStyle {
     Block,
     Inline,
+}
+
+macro_rules! make_mathml {
+    ($($name:ident => $variant:ident),*) => {
+        $(
+            impl From<$name> for MathML {
+                fn from(value: $name) -> Self {
+                    MathML::$variant(Box::new(value))
+                }
+            }
+        )*
+    };
+}
+
+#[rustfmt::skip]
+make_mathml! {
+    MathRoot       => Root,
+    MathNumber     => Number,
+    MathIdentifier => Letter,
+    MathOperator   => Operator,
+    MathSub        => Sub,
+    MathSup        => Sup,
+    MathSubSup     => SubSup,
+    MathSqrt       => Sqrt,
+    MathFraction   => Frac,
+    MathPhantom    => Phantom
 }

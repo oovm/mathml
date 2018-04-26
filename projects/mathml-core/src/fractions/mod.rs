@@ -27,12 +27,6 @@ impl Default for LineThickness {
     }
 }
 
-impl From<MathFraction> for MathML {
-    fn from(value: MathFraction) -> Self {
-        MathML::Frac(Box::new(value))
-    }
-}
-
 impl MathFraction {
     pub fn new(numerator: MathML, denominator: MathML) -> Self {
         Self { numerator, denominator, line_thickness: Default::default() }
