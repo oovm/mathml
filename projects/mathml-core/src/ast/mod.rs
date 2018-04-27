@@ -3,6 +3,7 @@ mod display;
 
 use crate::{
     ast::attribute::{Accent, ColumnAlign},
+    identifiers::MathText,
     operators::{MathOperator, MathSqrt},
     MathFraction, MathIdentifier, MathNumber, MathPhantom, MathRoot, MathSub, MathSubSup, MathSup,
 };
@@ -11,14 +12,21 @@ use std::fmt::{Display, Formatter};
 /// AST node
 #[derive(Debug, Clone, PartialEq)]
 pub enum MathML {
+    /// [`<math>`](https://developer.mozilla.org/en-US/docs/Web/MathML/Element/math)
     Root(Box<MathRoot>),
+    /// [`<mn>`](https://developer.mozilla.org/en-US/docs/Web/MathML/Element/mn)
     Number(Box<MathNumber>),
-    /// `<mi>`
-    Letter(Box<MathIdentifier>),
-    Text(String),
+    /// [`<mi>`](https://developer.mozilla.org/en-US/docs/Web/MathML/Element/mi)
+    Identifier(Box<MathIdentifier>),
+    /// [`<ms>`](https://developer.mozilla.org/en-US/docs/Web/MathML/Element/ms) / [`<mtext>`](https://developer.mozilla.org/en-US/docs/Web/MathML/Element/mtext)
+    Text(Box<MathText>),
+    /// [`<mo>`](https://developer.mozilla.org/en-US/docs/Web/MathML/Element/mo)
     Operator(Box<MathOperator>),
+    /// [`<msub>`](https://developer.mozilla.org/en-US/docs/Web/MathML/Element/msub)
     Sub(Box<MathSub>),
+    /// [`<msup>`](https://developer.mozilla.org/en-US/docs/Web/MathML/Element/msup)
     Sup(Box<MathSup>),
+    /// [`<msubsup>`](https://developer.mozilla.org/en-US/docs/Web/MathML/Element/msubsup)
     SubSup(Box<MathSubSup>),
     Function(String, Option<Box<MathML>>),
     Space(f32),
@@ -83,7 +91,7 @@ macro_rules! make_mathml {
 make_mathml! {
     MathRoot       => Root,
     MathNumber     => Number,
-    MathIdentifier => Letter,
+    MathIdentifier => Identifier,
     MathOperator   => Operator,
     MathSub        => Sub,
     MathSup        => Sup,

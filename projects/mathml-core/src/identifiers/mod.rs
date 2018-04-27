@@ -10,6 +10,12 @@ pub struct MathIdentifier {
     variant: MathVariant,
 }
 
+#[derive(Debug, Clone, PartialEq, Eq)]
+pub struct MathText {
+    is_string: bool,
+    text: String,
+}
+
 /// mi mathvariant attribute
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub enum MathVariant {
@@ -53,5 +59,20 @@ impl MathIdentifier {
     }
     pub fn get_identifier(&self) -> &str {
         &self.identifier
+    }
+}
+
+impl MathText {
+    pub fn text<S>(text: S) -> Self
+    where
+        S: ToString,
+    {
+        Self { text: text.to_string(), is_string: false }
+    }
+    pub fn string<S>(text: S) -> Self
+    where
+        S: ToString,
+    {
+        Self { text: text.to_string(), is_string: true }
     }
 }

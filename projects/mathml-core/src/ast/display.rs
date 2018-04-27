@@ -14,7 +14,7 @@ impl Display for MathML {
         match self {
             MathML::Root(v) => Display::fmt(v, f),
             MathML::Number(v) => Display::fmt(v, f),
-            MathML::Letter(v) => Display::fmt(v, f),
+            MathML::Identifier(v) => Display::fmt(v, f),
             MathML::Operator(v) => Display::fmt(v, f),
             MathML::Sub(v) => Display::fmt(v, f),
             MathML::Sup(v) => Display::fmt(v, f),
@@ -47,7 +47,7 @@ impl Display for MathML {
             }
             MathML::Slashed(node) => match &**node {
                 // force set math-variant here
-                MathML::Letter(mi) => {
+                MathML::Identifier(mi) => {
                     write!(f, "{:}", mi)
                 }
                 MathML::Operator(x) => write!(f, "<mo>{}&#x0338;</mo>", x),

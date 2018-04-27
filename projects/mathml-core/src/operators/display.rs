@@ -41,3 +41,35 @@ impl Display for MathSubSup {
         write!(f, "<msubsup>{}{}{}</msubsup>", self.base, self.sub, self.sup)
     }
 }
+
+impl Display for MathUnderOver {
+    fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
+        match (&self.under, &self.over) {
+            (Some(under), Some(over)) => {
+                f.write_str("<munderover")?;
+                if under.accent {
+                    f.write_str(" accentunder=\"true\"")?;
+                }
+                if over.accent {
+                    f.write_str(" accent=\"true\"")?;
+                }
+                write!(f, ">{}</munderover>", under.base)
+            }
+            (Some(under), None) => {
+                f.write_str("<munder")?;
+                if under.accent {
+                    f.write_str(" accentunder=\"true\"")?;
+                }
+                write!(f, ">{}</munder>", under.base)
+            }
+            (None, Some(over)) => {
+                f.write_str("<mover")?;
+                if over.accent {
+                    f.write_str(" accent=\"true\"")?;
+                }
+                write!(f, ">{}</mover>", over.base)
+            }
+            (None, None) => unreachable!("MathUnderOver must have at least one of under or over"),
+        }
+    }
+}

@@ -13,6 +13,16 @@ impl Display for MathIdentifier {
     }
 }
 
+impl Display for MathText {
+    fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
+        let text = encode_text(&self.text);
+        match self.is_string {
+            true => write!(f, "<ms>{}</ms>", text),
+            false => write!(f, "<mtext>{}</mtext>", text),
+        }
+    }
+}
+
 #[rustfmt::skip]
 impl Display for MathVariant {
     fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
