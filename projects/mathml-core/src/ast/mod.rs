@@ -4,7 +4,7 @@ mod display;
 use crate::{
     ast::attribute::{Accent, ColumnAlign},
     identifiers::MathText,
-    operators::{MathOperator, MathSqrt},
+    operators::{MathOperator, MathSqrt, MathUnderOver},
     MathFraction, MathIdentifier, MathNumber, MathPhantom, MathRoot, MathSub, MathSubSup, MathSup,
 };
 use std::fmt::{Display, Formatter};
@@ -32,20 +32,8 @@ pub enum MathML {
     Space(f32),
     OverOp(char, Accent, Box<MathML>),
     UnderOp(char, Accent, Box<MathML>),
-    Overset {
-        over: Box<MathML>,
-        target: Box<MathML>,
-    },
-    Underset {
-        under: Box<MathML>,
-        target: Box<MathML>,
-    },
-    Under(Box<MathML>, Box<MathML>),
-    UnderOver {
-        target: Box<MathML>,
-        under: Box<MathML>,
-        over: Box<MathML>,
-    },
+    /// [`<munder>`](https://developer.mozilla.org/en-US/docs/Web/MathML/Element/munder) / [`<mover>`](https://developer.mozilla.org/en-US/docs/Web/MathML/Element/mover) / [`<munderover>`](https://developer.mozilla.org/en-US/docs/Web/MathML/Element/munderover)
+    UnderOver(Box<MathUnderOver>),
     Sqrt(Box<MathSqrt>),
     Frac(Box<MathFraction>),
     Phantom(Box<MathPhantom>),

@@ -41,22 +41,6 @@ pub struct MathSubSup {
     sup: MathML,
 }
 
-/// The [`<munder>`](https://developer.mozilla.org/en-US/docs/Web/MathML/Element/munder) element is used to attach an accent or a limit under an expression.
-#[derive(Clone, Debug, PartialEq)]
-pub struct MathUnder {
-    base: MathML,
-    under: MathML,
-    accentunder: Option<MathML>,
-}
-
-/// The [`<mover>`](https://developer.mozilla.org/en-US/docs/Web/MathML/Element/mover) element is used to attach an accent or a limit over an expression.
-#[derive(Clone, Debug, PartialEq)]
-pub struct MathOver {
-    base: MathML,
-    over: MathML,
-    accent: Option<MathML>,
-}
-
 /// The [`<munderover>`](https://developer.mozilla.org/en-US/docs/Web/MathML/Element/munderover) element is used to attach an accent or a limit under and over an expression.
 #[derive(Clone, Debug, PartialEq)]
 pub struct MathUnderOver {

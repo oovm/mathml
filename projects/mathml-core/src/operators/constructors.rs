@@ -50,7 +50,7 @@ impl MathUnderOver {
             self.attributes.insert("accent".to_string(), "true".to_string());
         }
         else {
-            self.attributes.remove("accent")
+            self.attributes.remove("accent");
         }
         self
     }
@@ -59,7 +59,7 @@ impl MathUnderOver {
             self.attributes.insert("accentunder".to_string(), "true".to_string());
         }
         else {
-            self.attributes.remove("accentunder")
+            self.attributes.remove("accentunder");
         }
         self
     }

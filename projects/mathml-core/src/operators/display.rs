@@ -44,32 +44,24 @@ impl Display for MathSubSup {
 
 impl Display for MathUnderOver {
     fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
-        match (&self.under, &self.over) {
-            (Some(under), Some(over)) => {
-                f.write_str("<munderover")?;
-                if under.accent {
-                    f.write_str(" accentunder=\"true\"")?;
-                }
-                if over.accent {
-                    f.write_str(" accent=\"true\"")?;
-                }
-                write!(f, ">{}</munderover>", under.base)
-            }
-            (Some(under), None) => {
-                f.write_str("<munder")?;
-                if under.accent {
-                    f.write_str(" accentunder=\"true\"")?;
-                }
-                write!(f, ">{}</munder>", under.base)
-            }
-            (None, Some(over)) => {
-                f.write_str("<mover")?;
-                if over.accent {
-                    f.write_str(" accent=\"true\"")?;
-                }
-                write!(f, ">{}</mover>", over.base)
-            }
+        let tag = match (&self.under, &self.over) {
+            (Some(_), Some(_)) => "munderover",
+            (Some(_), None) => "munder",
+            (None, Some(_)) => "mover",
             (None, None) => unreachable!("MathUnderOver must have at least one of under or over"),
+        };
+        write!(f, "<{}", tag)?;
+        for (key, value) in &self.attributes {
+            write!(f, " {}=\"{}\"", key, value)?;
         }
+        write!(f, ">")?;
+        write!(f, "{}", self.base)?;
+        if let Some(under) = &self.under {
+            write!(f, "{}", under)?;
+        }
+        if let Some(over) = &self.over {
+            write!(f, "{}", over)?;
+        }
+        write!(f, "</{}>", tag)
     }
 }
