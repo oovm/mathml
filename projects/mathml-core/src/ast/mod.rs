@@ -5,7 +5,7 @@ use crate::{
     ast::attribute::{Accent, ColumnAlign},
     identifiers::MathText,
     operators::{MathOperator, MathSqrt, MathUnderOver},
-    MathFraction, MathIdentifier, MathNumber, MathPhantom, MathRoot, MathSub, MathSubSup, MathSup,
+    MathFraction, MathIdentifier, MathMultiScript, MathNumber, MathPhantom, MathRoot,
 };
 use std::fmt::{Display, Formatter};
 
@@ -22,18 +22,14 @@ pub enum MathML {
     Text(Box<MathText>),
     /// [`<mo>`](https://developer.mozilla.org/en-US/docs/Web/MathML/Element/mo)
     Operator(Box<MathOperator>),
-    /// [`<msub>`](https://developer.mozilla.org/en-US/docs/Web/MathML/Element/msub)
-    Sub(Box<MathSub>),
-    /// [`<msup>`](https://developer.mozilla.org/en-US/docs/Web/MathML/Element/msup)
-    Sup(Box<MathSup>),
-    /// [`<msubsup>`](https://developer.mozilla.org/en-US/docs/Web/MathML/Element/msubsup)
-    SubSup(Box<MathSubSup>),
+    /// [`<msub>`](https://developer.mozilla.org/en-US/docs/Web/MathML/Element/msub) / [`<msup>`](https://developer.mozilla.org/en-US/docs/Web/MathML/Element/msup) /  [`<msubsup>`](https://developer.mozilla.org/en-US/docs/Web/MathML/Element/msubsup)
+    SubSup(Box<MathMultiScript>),
+    /// [`<munder>`](https://developer.mozilla.org/en-US/docs/Web/MathML/Element/munder) / [`<mover>`](https://developer.mozilla.org/en-US/docs/Web/MathML/Element/mover) / [`<munderover>`](https://developer.mozilla.org/en-US/docs/Web/MathML/Element/munderover)
+    UnderOver(Box<MathUnderOver>),
     Function(String, Option<Box<MathML>>),
     Space(f32),
     OverOp(char, Accent, Box<MathML>),
     UnderOp(char, Accent, Box<MathML>),
-    /// [`<munder>`](https://developer.mozilla.org/en-US/docs/Web/MathML/Element/munder) / [`<mover>`](https://developer.mozilla.org/en-US/docs/Web/MathML/Element/mover) / [`<munderover>`](https://developer.mozilla.org/en-US/docs/Web/MathML/Element/munderover)
-    UnderOver(Box<MathUnderOver>),
     Sqrt(Box<MathSqrt>),
     Frac(Box<MathFraction>),
     Phantom(Box<MathPhantom>),
@@ -81,9 +77,7 @@ make_mathml! {
     MathNumber     => Number,
     MathIdentifier => Identifier,
     MathOperator   => Operator,
-    MathSub        => Sub,
-    MathSup        => Sup,
-    MathSubSup     => SubSup,
+    MathMultiScript   => SubSup,
     MathSqrt       => Sqrt,
     MathFraction   => Frac,
     MathPhantom    => Phantom

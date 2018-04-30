@@ -19,26 +19,13 @@ pub struct MathSqrt {
     surd: Option<MathML>,
 }
 
-/// <https://developer.mozilla.org/en-US/docs/Web/MathML/Element/msub>
-#[derive(Clone, Debug, PartialEq)]
-pub struct MathSub {
-    base: MathML,
-    sub: MathML,
-}
-
-/// <https://developer.mozilla.org/en-US/docs/Web/MathML/Element/msup>
-#[derive(Clone, Debug, PartialEq)]
-pub struct MathSup {
-    base: MathML,
-    sup: MathML,
-}
-
 /// <https://developer.mozilla.org/en-US/docs/Web/MathML/Element/msubsup>
 #[derive(Clone, Debug, PartialEq)]
-pub struct MathSubSup {
+pub struct MathMultiScript {
     base: MathML,
-    sub: MathML,
-    sup: MathML,
+    sub: Option<MathML>,
+    sup: Option<MathML>,
+    attributes: BTreeMap<String, String>,
 }
 
 /// The [`<munderover>`](https://developer.mozilla.org/en-US/docs/Web/MathML/Element/munderover) element is used to attach an accent or a limit under and over an expression.

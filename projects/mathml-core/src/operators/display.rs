@@ -24,21 +24,27 @@ impl Display for MathSqrt {
     }
 }
 
-impl Display for MathSup {
+impl Display for MathMultiScript {
     fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
-        write!(f, "<msup>{}{}</msup>", self.base, self.sup)
-    }
-}
-
-impl Display for MathSub {
-    fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
-        write!(f, "<msub>{}{}</msub>", self.base, self.sub)
-    }
-}
-
-impl Display for MathSubSup {
-    fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
-        write!(f, "<msubsup>{}{}{}</msubsup>", self.base, self.sub, self.sup)
+        let tag = match (&self.sub, &self.sup) {
+            (Some(_), Some(_)) => "msubsup",
+            (Some(_), None) => "msub",
+            (None, Some(_)) => "msup",
+            (None, None) => unreachable!("MathSubSuper must have at least one of sub or sup"),
+        };
+        write!(f, "<{}", tag)?;
+        for (key, value) in &self.attributes {
+            write!(f, " {}=\"{}\"", key, value)?;
+        }
+        write!(f, ">")?;
+        write!(f, "{}", self.base)?;
+        if let Some(sub) = &self.sub {
+            write!(f, "{}", sub)?;
+        }
+        if let Some(sup) = &self.sup {
+            write!(f, "{}", sup)?;
+        }
+        write!(f, "</{}>", tag)
     }
 }
 

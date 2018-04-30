@@ -18,23 +18,18 @@ impl MathSqrt {
     }
 }
 
-impl MathSub {
-    pub fn new(base: MathML, sub: MathML) -> Self {
-        Self { base, sub }
+impl MathMultiScript {
+    pub fn sub_script(base: MathML, sub: MathML) -> Self {
+        Self { base, sub: Some(sub), sup: None, attributes: Default::default() }
+    }
+    pub fn super_script(base: MathML, sup: MathML) -> Self {
+        Self { base, sub: None, sup: Some(sup), attributes: Default::default() }
+    }
+    pub fn sub_super(base: MathML, sub: MathML, sup: MathML) -> Self {
+        Self { base, sub: Some(sub), sup: Some(sup), attributes: Default::default() }
     }
 }
 
-impl MathSup {
-    pub fn new(base: MathML, sup: MathML) -> Self {
-        Self { base, sup }
-    }
-}
-
-impl MathSubSup {
-    pub fn new(base: MathML, sub: MathML, sup: MathML) -> Self {
-        Self { base, sub, sup }
-    }
-}
 impl MathUnderOver {
     pub fn under(base: MathML, under: MathML) -> Self {
         Self { base, under: Some(under), over: None, attributes: BTreeMap::new() }

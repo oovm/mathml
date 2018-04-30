@@ -16,8 +16,6 @@ impl Display for MathML {
             MathML::Number(v) => Display::fmt(v, f),
             MathML::Identifier(v) => Display::fmt(v, f),
             MathML::Operator(v) => Display::fmt(v, f),
-            MathML::Sub(v) => Display::fmt(v, f),
-            MathML::Sup(v) => Display::fmt(v, f),
             MathML::SubSup(v) => Display::fmt(v, f),
             MathML::Function(fun, arg) => match arg {
                 Some(arg) => write!(f, "<mi>{}</mi><mo>&#x2061;</mo>{}", fun, arg),
