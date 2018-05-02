@@ -19,14 +19,26 @@ impl MathSqrt {
 }
 
 impl MathMultiScript {
+    pub fn new(base: MathML, ru: Vec<MathML>, rd: Vec<MathML>, lu: Vec<MathML>, ld: Vec<MathML>) -> Self {
+        Self { base, ru, rd, lu, ld, attributes: BTreeMap::new() }
+    }
     pub fn sub_script(base: MathML, sub: MathML) -> Self {
-        Self { base, sub: Some(sub), sup: None, attributes: Default::default() }
+        Self { base, ru: Vec::new(), rd: Vec::new(), lu: Vec::new(), ld: vec![sub], attributes: BTreeMap::new() }
+    }
+    pub fn is_sub_script(&self) -> bool {
+        self.ru.is_empty() && self.rd.is_empty() && self.lu.is_empty() && self.ld.len() == 1
     }
     pub fn super_script(base: MathML, sup: MathML) -> Self {
-        Self { base, sub: None, sup: Some(sup), attributes: Default::default() }
+        Self { base, ru: Vec::new(), rd: Vec::new(), lu: vec![sup], ld: Vec::new(), attributes: BTreeMap::new() }
     }
-    pub fn sub_super(base: MathML, sub: MathML, sup: MathML) -> Self {
-        Self { base, sub: Some(sub), sup: Some(sup), attributes: Default::default() }
+    pub fn is_super_script(&self) -> bool {
+        self.ru.is_empty() && self.rd.is_empty() && self.lu.len() == 1 && self.ld.is_empty()
+    }
+    pub fn sub_super_script(base: MathML, sub: MathML, sup: MathML) -> Self {
+        Self { base, ru: Vec::new(), rd: Vec::new(), lu: vec![sup], ld: vec![sub], attributes: BTreeMap::new() }
+    }
+    pub fn is_sub_super_script(&self) -> bool {
+        self.ru.is_empty() && self.rd.is_empty() && self.lu.len() == 1 && self.ld.len() == 1
     }
 }
 

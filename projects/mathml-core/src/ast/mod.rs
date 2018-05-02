@@ -22,8 +22,11 @@ pub enum MathML {
     Text(Box<MathText>),
     /// [`<mo>`](https://developer.mozilla.org/en-US/docs/Web/MathML/Element/mo)
     Operator(Box<MathOperator>),
-    /// [`<msub>`](https://developer.mozilla.org/en-US/docs/Web/MathML/Element/msub) / [`<msup>`](https://developer.mozilla.org/en-US/docs/Web/MathML/Element/msup) /  [`<msubsup>`](https://developer.mozilla.org/en-US/docs/Web/MathML/Element/msubsup)
-    SubSup(Box<MathMultiScript>),
+    /// [`<msub>`](https://developer.mozilla.org/en-US/docs/Web/MathML/Element/msub)
+    /// / [`<msup>`](https://developer.mozilla.org/en-US/docs/Web/MathML/Element/msup)
+    /// /  [`<msubsup>`](https://developer.mozilla.org/en-US/docs/Web/MathML/Element/msubsup)
+    /// / [`<mmultiscripts>`](https://developer.mozilla.org/en-US/docs/Web/MathML/Element/mmultiscripts)
+    MultiScripts(Box<MathMultiScript>),
     /// [`<munder>`](https://developer.mozilla.org/en-US/docs/Web/MathML/Element/munder) / [`<mover>`](https://developer.mozilla.org/en-US/docs/Web/MathML/Element/mover) / [`<munderover>`](https://developer.mozilla.org/en-US/docs/Web/MathML/Element/munderover)
     UnderOver(Box<MathUnderOver>),
     Function(String, Option<Box<MathML>>),
@@ -77,7 +80,7 @@ make_mathml! {
     MathNumber     => Number,
     MathIdentifier => Identifier,
     MathOperator   => Operator,
-    MathMultiScript   => SubSup,
+    MathMultiScript   => MultiScripts,
     MathSqrt       => Sqrt,
     MathFraction   => Frac,
     MathPhantom    => Phantom

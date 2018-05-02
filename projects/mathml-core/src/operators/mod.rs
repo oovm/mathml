@@ -23,8 +23,10 @@ pub struct MathSqrt {
 #[derive(Clone, Debug, PartialEq)]
 pub struct MathMultiScript {
     base: MathML,
-    sub: Option<MathML>,
-    sup: Option<MathML>,
+    ru: Vec<MathML>,
+    rd: Vec<MathML>,
+    lu: Vec<MathML>,
+    ld: Vec<MathML>,
     attributes: BTreeMap<String, String>,
 }
 
@@ -38,7 +40,27 @@ pub struct MathUnderOver {
 }
 
 #[derive(Clone, Debug, PartialEq)]
-pub struct MathAccented {
+pub struct MathFenced {
     base: MathML,
-    accent: bool,
+    lhs: String,
+    rhs: String,
+}
+
+impl MathFenced {
+    pub fn new<S>(base: MathML, lhs: S, rhs: S) -> Self
+    where
+        S: Into<String>,
+    {
+        Self { base, lhs: lhs.into(), rhs: rhs.into() }
+    }
+}
+
+impl Display for MathFenced {
+    fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
+        write!(
+            f,
+            r#"<mrow><mo stretchy="true" form="prefix">{}</mo>{}<mo stretchy="true" form="postfix">{}</mo></mrow>"#,
+            self.lhs, self.base, self.rhs
+        )
+    }
 }

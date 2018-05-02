@@ -26,25 +26,44 @@ impl Display for MathSqrt {
 
 impl Display for MathMultiScript {
     fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
-        let tag = match (&self.sub, &self.sup) {
-            (Some(_), Some(_)) => "msubsup",
-            (Some(_), None) => "msub",
-            (None, Some(_)) => "msup",
-            (None, None) => unreachable!("MathSubSuper must have at least one of sub or sup"),
-        };
-        write!(f, "<{}", tag)?;
-        for (key, value) in &self.attributes {
-            write!(f, " {}=\"{}\"", key, value)?;
+        if self.is_sub_super_script() {
+            write!(f, "<msubsup>{}{}{}</msubsup>", self.base, self.ld[0], self.lu[0])
         }
-        write!(f, ">")?;
-        write!(f, "{}", self.base)?;
-        if let Some(sub) = &self.sub {
-            write!(f, "{}", sub)?;
+        else if self.is_sub_script() {
+            write!(f, "<msub>{}{}</msub>", self.base, self.ld[0])
         }
-        if let Some(sup) = &self.sup {
-            write!(f, "{}", sup)?;
+        else if self.is_super_script() {
+            write!(f, "<msup>{}{}</msup>", self.base, self.lu[0])
         }
-        write!(f, "</{}>", tag)
+        else {
+            f.write_str("<mmultiscripts>")?;
+            write!(f, "{}", self.base)?;
+
+            let r_max = self.ru.len().max(self.rd.len());
+            for i in 0..r_max {
+                match self.rd.get(i) {
+                    Some(s) => write!(f, "{}", s)?,
+                    None => write!(f, "<mrow></mrow>")?,
+                }
+                match self.ru.get(i) {
+                    Some(s) => write!(f, "{}", s)?,
+                    None => write!(f, "<mrow></mrow>")?,
+                }
+            }
+            f.write_str("<mprescripts/>")?;
+            let l_max = self.lu.len().max(self.ld.len());
+            for i in 0..l_max {
+                match self.ld.get(i) {
+                    Some(s) => write!(f, "{}", s)?,
+                    None => write!(f, "<mrow></mrow>")?,
+                }
+                match self.lu.get(i) {
+                    Some(s) => write!(f, "{}", s)?,
+                    None => write!(f, "<mrow></mrow>")?,
+                }
+            }
+            f.write_str("</mmultiscripts>")
+        }
     }
 }
 

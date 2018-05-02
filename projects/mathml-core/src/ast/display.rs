@@ -16,12 +16,12 @@ impl Display for MathML {
             MathML::Number(v) => Display::fmt(v, f),
             MathML::Identifier(v) => Display::fmt(v, f),
             MathML::Operator(v) => Display::fmt(v, f),
-            MathML::SubSup(v) => Display::fmt(v, f),
             MathML::Function(fun, arg) => match arg {
                 Some(arg) => write!(f, "<mi>{}</mi><mo>&#x2061;</mo>{}", fun, arg),
                 None => write!(f, "<mi>{}</mi>", fun),
             },
             MathML::Space(space) => write!(f, r#"<mspace width="{}em"/>"#, space),
+            MathML::MultiScripts(v) => Display::fmt(v, f),
             MathML::OverOp(op, acc, target) => write!(f, r#"<mover>{}<mo accent="{}">{}</mo></mover>"#, target, acc, op),
             MathML::UnderOp(op, acc, target) => write!(f, r#"<munder>{}<mo accent="{}">{}</mo></munder>"#, target, acc, op),
             MathML::UnderOver(v) => Display::fmt(v, f),
