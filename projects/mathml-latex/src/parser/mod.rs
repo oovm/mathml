@@ -1,4 +1,4 @@
-use crate::LaTeXBlock;
+use crate::{block::LaTeXCommand, LaTeXBlock};
 use mathml_core::{MathIdentifier, MathML, MathNumber};
 use pex::{
     helpers::{make_from_str, whitespace},
@@ -20,7 +20,7 @@ pub enum LaTeXNode<'i> {
     Root { children: Vec<LaTeXNode<'i>> },
     Row { children: Vec<LaTeXNode<'i>> },
     Block(LaTeXBlock<'i>),
-    Command { name: &'i str, children: Vec<LaTeXNode<'i>> },
+    Command(LaTeXCommand<'i>),
     Text { text: &'i str },
     Number { number: &'i str },
     Operation { operator: &'i str },
@@ -56,20 +56,36 @@ impl<'i> LaTeXNode<'i> {
     }
     /// `row := atomic*`
     fn parse_row(input: ParseState<'i>) -> ParseResult<LaTeXNode<'i>> {
-        let (state, mut children) = input.match_repeats(LaTeXNode::parse_atomic)?;
+        let (state, children) = input.match_repeats(LaTeXNode::parse_atomic)?;
         state.finish(LaTeXNode::Row { children })
+    }
+    fn parse_command(input: ParseState<'i>) -> ParseResult<LaTeXNode<'i>> {
+        let (state, _) = input.match_char('\\')?;
+        let (state, cmd) = state
+            .begin_choice()
+            .or_else(|state| state.match_char(' ').map_inner(|_| " "))
+            .or_else(|state| state.match_str_if(|c| c.is_ascii_alphabetic(), "ASCII_ALPHA"))
+            .end_choice()?;
+        let (state, args) = state.match_repeats(|state| state.skip(whitespace).match_fn(LaTeXNode::parse_group))?;
+
+        state.finish(LaTeXNode::Command(LaTeXCommand { name: "", children: vec![] }))
     }
     fn parse_atomic(input: ParseState<'i>) -> ParseResult<LaTeXNode<'i>> {
         let (state, node) = input
             .skip(whitespace)
             .begin_choice()
             .or_else(Self::parse_group)
+            .or_else(Self::parse_command)
             .or_else(Self::parse_letter)
             .or_else(Self::parse_operator)
             .or_else(Self::parse_number)
             .end_choice()?;
         state.finish(node)
     }
+    // pub fn parse_maybe_digit(input: ParseState<'i>) -> ParseResult<LaTeXNode<'i>> {
+    //     let (state, node) = input.begin_choice().or_else(Self::parse_number).or_else(Self::parse_letter).end_choice()?;
+    //     state.finish(node)
+    // }
     // 1
     // 1.0
     fn parse_number(input: ParseState<'i>) -> ParseResult<LaTeXNode<'i>> {
@@ -117,21 +133,4 @@ impl<'i> LaTeXBlock<'i> {
         let (state, _) = state.skip(whitespace).match_char('}')?;
         state.finish(kind)
     }
-}
-
-fn parse_command_head<'i>(input: ParseState<'i>) -> ParseResult<&'i str> {
-    let (state, _) = input.match_char('\\')?;
-    let (state, cmd) = state
-        .begin_choice()
-        .or_else(|state| state.match_char(' ').map_inner(|_| " "))
-        .or_else(|state| state.match_str_if(|c| c.is_ascii_alphabetic(), "ASCII_ALPHA"))
-        .end_choice()?;
-    state.finish(cmd)
-}
-
-fn parse_command_brace<'i>(input: ParseState<'i>) -> ParseResult<&'i str> {
-    let (state, _) = input.match_char('{')?;
-
-    let (state, _) = state.skip(whitespace).match_char('}')?;
-    todo!()
 }

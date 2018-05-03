@@ -13,11 +13,11 @@ edition = "2021"
 tracing = "0.1.37"
 
 [dependencies.pex]
-version = "0.0.6"
-path = "C:\\Users\\Dell\\CLionProjects\\pex\\projects\\pex-core"
+version = "0.0.7"
+#path = "C:\\Users\\Dell\\CLionProjects\\pex\\projects\\pex-core"
 
 [dependencies.mathml-core]
-version = "0.0.0"
+version = "0.0.1"
 path = "../mathml-core"
 
 [dev-dependencies]

@@ -13,3 +13,8 @@ pub struct LaTeXFraction<'i> {
     pub numerator: Box<LaTeXNode<'i>>,
     pub denominator: Box<LaTeXNode<'i>>,
 }
+
+pub struct LaTeXCommand<'i> {
+    pub name: &'i str,
+    pub children: Vec<LaTeXNode<'i>>,
+}

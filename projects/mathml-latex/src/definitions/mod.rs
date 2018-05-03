@@ -1,7 +1,7 @@
-use std::collections::BTreeSet;
+use std::collections::{BTreeMap, BTreeSet};
 mod builtin;
 
 pub struct LaTeXEngine {
-    functions: BTreeSet<String>,
-    operators: BTreeSet<String>,
+    functions: BTreeMap<String, String>,
+    operators: BTreeMap<String, String>,
 }

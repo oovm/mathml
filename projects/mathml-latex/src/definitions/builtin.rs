@@ -2,39 +2,88 @@ use super::*;
 
 impl Default for LaTeXEngine {
     fn default() -> Self {
-        let mut empty = Self::empty();
-        empty.set_functions(Self::builtin_functions());
+        let mut empty = Self { functions: Default::default(), operators: Default::default() };
+        empty.add_builtin_operators();
+        empty.add_builtin_functions();
         empty
     }
 }
 
 impl LaTeXEngine {
-    fn empty() -> Self {
-        Self { functions: BTreeSet::new(), operators: Default::default() }
+    pub fn get_function(&self, name: &str) -> Option<&str> {
+        Some(self.functions.get(name)?.as_str())
+    }
+    pub fn add_function<K, V>(&mut self, key: K, value: V)
+    where
+        K: ToString,
+        V: ToString,
+    {
+        self.functions.insert(key.to_string(), value.to_string());
+    }
+    pub fn mut_functions<I>(&mut self) -> &mut BTreeMap<String, String> {
+        &mut self.functions
+    }
+    fn add_builtin_functions(&mut self) {
+        macro_rules! add_function {
+            ($($name:literal => $symbol:literal),* $(,)?) => {
+                $(
+                    self.functions.insert($name.to_string(), $symbol.to_string());
+                )*
+            };
+        }
+        add_function! {
+            "sin" => "sin",
+            "cos" => "cos",
+            "tan" => "tan",
+            "csc" => "csc",
+            "sec" => "sec",
+            "cot" => "cot",
+            "arcsin" => "arcsin",
+            "arccos" => "arccos",
+            "arctan" => "arctan",
+            "sinh" => "sinh",
+            "cosh" => "cosh",
+            "tanh" => "tanh",
+            "coth" => "coth",
+            "exp" => "exp",
+            "ln" => "ln",
+            "log" => "log",
+            "erf" => "erf",
+            "erfc" => "erfc",
+            "arg" => "arg",
+            "gcd" => "gcd",
+            "lcm" => "lcm",
+            "min" => "min",
+            "max" => "max",
+        }
     }
 }
 
 impl LaTeXEngine {
-    pub fn get_functions(&self) -> &BTreeSet<String> {
-        &self.functions
+    pub fn match_operator(&self, name: &str) -> Option<&str> {
+        Some(self.operators.get(name)?.as_str())
     }
-    pub fn add_functions<I>(&mut self, functions: I)
-    where
-        I: IntoIterator<Item = String>,
-    {
-        self.functions.extend(functions)
-    }
-    pub fn set_functions<I>(&mut self, functions: I)
-    where
-        I: IntoIterator<Item = String>,
-    {
-        self.functions = functions.into_iter().collect()
-    }
-    fn builtin_functions() -> BTreeSet<String> {
-        const BUILTIN_FUNCTIONS: &[&str] = &[
-            "sin", "cos", "tan", "csc", "sec", "cot", "arcsin", "arccos", "arctan", "sinh", "cosh", "tanh", "coth", "exp",
-            "ln", "log", "erf", "erfc", "arg", "gcd", "lcm", "min", "max", "lim", "liminf", "limsup", "inf", "sup",
-        ];
-        BTreeSet::from_iter(BUILTIN_FUNCTIONS.into_iter().map(|s| s.to_string()))
+    fn add_builtin_operators(&mut self) {
+        macro_rules! add_operator {
+            ($($name:literal => $symbol:literal),* $(,)?) => {
+                $(
+                    self.operators.insert($name.to_string(), $symbol.to_string());
+                )*
+            };
+        }
+
+        add_operator! {
+            "times"  => "×",
+            "oplus"  => "⊕",
+            "otimes" => "⊗",
+            "odot"   => "⊙",
+            "cup"    => "∪",
+            "cap"    => "∩",
+            "sqcup"  => "⊔",
+            "sqcap"  => "⊓",
+            "vee"    => "∨",
+            "wedge"  => "∧",
+            "setminus" => "∖",
+        }
     }
 }
