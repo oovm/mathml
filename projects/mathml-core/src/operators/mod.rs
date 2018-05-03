@@ -19,7 +19,7 @@ pub struct MathSqrt {
     surd: Option<MathML>,
 }
 
-/// <https://developer.mozilla.org/en-US/docs/Web/MathML/Element/msubsup>
+/// The [`<mmultiscripts>`](https://developer.mozilla.org/en-US/docs/Web/MathML/Element/mmultiscripts) element is used to attach multiple subscripts and superscripts to a base.
 #[derive(Clone, Debug, PartialEq)]
 pub struct MathMultiScript {
     base: MathML,
@@ -44,23 +44,4 @@ pub struct MathFenced {
     base: MathML,
     lhs: String,
     rhs: String,
-}
-
-impl MathFenced {
-    pub fn new<S>(base: MathML, lhs: S, rhs: S) -> Self
-    where
-        S: Into<String>,
-    {
-        Self { base, lhs: lhs.into(), rhs: rhs.into() }
-    }
-}
-
-impl Display for MathFenced {
-    fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
-        write!(
-            f,
-            r#"<mrow><mo stretchy="true" form="prefix">{}</mo>{}<mo stretchy="true" form="postfix">{}</mo></mrow>"#,
-            self.lhs, self.base, self.rhs
-        )
-    }
 }

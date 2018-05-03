@@ -24,6 +24,16 @@ impl Display for MathSqrt {
     }
 }
 
+impl Display for MathFenced {
+    fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
+        write!(
+            f,
+            r#"<mrow><mo stretchy="true" form="prefix">{}</mo>{}<mo stretchy="true" form="postfix">{}</mo></mrow>"#,
+            self.lhs, self.base, self.rhs
+        )
+    }
+}
+
 impl Display for MathMultiScript {
     fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
         if self.is_sub_super_script() {

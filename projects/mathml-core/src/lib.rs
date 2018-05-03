@@ -11,5 +11,5 @@ pub use crate::{
     fractions::{LineThickness, MathFraction},
     identifiers::{MathIdentifier, MathVariant},
     numbers::MathNumber,
-    operators::{MathMultiScript, MathOperator},
+    operators::{MathFenced, MathMultiScript, MathOperator, MathUnderOver},
 };

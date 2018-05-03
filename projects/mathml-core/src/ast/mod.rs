@@ -5,7 +5,7 @@ use crate::{
     ast::attribute::{Accent, ColumnAlign},
     identifiers::MathText,
     operators::{MathOperator, MathSqrt, MathUnderOver},
-    MathFraction, MathIdentifier, MathMultiScript, MathNumber, MathPhantom, MathRoot,
+    MathFenced, MathFraction, MathIdentifier, MathMultiScript, MathNumber, MathPhantom, MathRoot,
 };
 use std::fmt::{Display, Formatter};
 
@@ -37,11 +37,7 @@ pub enum MathML {
     Frac(Box<MathFraction>),
     Phantom(Box<MathPhantom>),
     Row(Vec<MathML>),
-    Fenced {
-        open: &'static str,
-        close: &'static str,
-        content: Box<MathML>,
-    },
+    Fenced(Box<MathFenced>),
     StrechedOp(bool, String),
     SizedParen {
         size: &'static str,

@@ -29,13 +29,7 @@ impl Display for MathML {
             MathML::Frac(v) => Display::fmt(v, f),
             MathML::Row(vec) => write!(f, "<mrow>{}</mrow>", vec.iter().map(|node| format!("{}", node)).collect::<String>()),
             MathML::Phantom(v) => Display::fmt(v, f),
-            MathML::Fenced { open, close, content } => {
-                write!(
-                    f,
-                    r#"<mrow><mo stretchy="true" form="prefix">{}</mo>{}<mo stretchy="true" form="postfix">{}</mo></mrow>"#,
-                    open, content, close
-                )
-            }
+            MathML::Fenced(v) => Display::fmt(v, f),
             MathML::StrechedOp(stretchy, op) => write!(f, r#"<mo stretchy="{}">{}</mo>"#, stretchy, op),
             MathML::SizedParen { size, paren } => {
                 write!(f, r#"<mrow><mo maxsize="{0}" minsize="{0}">{1}</mro></mrow>"#, size, paren)

@@ -42,6 +42,15 @@ impl MathMultiScript {
     }
 }
 
+impl MathFenced {
+    pub fn new<S>(base: MathML, lhs: S, rhs: S) -> Self
+    where
+        S: Into<String>,
+    {
+        Self { base, lhs: lhs.into(), rhs: rhs.into() }
+    }
+}
+
 impl MathUnderOver {
     pub fn under(base: MathML, under: MathML) -> Self {
         Self { base, under: Some(under), over: None, attributes: BTreeMap::new() }

@@ -68,7 +68,7 @@ impl<'i> LaTeXNode<'i> {
             .end_choice()?;
         let (state, args) = state.match_repeats(|state| state.skip(whitespace).match_fn(LaTeXNode::parse_group))?;
 
-        state.finish(LaTeXNode::Command(LaTeXCommand { name: "", children: vec![] }))
+        state.finish(LaTeXNode::Command(LaTeXCommand { name: cmd, children: args }))
     }
     fn parse_atomic(input: ParseState<'i>) -> ParseResult<LaTeXNode<'i>> {
         let (state, node) = input

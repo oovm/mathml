@@ -21,10 +21,10 @@ impl MathRoot {
         self.attributes.insert(key.to_string(), value.to_string());
         self
     }
-    pub fn with_display_style(mut self) -> Self {
+    pub fn with_display_style(self) -> Self {
         self.with_attribute("display", "block")
     }
-    pub fn with_inline_style(mut self) -> Self {
+    pub fn with_inline_style(self) -> Self {
         self.with_attribute("display", "inline")
     }
 }
