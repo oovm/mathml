@@ -39,26 +39,3 @@ impl MathFraction {
         self
     }
 }
-
-impl MathML {
-    pub fn fraction(numerator: MathML, denominator: MathML) -> Self {
-        MathFraction::new(numerator, denominator).into()
-    }
-    //  binomial coefficients and Legendre symbols
-
-    //   <mrow>
-    //     <mo>(</mo>
-    //     <mfrac linethickness="0">
-    //       <mi>n</mi>
-    //       <mi>k</mi>
-    //     </mfrac>
-    //     <mo>)</mo>
-    //   </mrow>
-    // pub fn binomial(numerator: MathML, denominator: MathML) -> Self {
-    //     let mut row = vec![];
-    //     row.push(MathML::Op("("));
-    //     row.push(MathML::fraction(numerator, denominator).with_thickness(LineThickness::Length(0)));
-    //     row.push(MathML::mo(")"));
-    //     row
-    // }
-}

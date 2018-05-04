@@ -5,6 +5,9 @@ mod identifiers;
 mod numbers;
 mod operators;
 
+#[allow(unused_variables)]
+pub mod helpers;
+
 pub use crate::{
     ast::MathML,
     blocks::{MathPhantom, MathRoot},

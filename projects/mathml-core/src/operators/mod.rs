@@ -39,9 +39,15 @@ pub struct MathUnderOver {
     attributes: BTreeMap<String, String>,
 }
 
+/// The <mfenced> MathML element provides the possibility to add custom opening and closing parentheses (such as brackets) and separators (such as commas or semicolons) to an expression.
+///
+/// ## Syntax
+///
+/// Since it is deprecated by the MathML standard, the syntax is not well defined.
 #[derive(Clone, Debug, PartialEq)]
 pub struct MathFenced {
-    base: MathML,
-    lhs: String,
-    rhs: String,
+    base: Vec<MathML>,
+    open: String,
+    close: String,
+    separators: String,
 }

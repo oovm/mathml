@@ -1,4 +1,5 @@
 use super::*;
+use std::iter::repeat;
 
 impl Display for MathOperator {
     fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
@@ -26,11 +27,20 @@ impl Display for MathSqrt {
 
 impl Display for MathFenced {
     fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
-        write!(
-            f,
-            r#"<mrow><mo stretchy="true" form="prefix">{}</mo>{}<mo stretchy="true" form="postfix">{}</mo></mrow>"#,
-            self.lhs, self.base, self.rhs
-        )
+        let last = self.separators.chars().last().unwrap_or(',');
+        let mut separators = self.separators.chars().chain(repeat(last));
+        write!(f, "<mrow><mo stretchy=\"true\" form=\"prefix\">{}</mo>", self.open)?;
+        for (i, item) in self.base.iter().enumerate() {
+            if i == 0 {
+                write!(f, "{}", item)?;
+            }
+            else {
+                // SAFETY: `separators` is infinite
+                let split = unsafe { separators.next().unwrap_unchecked() };
+                write!(f, "<mo>{}</mo>{}", split, item)?;
+            }
+        }
+        write!(f, "<mo stretchy=\"true\" form=\"postfix\">{}</mo></mrow>", self.close)
     }
 }
 

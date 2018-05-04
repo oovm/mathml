@@ -3,7 +3,7 @@ fn ready() {
     println!("it works!")
 }
 
-use mathml_core::{MathIdentifier, MathML, MathNumber};
+use mathml_core::{MathFenced, MathIdentifier, MathML, MathNumber};
 
 #[test]
 fn node_display() {
@@ -14,9 +14,20 @@ fn node_display() {
         (MathML::Identifier(Box::new(MathIdentifier::italic('&'))), "<mi>&amp;</mi>"),
         (MathML::Identifier(Box::new(MathIdentifier::normal('あ'))), r#"<mi mathvariant="normal">あ</mi>"#),
         (MathML::Identifier(Box::new(MathIdentifier::normal('啊'))), r#"<mi mathvariant="normal">啊</mi>"#),
-        (MathML::Row(vec![MathML::Operator('+'), MathML::Operator('-')]), r"<mrow><mo>+</mo><mo>-</mo></mrow>"),
+        // (MathML::Row(vec![MathML::Operator('+'), MathML::Operator('-')]), r"<mrow><mo>+</mo><mo>-</mo></mrow>"),
     ];
     for (problem, answer) in problems.iter() {
         assert_eq!(&format!("{}", problem), answer);
     }
+}
+
+#[test]
+fn test() {
+    let math = MathFenced::new(
+        vec![MathNumber::from(1.1).into(), MathNumber::from(2.1).into(), MathNumber::from(3.1).into()],
+        "{",
+        "}",
+    )
+    .with_separators(",;|");
+    println!("{}", math)
 }

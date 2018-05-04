@@ -27,6 +27,9 @@ impl MathRoot {
     pub fn with_inline_style(self) -> Self {
         self.with_attribute("display", "inline")
     }
+    pub fn with_namespace(self) -> Self {
+        self.with_attribute("xmlns", "http://www.w3.org/1998/Math/MathML")
+    }
 }
 
 impl MathPhantom {

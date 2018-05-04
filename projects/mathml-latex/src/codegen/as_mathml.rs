@@ -1,6 +1,9 @@
 use super::*;
 use crate::block::LaTeXCommand;
-use mathml_core::{MathIdentifier, MathML, MathMultiScript, MathNumber, MathOperator, MathRoot};
+use mathml_core::{
+    helpers::{binom, frac},
+    MathIdentifier, MathML, MathMultiScript, MathNumber, MathOperator, MathRoot,
+};
 use std::process::Command;
 
 impl<'i> LaTeXNode<'i> {
@@ -36,16 +39,24 @@ impl<'i> LaTeXCommand<'i> {
     pub fn as_mathml(&self, context: &LaTeXEngine) -> MathML {
         if self.name.eq("frac") {
             match self.children.as_slice() {
-                [numerator, denominator] => {
-                    return MathML::fraction(numerator.as_mathml(context), denominator.as_mathml(context));
+                [] => panic!("frac command must have at least two arguments"),
+                [numerator] => panic!("frac command must have at least two arguments"),
+                [numerator, denominator, rest @ ..] => {
+                    let term = frac(numerator.as_mathml(context), denominator.as_mathml(context));
+                    if rest.len() == 0 {
+                        return term;
+                    }
+                    let mut terms = Vec::with_capacity(rest.len() + 1);
+                    terms.push(term);
+                    terms.extend(rest.iter().map(|node| node.as_mathml(context)));
+                    return MathML::Row(terms);
                 }
-                _ => panic!("frac command must have exactly two arguments"),
             }
         }
         if self.name.eq("binom") {
             match self.children.as_slice() {
                 [numerator, denominator] => {
-                    return MathML::fraction(numerator.as_mathml(context), denominator.as_mathml(context));
+                    return binom(numerator.as_mathml(context), denominator.as_mathml(context));
                 }
                 _ => panic!("binom command must have exactly two arguments"),
             }

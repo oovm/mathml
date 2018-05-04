@@ -43,11 +43,19 @@ impl MathMultiScript {
 }
 
 impl MathFenced {
-    pub fn new<S>(base: MathML, lhs: S, rhs: S) -> Self
+    pub fn new<I, S>(base: I, lhs: S, rhs: S) -> Self
     where
+        I: IntoIterator<Item = MathML>,
         S: Into<String>,
     {
-        Self { base, lhs: lhs.into(), rhs: rhs.into() }
+        Self { base: Vec::from_iter(base.into_iter()), open: lhs.into(), close: rhs.into(), separators: String::new() }
+    }
+    pub fn with_separators<S>(mut self, separators: S) -> Self
+    where
+        S: ToString,
+    {
+        self.separators = separators.to_string();
+        self
     }
 }
 

@@ -62,6 +62,15 @@ impl MathIdentifier {
     }
 }
 
+impl MathML {
+    pub fn identifier<S>(text: S) -> Self
+    where
+        S: ToString,
+    {
+        MathIdentifier::italic(text).into()
+    }
+}
+
 impl MathText {
     pub fn text<S>(text: S) -> Self
     where
