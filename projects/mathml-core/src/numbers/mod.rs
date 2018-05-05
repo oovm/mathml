@@ -1,4 +1,3 @@
-use crate::MathML;
 use std::fmt::{Display, Formatter};
 
 mod display;

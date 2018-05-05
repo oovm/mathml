@@ -3,9 +3,10 @@ mod display;
 
 use crate::{
     ast::attribute::{Accent, ColumnAlign},
+    blocks::MathRow,
     identifiers::MathText,
     operators::{MathOperator, MathSqrt, MathUnderOver},
-    MathFenced, MathFraction, MathIdentifier, MathMultiScript, MathNumber, MathPhantom, MathRoot,
+    MathFenced, MathFraction, MathIdentifier, MathMultiScript, MathNumber, MathPhantom, MathRoot, MathSpace,
 };
 use std::fmt::{Display, Formatter};
 
@@ -14,6 +15,8 @@ use std::fmt::{Display, Formatter};
 pub enum MathML {
     /// [`<math>`](https://developer.mozilla.org/en-US/docs/Web/MathML/Element/math)
     Root(Box<MathRoot>),
+    /// [`<mspace>`](https://developer.mozilla.org/en-US/docs/Web/MathML/Element/mspace)
+    Space(Box<MathSpace>),
     /// [`<mn>`](https://developer.mozilla.org/en-US/docs/Web/MathML/Element/mn)
     Number(Box<MathNumber>),
     /// [`<mi>`](https://developer.mozilla.org/en-US/docs/Web/MathML/Element/mi)
@@ -30,13 +33,12 @@ pub enum MathML {
     /// [`<munder>`](https://developer.mozilla.org/en-US/docs/Web/MathML/Element/munder) / [`<mover>`](https://developer.mozilla.org/en-US/docs/Web/MathML/Element/mover) / [`<munderover>`](https://developer.mozilla.org/en-US/docs/Web/MathML/Element/munderover)
     UnderOver(Box<MathUnderOver>),
     Function(String, Option<Box<MathML>>),
-    Space(f32),
     OverOp(char, Accent, Box<MathML>),
     UnderOp(char, Accent, Box<MathML>),
     Sqrt(Box<MathSqrt>),
     Frac(Box<MathFraction>),
     Phantom(Box<MathPhantom>),
-    Row(Vec<MathML>),
+    Row(Box<MathRow>),
     Fenced(Box<MathFenced>),
     StrechedOp(bool, String),
     SizedParen {
@@ -69,6 +71,22 @@ macro_rules! make_mathml {
         )*
     };
 }
+
+macro_rules! make_number {
+    ($($name:ident),*) => {
+        $(
+            impl From<$name> for MathML {
+                fn from(value: $name) -> Self {
+                    MathML::Number(Box::new(value.into()))
+                }
+            }
+        )*
+    };
+}
+
+make_number![i8, i16, i32, i64, i128, isize];
+make_number![u8, u16, u32, u64, u128, usize];
+make_number![f32, f64];
 
 #[rustfmt::skip]
 make_mathml! {

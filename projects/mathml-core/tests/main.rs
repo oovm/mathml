@@ -3,7 +3,7 @@ fn ready() {
     println!("it works!")
 }
 
-use mathml_core::{MathFenced, MathIdentifier, MathML, MathNumber};
+use mathml_core::{MathFenced, MathFraction, MathIdentifier, MathML, MathNumber};
 
 #[test]
 fn node_display() {
@@ -24,10 +24,10 @@ fn node_display() {
 #[test]
 fn test() {
     let math = MathFenced::new(
-        vec![MathNumber::from(1.1).into(), MathNumber::from(2.1).into(), MathNumber::from(3.1).into()],
-        "{",
-        "}",
+        vec![MathFraction::new(1, 2).into(), MathNumber::from(2.1).into(), MathNumber::from(3.1).into()],
+        '<',
+        '>',
     )
-    .with_separators(",;|");
+    .with_separators("&#");
     println!("{}", math)
 }

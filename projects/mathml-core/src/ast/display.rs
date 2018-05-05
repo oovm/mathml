@@ -20,7 +20,6 @@ impl Display for MathML {
                 Some(arg) => write!(f, "<mi>{}</mi><mo>&#x2061;</mo>{}", fun, arg),
                 None => write!(f, "<mi>{}</mi>", fun),
             },
-            MathML::Space(space) => write!(f, r#"<mspace width="{}em"/>"#, space),
             MathML::MultiScripts(v) => Display::fmt(v, f),
             MathML::OverOp(op, acc, target) => write!(f, r#"<mover>{}<mo accent="{}">{}</mo></mover>"#, target, acc, op),
             MathML::UnderOp(op, acc, target) => write!(f, r#"<munder>{}<mo accent="{}">{}</mo></munder>"#, target, acc, op),
@@ -67,7 +66,8 @@ impl Display for MathML {
 
                 write!(f, "{}", mathml)
             }
-            MathML::Text(text) => write!(f, "<mtext>{}</mtext>", text),
+            MathML::Space(v) => Display::fmt(v, f),
+            MathML::Text(v) => Display::fmt(v, f),
             MathML::Style(display, content) => match display {
                 Some(DisplayStyle::Block) => write!(f, r#"<mstyle displaystyle="true">{}</mstyle>"#, content),
                 Some(DisplayStyle::Inline) => write!(f, r#"<mstyle displaystyle="false">{}</mstyle>"#, content),

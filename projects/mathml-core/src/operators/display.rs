@@ -1,4 +1,5 @@
 use super::*;
+use crate::helpers::safe_html_char;
 use std::iter::repeat;
 
 impl Display for MathOperator {
@@ -9,6 +10,16 @@ impl Display for MathOperator {
         else {
             write!(f, r#"<mo>{}</mo>"#, self.operator)
         }
+    }
+}
+
+impl Display for MathSpace {
+    fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
+        write!(f, "<mspace")?;
+        for (key, value) in &self.attributes {
+            write!(f, " {}=\"{}\"", key, value)?;
+        }
+        write!(f, "/>")
     }
 }
 
@@ -29,7 +40,9 @@ impl Display for MathFenced {
     fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
         let last = self.separators.chars().last().unwrap_or(',');
         let mut separators = self.separators.chars().chain(repeat(last));
-        write!(f, "<mrow><mo stretchy=\"true\" form=\"prefix\">{}</mo>", self.open)?;
+        f.write_str("<mrow><mo stretchy=\"true\" form=\"prefix\">")?;
+        safe_html_char(f, self.open)?;
+        f.write_str("</mo>")?;
         for (i, item) in self.base.iter().enumerate() {
             if i == 0 {
                 write!(f, "{}", item)?;
@@ -37,10 +50,15 @@ impl Display for MathFenced {
             else {
                 // SAFETY: `separators` is infinite
                 let split = unsafe { separators.next().unwrap_unchecked() };
-                write!(f, "<mo>{}</mo>{}", split, item)?;
+                f.write_str("<mo>")?;
+                safe_html_char(f, split)?;
+                f.write_str("</mo>")?;
+                write!(f, "{}", item)?;
             }
         }
-        write!(f, "<mo stretchy=\"true\" form=\"postfix\">{}</mo></mrow>", self.close)
+        f.write_str("<mo stretchy=\"true\" form=\"postfix\">")?;
+        safe_html_char(f, self.close)?;
+        f.write_str("</mo></mrow>")
     }
 }
 

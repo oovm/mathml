@@ -13,6 +13,27 @@ pub struct MathRoot {
     attributes: BTreeMap<String, String>,
 }
 
+#[derive(Debug, Clone, PartialEq)]
+pub struct MathRow {
+    children: Vec<MathML>,
+    has_grouping: bool,
+}
+
+impl Display for MathRow {
+    fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
+        if self.has_grouping {
+            write!(f, "{{")?;
+        }
+        for child in &self.children {
+            write!(f, "{}", child)?;
+        }
+        if self.has_grouping {
+            write!(f, "}}")?;
+        }
+        Ok(())
+    }
+}
+
 /// The [`<mphantom>`](https://developer.mozilla.org/en-US/docs/Web/MathML/Element/mphantom) element is rendered invisibly, but dimensions (such as height, width, and baseline position) are still kept.
 #[derive(Debug, Clone, PartialEq)]
 pub struct MathPhantom {

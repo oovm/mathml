@@ -9,6 +9,34 @@ impl MathOperator {
     }
 }
 
+impl Default for MathSpace {
+    fn default() -> Self {
+        MathSpace::new(1.0)
+    }
+}
+
+impl MathSpace {
+    pub fn new(width: f32) -> Self {
+        let mut attributes = BTreeMap::new();
+        attributes.insert("width".to_string(), format!("{}rem", width));
+        Self { attributes }
+    }
+    pub fn get_attribute(&self, key: &str) -> Option<&str> {
+        self.attributes.get(key).map(|s| s.as_str())
+    }
+    pub fn add_attribute<K, V>(mut self, key: K, value: V) -> Self
+    where
+        K: ToString,
+        V: ToString,
+    {
+        self.attributes.insert(key.to_string(), value.to_string());
+        self
+    }
+    pub fn remove_attribute(&mut self, key: &str) -> Option<String> {
+        self.attributes.remove(key)
+    }
+}
+
 impl MathSqrt {
     pub fn new(base: MathML) -> Self {
         Self { base, surd: None }
@@ -43,12 +71,29 @@ impl MathMultiScript {
 }
 
 impl MathFenced {
-    pub fn new<I, S>(base: I, lhs: S, rhs: S) -> Self
+    pub fn new<I>(base: I, lhs: char, rhs: char) -> Self
     where
         I: IntoIterator<Item = MathML>,
-        S: Into<String>,
     {
-        Self { base: Vec::from_iter(base.into_iter()), open: lhs.into(), close: rhs.into(), separators: String::new() }
+        Self { base: Vec::from_iter(base.into_iter()), open: lhs, close: rhs, separators: String::new() }
+    }
+    pub fn parentheses<I>(base: I) -> Self
+    where
+        I: IntoIterator<Item = MathML>,
+    {
+        Self::new(base, '(', ')')
+    }
+    pub fn brackets<I>(base: I) -> Self
+    where
+        I: IntoIterator<Item = MathML>,
+    {
+        Self::new(base, '[', ']')
+    }
+    pub fn curly<I>(base: I) -> Self
+    where
+        I: IntoIterator<Item = MathML>,
+    {
+        Self::new(base, '{', '}')
     }
     pub fn with_separators<S>(mut self, separators: S) -> Self
     where

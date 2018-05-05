@@ -1,7 +1,7 @@
 use crate::MathML;
 use std::{
-    collections::{BTreeMap, BTreeSet},
-    fmt::{Display, Formatter, Write},
+    collections::BTreeMap,
+    fmt::{Display, Formatter},
 };
 
 mod constructors;
@@ -10,6 +10,11 @@ mod display;
 #[derive(Clone, Debug, PartialEq)]
 pub struct MathOperator {
     operator: String,
+}
+
+#[derive(Clone, Debug, PartialEq)]
+pub struct MathSpace {
+    attributes: BTreeMap<String, String>,
 }
 
 /// The [`<mroot>`](https://developer.mozilla.org/en-US/docs/Web/MathML/Element/mroot) or [`<msqrt>`](https://developer.mozilla.org/en-US/docs/Web/MathML/Element/msqrt) element is used to display roots with an explicit index.
@@ -39,7 +44,7 @@ pub struct MathUnderOver {
     attributes: BTreeMap<String, String>,
 }
 
-/// The <mfenced> MathML element provides the possibility to add custom opening and closing parentheses (such as brackets) and separators (such as commas or semicolons) to an expression.
+/// The [`<mfenced>`](https://developer.mozilla.org/en-US/docs/Web/MathML/Element/mfenced) element provides the possibility to add custom opening and closing parentheses (such as brackets) and separators (such as commas or semicolons) to an expression.
 ///
 /// ## Syntax
 ///
@@ -47,7 +52,7 @@ pub struct MathUnderOver {
 #[derive(Clone, Debug, PartialEq)]
 pub struct MathFenced {
     base: Vec<MathML>,
-    open: String,
-    close: String,
+    open: char,
+    close: char,
     separators: String,
 }

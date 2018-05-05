@@ -30,3 +30,18 @@ pub fn legendre_symbols(numerator: MathML, denominator: MathML) -> MathML {
 pub fn isotope(nucleus: usize, atomic_number: usize, mass_number: usize) -> MathML {
     todo!()
 }
+
+#[inline(always)]
+pub fn safe_html_char<W>(writer: &mut W, c: char) -> std::fmt::Result
+where
+    W: std::fmt::Write,
+{
+    match c {
+        '<' => writer.write_str("&lt;"),
+        '>' => writer.write_str("&gt;"),
+        '&' => writer.write_str("&amp;"),
+        '"' => writer.write_str("&quot;"),
+        '\'' => writer.write_str("&apos;"),
+        _ => writer.write_char(c),
+    }
+}

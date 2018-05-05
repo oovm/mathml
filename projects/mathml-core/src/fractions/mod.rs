@@ -28,8 +28,12 @@ impl Default for LineThickness {
 }
 
 impl MathFraction {
-    pub fn new(numerator: MathML, denominator: MathML) -> Self {
-        Self { numerator, denominator, line_thickness: Default::default() }
+    pub fn new<N, D>(numerator: N, denominator: D) -> Self
+    where
+        N: Into<MathML>,
+        D: Into<MathML>,
+    {
+        Self { numerator: numerator.into(), denominator: denominator.into(), line_thickness: Default::default() }
     }
     pub fn with_thickness<T>(mut self, line_thickness: T) -> Self
     where
