@@ -45,3 +45,14 @@ where
         _ => writer.write_char(c),
     }
 }
+
+#[inline(always)]
+pub fn safe_html_str<W>(writer: &mut W, s: &str) -> std::fmt::Result
+where
+    W: std::fmt::Write,
+{
+    for c in s.chars() {
+        safe_html_char(writer, c)?;
+    }
+    Ok(())
+}

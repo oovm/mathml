@@ -1,6 +1,4 @@
 use super::*;
-use crate::helpers::safe_html_char;
-use std::iter::repeat;
 
 impl Display for MathOperator {
     fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {

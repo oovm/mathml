@@ -10,7 +10,7 @@ pub mod helpers;
 
 pub use crate::{
     ast::MathML,
-    blocks::{MathPhantom, MathRoot},
+    blocks::{MathPhantom, MathRoot, MathRow},
     fractions::{LineThickness, MathFraction},
     identifiers::{MathIdentifier, MathVariant},
     numbers::MathNumber,

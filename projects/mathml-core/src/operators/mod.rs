@@ -1,9 +1,9 @@
-use crate::MathML;
+use crate::{helpers::safe_html_char, MathML};
 use std::{
     collections::BTreeMap,
     fmt::{Display, Formatter},
+    iter::repeat,
 };
-
 mod constructors;
 mod display;
 

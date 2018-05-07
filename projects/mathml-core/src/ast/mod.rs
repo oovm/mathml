@@ -15,6 +15,8 @@ use std::fmt::{Display, Formatter};
 pub enum MathML {
     /// [`<math>`](https://developer.mozilla.org/en-US/docs/Web/MathML/Element/math)
     Root(Box<MathRoot>),
+    /// [`<mrow>`](https://developer.mozilla.org/en-US/docs/Web/MathML/Element/mrow)
+    Row(Box<MathRow>),
     /// [`<mspace>`](https://developer.mozilla.org/en-US/docs/Web/MathML/Element/mspace)
     Space(Box<MathSpace>),
     /// [`<mn>`](https://developer.mozilla.org/en-US/docs/Web/MathML/Element/mn)
@@ -38,7 +40,7 @@ pub enum MathML {
     Sqrt(Box<MathSqrt>),
     Frac(Box<MathFraction>),
     Phantom(Box<MathPhantom>),
-    Row(Box<MathRow>),
+
     Fenced(Box<MathFenced>),
     StrechedOp(bool, String),
     SizedParen {

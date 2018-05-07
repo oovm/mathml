@@ -6,6 +6,27 @@ impl Default for MathRoot {
     }
 }
 
+impl MathRow {
+    pub fn new<I>(items: I) -> Self
+    where
+        I: IntoIterator<Item = MathML>,
+    {
+        Self { children: items.into_iter().collect(), has_grouping: false }
+    }
+    pub fn group<I>(items: I) -> Self
+    where
+        I: IntoIterator<Item = MathML>,
+    {
+        Self { children: items.into_iter().collect(), has_grouping: true }
+    }
+    pub fn get_items(&self) -> &[MathML] {
+        &self.children
+    }
+    pub fn mut_items(&mut self) -> &mut Vec<MathML> {
+        &mut self.children
+    }
+}
+
 impl MathRoot {
     pub fn new<I>(children: I) -> Self
     where
@@ -35,5 +56,11 @@ impl MathRoot {
 impl MathPhantom {
     pub fn new(inner: MathML) -> Self {
         Self { inner }
+    }
+    pub fn get_inner(&self) -> &MathML {
+        &self.inner
+    }
+    pub fn mut_inner(&mut self) -> &mut MathML {
+        &mut self.inner
     }
 }

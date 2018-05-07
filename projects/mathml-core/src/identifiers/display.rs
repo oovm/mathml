@@ -1,25 +1,34 @@
 use super::*;
+use crate::helpers::safe_html_str;
 
 impl Display for MathIdentifier {
     fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
-        let identifier = encode_text(&self.identifier);
         // maybe short form
         if !f.alternate() && self.variant == MathVariant::Italic {
-            write!(f, "<mi>{}</mi>", identifier)
+            f.write_str("<mi>")?;
+            safe_html_str(f, &self.identifier)?;
+            f.write_str("</mi>")
         }
         else {
-            write!(f, r#"<mi mathvariant="{}">{}</mi>"#, self.variant, identifier)
+            f.write_str("<mi mathvariant=\"")?;
+            Display::fmt(&self.variant, f)?;
+            f.write_str("\">")?;
+            safe_html_str(f, &self.identifier)?;
+            f.write_str("</mi>")
         }
     }
 }
 
 impl Display for MathText {
     fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
-        let text = encode_text(&self.text);
-        match self.is_string {
-            true => write!(f, "<ms>{}</ms>", text),
-            false => write!(f, "<mtext>{}</mtext>", text),
-        }
+        let tag = if self.is_string { "ms" } else { "mtext" };
+        f.write_str("<")?;
+        f.write_str(tag)?;
+        f.write_str(">")?;
+        safe_html_str(f, &self.text)?;
+        f.write_str("</")?;
+        f.write_str(tag)?;
+        f.write_str(">")
     }
 }
 

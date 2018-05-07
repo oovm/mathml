@@ -21,3 +21,13 @@ impl Display for MathPhantom {
         write!(f, "</mphantom>")
     }
 }
+
+impl Display for MathRow {
+    fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
+        f.write_str("<mrow>")?;
+        for child in &self.children {
+            write!(f, "{}", child)?;
+        }
+        f.write_str("</mrow>")
+    }
+}

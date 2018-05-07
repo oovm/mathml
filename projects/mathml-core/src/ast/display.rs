@@ -26,7 +26,7 @@ impl Display for MathML {
             MathML::UnderOver(v) => Display::fmt(v, f),
             MathML::Sqrt(v) => Display::fmt(v, f),
             MathML::Frac(v) => Display::fmt(v, f),
-            MathML::Row(vec) => write!(f, "<mrow>{}</mrow>", vec.iter().map(|node| format!("{}", node)).collect::<String>()),
+            MathML::Row(v) => Display::fmt(v, f),
             MathML::Phantom(v) => Display::fmt(v, f),
             MathML::Fenced(v) => Display::fmt(v, f),
             MathML::StrechedOp(stretchy, op) => write!(f, r#"<mo stretchy="{}">{}</mo>"#, stretchy, op),
