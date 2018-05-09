@@ -13,20 +13,17 @@ impl Display for MathML {
     fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
         match self {
             MathML::Root(v) => Display::fmt(v, f),
+            MathML::Row(v) => Display::fmt(v, f),
+            MathML::Function(v) => Display::fmt(v, f),
             MathML::Number(v) => Display::fmt(v, f),
             MathML::Identifier(v) => Display::fmt(v, f),
             MathML::Operator(v) => Display::fmt(v, f),
-            MathML::Function(fun, arg) => match arg {
-                Some(arg) => write!(f, "<mi>{}</mi><mo>&#x2061;</mo>{}", fun, arg),
-                None => write!(f, "<mi>{}</mi>", fun),
-            },
             MathML::MultiScripts(v) => Display::fmt(v, f),
             MathML::OverOp(op, acc, target) => write!(f, r#"<mover>{}<mo accent="{}">{}</mo></mover>"#, target, acc, op),
             MathML::UnderOp(op, acc, target) => write!(f, r#"<munder>{}<mo accent="{}">{}</mo></munder>"#, target, acc, op),
             MathML::UnderOver(v) => Display::fmt(v, f),
             MathML::Sqrt(v) => Display::fmt(v, f),
             MathML::Frac(v) => Display::fmt(v, f),
-            MathML::Row(v) => Display::fmt(v, f),
             MathML::Phantom(v) => Display::fmt(v, f),
             MathML::Fenced(v) => Display::fmt(v, f),
             MathML::StrechedOp(stretchy, op) => write!(f, r#"<mo stretchy="{}">{}</mo>"#, stretchy, op),

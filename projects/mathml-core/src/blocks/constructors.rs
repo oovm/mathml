@@ -64,3 +64,22 @@ impl MathPhantom {
         &mut self.inner
     }
 }
+
+impl MathFunction {
+    pub fn new<S, I>(name: S, body: I) -> Self
+    where
+        S: ToString,
+        I: IntoIterator<Item = MathML>,
+    {
+        Self { name: name.to_string(), body: body.into_iter().collect() }
+    }
+    pub fn add_argument(&mut self, argument: MathML) {
+        self.body.push(argument);
+    }
+    pub fn get_arguments(&self) -> &[MathML] {
+        &self.body
+    }
+    pub fn mut_arguments(&mut self) -> &mut Vec<MathML> {
+        &mut self.body
+    }
+}

@@ -31,3 +31,17 @@ impl Display for MathRow {
         f.write_str("</mrow>")
     }
 }
+
+impl Display for MathFunction {
+    fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
+        let identifier = MathIdentifier::normal(&self.name);
+        if self.body.is_empty() {
+            write!(f, "{}", identifier)
+        }
+        else {
+            let mut row = MathRow::new(vec![identifier.into(), MathOperator::new("&#x2061;").into()]);
+            row.mut_items().extend(self.body.iter().cloned());
+            write!(f, "{}", row)
+        }
+    }
+}

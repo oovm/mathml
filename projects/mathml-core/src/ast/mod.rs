@@ -6,7 +6,7 @@ use crate::{
     blocks::MathRow,
     identifiers::MathText,
     operators::{MathOperator, MathSqrt, MathUnderOver},
-    MathFenced, MathFraction, MathIdentifier, MathMultiScript, MathNumber, MathPhantom, MathRoot, MathSpace,
+    MathFenced, MathFraction, MathFunction, MathIdentifier, MathMultiScript, MathNumber, MathPhantom, MathRoot, MathSpace,
 };
 use std::fmt::{Display, Formatter};
 
@@ -34,13 +34,12 @@ pub enum MathML {
     MultiScripts(Box<MathMultiScript>),
     /// [`<munder>`](https://developer.mozilla.org/en-US/docs/Web/MathML/Element/munder) / [`<mover>`](https://developer.mozilla.org/en-US/docs/Web/MathML/Element/mover) / [`<munderover>`](https://developer.mozilla.org/en-US/docs/Web/MathML/Element/munderover)
     UnderOver(Box<MathUnderOver>),
-    Function(String, Option<Box<MathML>>),
+    Function(Box<MathFunction>),
     OverOp(char, Accent, Box<MathML>),
     UnderOp(char, Accent, Box<MathML>),
     Sqrt(Box<MathSqrt>),
     Frac(Box<MathFraction>),
     Phantom(Box<MathPhantom>),
-
     Fenced(Box<MathFenced>),
     StrechedOp(bool, String),
     SizedParen {

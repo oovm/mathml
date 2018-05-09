@@ -1,4 +1,4 @@
-use crate::MathML;
+use crate::{MathIdentifier, MathML, MathOperator};
 use std::{
     collections::BTreeMap,
     fmt::{Display, Formatter},
@@ -12,6 +12,12 @@ mod display;
 pub struct MathRoot {
     children: Vec<MathML>,
     attributes: BTreeMap<String, String>,
+}
+
+#[derive(Debug, Clone, PartialEq)]
+pub struct MathFunction {
+    name: String,
+    body: Vec<MathML>,
 }
 
 #[derive(Debug, Clone, PartialEq)]
