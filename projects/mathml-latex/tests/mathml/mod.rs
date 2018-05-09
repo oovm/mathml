@@ -22,6 +22,25 @@ pub fn test_term() {
 pub fn test_frac() {
     assert_mathml(r"\frac{a}{b}", r"<mfrac><mi>a</mi><mi>b</mi></mfrac>").unwrap();
     assert_mathml(r"\frac{a}{b}{c}", r"<mrow><mfrac><mi>a</mi><mi>b</mi></mfrac><mi>c</mi></mrow>").unwrap();
+    assert_mathml(
+        r"-\frac{p - q}{\Delta}",
+        r#"<mrow><mo>-</mo><mfrac><mrow><mi>p</mi><mo>-</mo><mi>q</mi></mrow><mi mathvariant="normal">Δ</mi></mfrac></mrow>"#,
+    )
+    .unwrap();
+}
+
+#[test]
+pub fn test_function() {
+    assert_mathml(
+        r"\sin{a}{b}",
+        r#"<mrow><mi mathvariant="normal">sin</mi><mspace width="0.167rem"/><mi>a</mi><mi>b</mi></mrow>"#,
+    )
+    .unwrap();
+    assert_mathml(
+        r"\operatorname{a}{b}{c}",
+        r#"<mrow><mi mathvariant="normal">a</mi><mspace width="0.167rem"/><mi>b</mi><mi>c</mi></mrow>"#,
+    )
+    .unwrap();
 }
 
 pub fn assert_mathml(source: &str, target: &str) -> Result<(), StopBecause> {

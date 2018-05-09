@@ -91,12 +91,20 @@ make_number![f32, f64];
 
 #[rustfmt::skip]
 make_mathml! {
-    MathRoot       => Root,
-    MathNumber     => Number,
-    MathIdentifier => Identifier,
-    MathOperator   => Operator,
-    MathMultiScript   => MultiScripts,
-    MathSqrt       => Sqrt,
-    MathFraction   => Frac,
-    MathPhantom    => Phantom
+    MathRoot        => Root,
+    MathRow         => Row,
+    
+    MathSpace       => Space,
+    MathText        => Text,
+    MathNumber      => Number,
+    
+    MathFunction    => Function,
+    MathUnderOver   => UnderOver,
+
+    MathIdentifier  => Identifier,
+    MathOperator    => Operator,
+    MathMultiScript => MultiScripts,
+    MathSqrt        => Sqrt,
+    MathFraction    => Frac,
+    MathPhantom     => Phantom
 }

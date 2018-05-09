@@ -1,9 +1,6 @@
 use crate::{block::LaTeXCommand, LaTeXBlock};
-use mathml_core::{MathIdentifier, MathML, MathNumber};
-use pex::{
-    helpers::{make_from_str, whitespace},
-    ParseResult, ParseState, StopBecause,
-};
+
+use pex::{helpers::whitespace, ParseResult, ParseState, StopBecause};
 
 mod sup_sub;
 
@@ -16,6 +13,7 @@ pub fn parse_latex(s: &str) -> Result<LaTeXNode, StopBecause> {
     }
 }
 
+#[derive(Clone, Debug)]
 pub enum LaTeXNode<'i> {
     Root { children: Vec<LaTeXNode<'i>> },
     Row { children: Vec<LaTeXNode<'i>> },
@@ -25,8 +23,23 @@ pub enum LaTeXNode<'i> {
     Number { number: &'i str },
     Operation { operator: &'i str },
     Superscript { lhs: Box<LaTeXNode<'i>>, rhs: Box<LaTeXNode<'i>> },
-    Fraction { numerator: Box<LaTeXNode<'i>>, denominator: Box<LaTeXNode<'i>> },
     Letter { identifier: &'i str },
+}
+
+impl<'i> LaTeXNode<'i> {
+    pub fn refine(self) -> Self {
+        match self {
+            LaTeXNode::Row { mut children } => {
+                if children.len() == 1 {
+                    children.remove(0)
+                }
+                else {
+                    LaTeXNode::Row { children }
+                }
+            }
+            _ => self,
+        }
+    }
 }
 
 impl<'i> LaTeXNode<'i> {
@@ -50,14 +63,14 @@ impl<'i> LaTeXNode<'i> {
     /// `group := '{' atomic* '}'`
     fn parse_group(input: ParseState<'i>) -> ParseResult<LaTeXNode<'i>> {
         let (state, _) = input.match_char('{')?;
-        let (state, mut children) = state.match_repeats(LaTeXNode::parse_atomic)?;
+        let (state, children) = state.match_repeats(LaTeXNode::parse_atomic)?;
         let (state, _) = state.skip(whitespace).match_char('}')?;
-        state.finish(LaTeXNode::Row { children })
+        state.finish(LaTeXNode::Row { children }.refine())
     }
     /// `row := atomic*`
     fn parse_row(input: ParseState<'i>) -> ParseResult<LaTeXNode<'i>> {
         let (state, children) = input.match_repeats(LaTeXNode::parse_atomic)?;
-        state.finish(LaTeXNode::Row { children })
+        state.finish(LaTeXNode::Row { children }.refine())
     }
     fn parse_command(input: ParseState<'i>) -> ParseResult<LaTeXNode<'i>> {
         let (state, _) = input.match_char('\\')?;

@@ -1,4 +1,5 @@
 use super::*;
+use crate::MathSpace;
 
 impl Display for MathRoot {
     fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
@@ -39,7 +40,7 @@ impl Display for MathFunction {
             write!(f, "{}", identifier)
         }
         else {
-            let mut row = MathRow::new(vec![identifier.into(), MathOperator::new("&#x2061;").into()]);
+            let mut row = MathRow::new(vec![identifier.into(), MathSpace::new(0.167).into()]);
             row.mut_items().extend(self.body.iter().cloned());
             write!(f, "{}", row)
         }

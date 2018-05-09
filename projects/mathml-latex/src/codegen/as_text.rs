@@ -1,5 +1,15 @@
 use super::*;
 
+impl<'i> LaTeXNode<'i> {
+    pub fn as_identifier(&self) -> &'i str {
+        match self {
+            LaTeXNode::Letter { identifier } => identifier,
+            LaTeXNode::Operation { operator } => operator,
+            _ => "",
+        }
+    }
+}
+
 impl<'i> Display for LaTeXNode<'i> {
     fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
         match self {
@@ -32,13 +42,6 @@ impl<'i> Display for LaTeXNode<'i> {
             }
             LaTeXNode::Letter { .. } => {
                 todo!()
-            }
-            LaTeXNode::Fraction { numerator, denominator } => {
-                f.write_str("\\frac{")?;
-                numerator.fmt(f)?;
-                f.write_str("}{")?;
-                denominator.fmt(f)?;
-                f.write_str("}")
             }
         }
     }

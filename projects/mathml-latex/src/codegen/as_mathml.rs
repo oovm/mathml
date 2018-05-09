@@ -2,18 +2,14 @@ use super::*;
 use crate::block::LaTeXCommand;
 use mathml_core::{
     helpers::{binom, frac},
-    MathIdentifier, MathML, MathMultiScript, MathNumber, MathOperator, MathRoot,
+    MathFunction, MathIdentifier, MathML, MathMultiScript, MathNumber, MathOperator, MathRoot, MathRow,
 };
-use std::process::Command;
 
 impl<'i> LaTeXNode<'i> {
     pub fn as_mathml(&self, context: &LaTeXEngine) -> MathML {
         match self {
             LaTeXNode::Root { children } => MathRoot::new(children.iter().map(|node| node.as_mathml(context))).into(),
-            LaTeXNode::Row { children } => match children.as_slice() {
-                [one] => one.as_mathml(context),
-                many => MathML::Row(Vec::from_iter(many.iter().map(|node| node.as_mathml(context)))),
-            },
+            LaTeXNode::Row { children } => MathRow::new(children.iter().map(|node| node.as_mathml(context))).into(),
             LaTeXNode::Block(v) => {
                 todo!()
             }
@@ -27,9 +23,6 @@ impl<'i> LaTeXNode<'i> {
             LaTeXNode::Operation { operator } => MathOperator::new(operator).into(),
             LaTeXNode::Superscript { lhs, rhs } => {
                 MathMultiScript::super_script(lhs.as_mathml(context), rhs.as_mathml(context)).into()
-            }
-            LaTeXNode::Fraction { .. } => {
-                todo!()
             }
         }
     }
@@ -46,10 +39,9 @@ impl<'i> LaTeXCommand<'i> {
                     if rest.len() == 0 {
                         return term;
                     }
-                    let mut terms = Vec::with_capacity(rest.len() + 1);
-                    terms.push(term);
-                    terms.extend(rest.iter().map(|node| node.as_mathml(context)));
-                    return MathML::Row(terms);
+                    let mut terms = MathRow::new(vec![term]);
+                    terms.mut_items().extend(rest.iter().map(|node| node.as_mathml(context)));
+                    return terms.into();
                 }
             }
         }
@@ -61,10 +53,20 @@ impl<'i> LaTeXCommand<'i> {
                 _ => panic!("binom command must have exactly two arguments"),
             }
         }
-        if let Some(s) = context.get_function(&self.name) {
-            todo!()
+        if self.name.eq("operatorname") {
+            match self.children.as_slice() {
+                [] => panic!("operatorname command must have exactly one argument"),
+                [head, rest @ ..] => {
+                    return MathFunction::new(head.as_identifier(), rest.iter().map(|node| node.as_mathml(context))).into();
+                }
+            }
         }
-        println!("unknown command: {}", self.name);
-        todo!()
+        if let Some(s) = context.get_function(&self.name) {
+            return MathFunction::new(s, self.children.iter().map(|node| node.as_mathml(context))).into();
+        }
+        if let Some(s) = context.get_operator(&self.name) {
+            return MathOperator::new(s).into();
+        }
+        return MathIdentifier::italic(format!("\\{}", self.name)).into();
     }
 }
