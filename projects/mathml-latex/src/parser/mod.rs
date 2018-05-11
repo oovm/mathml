@@ -102,6 +102,7 @@ impl<'i> LaTeXNode<'i> {
             .or_else(Self::parse_letter)
             .or_else(Self::parse_operator)
             .or_else(Self::parse_number)
+            .or_else(Self::parse_special)
             .end_choice()?;
         state.finish(node)
     }

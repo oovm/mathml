@@ -7,8 +7,12 @@ use crate::{
     identifiers::MathText,
     operators::{MathOperator, MathSqrt, MathUnderOver},
     MathFenced, MathFraction, MathFunction, MathIdentifier, MathMultiScript, MathNumber, MathPhantom, MathRoot, MathSpace,
+    MathTable,
 };
-use std::fmt::{Display, Formatter};
+use std::{
+    collections::BTreeMap,
+    fmt::{Display, Formatter},
+};
 
 /// AST node
 #[derive(Debug, Clone, PartialEq)]
@@ -46,12 +50,12 @@ pub enum MathML {
         size: &'static str,
         paren: &'static str,
     },
-    Matrix(Vec<MathML>, ColumnAlign),
-    Ampersand,
-    NewLine,
+    Table(Box<MathTable>),
     Slashed(Box<MathML>),
     Style(Option<DisplayStyle>, Box<MathML>),
     Undefined(String),
+    Ampersand,
+    NewLine,
 }
 
 /// display style
@@ -99,6 +103,7 @@ make_number![f32, f64];
 make_mathml! {
     MathRoot        => Root,
     MathRow         => Row,
+    MathTable       => Table,
     
     MathSpace       => Space,
     MathText        => Text,
@@ -112,5 +117,6 @@ make_mathml! {
     MathMultiScript => MultiScripts,
     MathSqrt        => Sqrt,
     MathFraction    => Frac,
-    MathPhantom     => Phantom
+    MathPhantom     => Phantom,
+    MathFenced      => Fenced
 }

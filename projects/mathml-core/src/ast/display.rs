@@ -38,30 +38,32 @@ impl Display for MathML {
                 MathML::Operator(x) => write!(f, "<mo>{}&#x0338;</mo>", x),
                 n => write!(f, "{}", n),
             },
-            MathML::Matrix(content, columnalign) => {
-                let mut mathml = format!("<mtable{}><mtr><mtd>", columnalign);
-                for (i, node) in content.iter().enumerate() {
-                    match node {
-                        MathML::NewLine => {
-                            mathml.push_str("</mtd></mtr>");
-                            if i < content.len() {
-                                mathml.push_str("<mtr><mtd>")
-                            }
-                        }
-                        MathML::Ampersand => {
-                            mathml.push_str("</mtd>");
-                            if i < content.len() {
-                                mathml.push_str("<mtd>")
-                            }
-                        }
-                        node => {
-                            mathml = format!("{}{}", mathml, node);
-                        }
-                    }
-                }
-                mathml.push_str("</mtd></mtr></mtable>");
+            MathML::Table(v) => {
+                Display::fmt(v, f)
 
-                write!(f, "{}", mathml)
+                // let mut mathml = format!("<mtable{}><mtr><mtd>", columnalign);
+                // for (i, node) in content.iter().enumerate() {
+                //     match node {
+                //         MathML::NewLine => {
+                //             mathml.push_str("</mtd></mtr>");
+                //             if i < content.len() {
+                //                 mathml.push_str("<mtr><mtd>")
+                //             }
+                //         }
+                //         MathML::Ampersand => {
+                //             mathml.push_str("</mtd>");
+                //             if i < content.len() {
+                //                 mathml.push_str("<mtd>")
+                //             }
+                //         }
+                //         node => {
+                //             mathml = format!("{}{}", mathml, node);
+                //         }
+                //     }
+                // }
+                // mathml.push_str("</mtd></mtr></mtable>");
+                //
+                // write!(f, "{}", mathml)
             }
             MathML::Space(v) => Display::fmt(v, f),
             MathML::Text(v) => Display::fmt(v, f),
@@ -70,12 +72,8 @@ impl Display for MathML {
                 Some(DisplayStyle::Inline) => write!(f, r#"<mstyle displaystyle="false">{}</mstyle>"#, content),
                 None => write!(f, "<mstyle>{}</mstyle>", content),
             },
-            MathML::Ampersand => {
-                todo!()
-            }
-            MathML::NewLine => {
-                todo!()
-            }
+            MathML::Ampersand => Ok(()),
+            MathML::NewLine => Ok(()),
             MathML::Undefined(_) => {
                 todo!()
             }

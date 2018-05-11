@@ -1,8 +1,8 @@
 use super::*;
-use crate::block::LaTeXCommand;
+use crate::{block::LaTeXCommand, LaTeXBlock};
 use mathml_core::{
     helpers::{binom, frac},
-    MathFunction, MathIdentifier, MathML, MathMultiScript, MathNumber, MathOperator, MathRoot, MathRow, MathSpace,
+    MathFunction, MathIdentifier, MathML, MathMultiScript, MathNumber, MathOperator, MathRoot, MathRow, MathSpace, MathTable,
 };
 
 impl<'i> LaTeXNode<'i> {
@@ -10,9 +10,7 @@ impl<'i> LaTeXNode<'i> {
         match self {
             LaTeXNode::Root { children } => MathRoot::new(children.iter().map(|node| node.as_mathml(context))).into(),
             LaTeXNode::Row { children } => MathRow::new(children.iter().map(|node| node.as_mathml(context))).into(),
-            LaTeXNode::Block(v) => {
-                todo!()
-            }
+            LaTeXNode::Block(block) => block.as_mathml(context),
             LaTeXNode::Command(cmd) => cmd.as_mathml(context),
             LaTeXNode::Text { .. } => {
                 todo!()
@@ -24,13 +22,18 @@ impl<'i> LaTeXNode<'i> {
             LaTeXNode::Superscript { lhs, rhs } => {
                 MathMultiScript::super_script(lhs.as_mathml(context), rhs.as_mathml(context)).into()
             }
-            LaTeXNode::NewLine => {
-                todo!()
-            }
-            LaTeXNode::Ampersand => {
-                todo!()
-            }
+            LaTeXNode::NewLine => MathML::NewLine,
+            LaTeXNode::Ampersand => MathML::Ampersand,
         }
+    }
+}
+
+impl<'i> LaTeXBlock<'i> {
+    pub fn as_mathml(&self, context: &LaTeXEngine) -> MathML {
+        if self.kind.eq("matrix") {
+            return MathTable::matrix(self.children.iter().map(|node| node.as_mathml(context))).into();
+        }
+        todo!()
     }
 }
 

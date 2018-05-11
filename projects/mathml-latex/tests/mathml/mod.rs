@@ -45,7 +45,11 @@ pub fn test_function() {
 
 #[test]
 pub fn test_matrix() {
-    assert_mathml(r#"\begin{matrix} a & b \\ c & d \end{matrix}"#, "").unwrap();
+    assert_mathml(
+        r#"\begin{matrix} a & b \\ c & d \end{matrix}"#,
+        "<mtable><mtr><mtd><mi>a</mi></mtd><mtd><mi>b</mi></mtr><mtr><mi>c</mi></mtd><mtd><mi>d</mi></mtd></mtr></mtable>",
+    )
+    .unwrap();
     assert_mathml(r#"\begin{bmatrix} a & b \\ c & d \end{bmatrix}"#, "").unwrap();
     assert_mathml(r#"\begin{vmatrix} a & b \\ c & d \end{vmatrix}"#, "").unwrap();
     assert_mathml(r#"\begin{Vmatrix} a & b \\ c & d \end{Vmatrix}"#, "").unwrap();
