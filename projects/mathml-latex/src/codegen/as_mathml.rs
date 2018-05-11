@@ -24,6 +24,12 @@ impl<'i> LaTeXNode<'i> {
             LaTeXNode::Superscript { lhs, rhs } => {
                 MathMultiScript::super_script(lhs.as_mathml(context), rhs.as_mathml(context)).into()
             }
+            LaTeXNode::NewLine => {
+                todo!()
+            }
+            LaTeXNode::Ampersand => {
+                todo!()
+            }
         }
     }
 }

@@ -31,9 +31,7 @@ impl<'i> Display for LaTeXNode<'i> {
             LaTeXNode::Text { .. } => {
                 todo!()
             }
-            LaTeXNode::Number { .. } => {
-                todo!()
-            }
+            LaTeXNode::Number { number } => f.write_str(number),
             LaTeXNode::Operation { .. } => {
                 todo!()
             }
@@ -43,6 +41,8 @@ impl<'i> Display for LaTeXNode<'i> {
             LaTeXNode::Letter { .. } => {
                 todo!()
             }
+            LaTeXNode::NewLine => f.write_str("\\\\"),
+            LaTeXNode::Ampersand => f.write_str("&"),
         }
     }
 }

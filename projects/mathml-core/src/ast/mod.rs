@@ -85,6 +85,12 @@ macro_rules! make_number {
     };
 }
 
+impl From<char> for MathML {
+    fn from(value: char) -> Self {
+        MathML::identifier(value)
+    }
+}
+
 make_number![i8, i16, i32, i64, i128, isize];
 make_number![u8, u16, u32, u64, u128, usize];
 make_number![f32, f64];

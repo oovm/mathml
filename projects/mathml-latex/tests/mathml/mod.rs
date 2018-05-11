@@ -43,6 +43,14 @@ pub fn test_function() {
     .unwrap();
 }
 
+#[test]
+pub fn test_matrix() {
+    assert_mathml(r#"\begin{matrix} a & b \\ c & d \end{matrix}"#, "").unwrap();
+    assert_mathml(r#"\begin{bmatrix} a & b \\ c & d \end{bmatrix}"#, "").unwrap();
+    assert_mathml(r#"\begin{vmatrix} a & b \\ c & d \end{vmatrix}"#, "").unwrap();
+    assert_mathml(r#"\begin{Vmatrix} a & b \\ c & d \end{Vmatrix}"#, "").unwrap();
+}
+
 pub fn assert_mathml(source: &str, target: &str) -> Result<(), StopBecause> {
     let context = LaTeXEngine::builtin();
     let mathml = parse_latex(source)?.as_mathml(&context);

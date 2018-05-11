@@ -1,4 +1,4 @@
-use crate::{MathIdentifier, MathML, MathOperator};
+use crate::{MathIdentifier, MathML};
 use std::{
     collections::BTreeMap,
     fmt::{Display, Formatter},

@@ -2,6 +2,7 @@ use crate::{block::LaTeXCommand, LaTeXBlock};
 
 use pex::{helpers::whitespace, ParseResult, ParseState, StopBecause};
 
+mod block;
 mod sup_sub;
 
 pub fn parse_latex(s: &str) -> Result<LaTeXNode, StopBecause> {
@@ -24,6 +25,10 @@ pub enum LaTeXNode<'i> {
     Operation { operator: &'i str },
     Superscript { lhs: Box<LaTeXNode<'i>>, rhs: Box<LaTeXNode<'i>> },
     Letter { identifier: &'i str },
+    // `\\`
+    NewLine,
+    // `&`
+    Ampersand,
 }
 
 impl<'i> LaTeXNode<'i> {
@@ -79,8 +84,13 @@ impl<'i> LaTeXNode<'i> {
             .or_else(|state| state.match_char(' ').map_inner(|_| " "))
             .or_else(|state| state.match_str_if(|c| c.is_ascii_alphabetic(), "ASCII_ALPHA"))
             .end_choice()?;
+        if cmd.eq("begin") {
+            Err(StopBecause::ShouldNotBe { message: "\\begin", position: state.start_offset })?;
+        }
+        if cmd.eq("end") {
+            Err(StopBecause::ShouldNotBe { message: "\\end", position: state.start_offset })?;
+        }
         let (state, args) = state.match_repeats(|state| state.skip(whitespace).match_fn(LaTeXNode::parse_group))?;
-
         state.finish(LaTeXNode::Command(LaTeXCommand { name: cmd, children: args }))
     }
     fn parse_atomic(input: ParseState<'i>) -> ParseResult<LaTeXNode<'i>> {
@@ -119,31 +129,12 @@ impl<'i> LaTeXNode<'i> {
             .end_choice()?;
         state.finish(LaTeXNode::Operation { operator: dec })
     }
-}
-
-impl<'i> LaTeXBlock<'i> {
-    pub fn parse(input: ParseState<'i>) -> ParseResult<LaTeXBlock<'i>> {
-        let (state, begin) = input.skip(whitespace).match_fn(Self::parse_begin)?;
-        let (state, children) = state.skip(whitespace).match_repeats(LaTeXNode::parse)?;
-        let (state, end) = state.skip(whitespace).match_fn(Self::parse_end)?;
-        if begin != end {
-            tracing::warn!("Mismatched begin/end: {} vs {}", begin, end);
-        }
-        state.finish(LaTeXBlock { kind: begin, children })
-    }
-
-    fn parse_begin(input: ParseState<'i>) -> ParseResult<&'i str> {
-        let (state, _) = input.match_str("\\begin", false)?;
-        let (state, _) = state.skip(whitespace).match_char('{')?;
-        let (state, kind) = state.skip(whitespace).match_str_if(|c| c.is_ascii_alphabetic(), "ASCII_ALPHA")?;
-        let (state, _) = state.skip(whitespace).match_char('}')?;
-        state.finish(kind)
-    }
-    fn parse_end(input: ParseState<'i>) -> ParseResult<&'i str> {
-        let (state, _) = input.match_str("\\end", false)?;
-        let (state, _) = state.skip(whitespace).match_char('{')?;
-        let (state, kind) = state.skip(whitespace).match_str_if(|c| c.is_ascii_alphabetic(), "ASCII_ALPHA")?;
-        let (state, _) = state.skip(whitespace).match_char('}')?;
-        state.finish(kind)
+    fn parse_special(input: ParseState<'i>) -> ParseResult<LaTeXNode<'i>> {
+        let (state, item) = input
+            .begin_choice()
+            .or_else(|state| state.match_str("\\\\", false).map_inner(|_| LaTeXNode::NewLine))
+            .or_else(|state| state.match_str("&", false).map_inner(|_| LaTeXNode::Ampersand))
+            .end_choice()?;
+        state.finish(item)
     }
 }
