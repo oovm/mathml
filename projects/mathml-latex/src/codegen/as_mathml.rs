@@ -2,7 +2,7 @@ use super::*;
 use crate::block::LaTeXCommand;
 use mathml_core::{
     helpers::{binom, frac},
-    MathFunction, MathIdentifier, MathML, MathMultiScript, MathNumber, MathOperator, MathRoot, MathRow,
+    MathFunction, MathIdentifier, MathML, MathMultiScript, MathNumber, MathOperator, MathRoot, MathRow, MathSpace,
 };
 
 impl<'i> LaTeXNode<'i> {
@@ -67,6 +67,13 @@ impl<'i> LaTeXCommand<'i> {
         if let Some(s) = context.get_operator(&self.name) {
             return MathOperator::new(s).into();
         }
-        return MathIdentifier::italic(format!("\\{}", self.name)).into();
+        if let Some(s) = context.get_letters(&self.name) {
+            return MathIdentifier::normal(s).into();
+        }
+        if let Some(s) = context.get_space(&self.name) {
+            return MathSpace::new(s).into();
+        }
+
+        todo!()
     }
 }

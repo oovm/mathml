@@ -115,7 +115,7 @@ impl<'i> LaTeXNode<'i> {
         let (state, dec) = input
             .begin_choice()
             .or_else(|state| state.match_str("+", false))
-            .or_else(|state| state.match_str("-", false))
+            .or_else(|state| state.match_str("-", false).map_inner(|_| "−"))
             .end_choice()?;
         state.finish(LaTeXNode::Operation { operator: dec })
     }

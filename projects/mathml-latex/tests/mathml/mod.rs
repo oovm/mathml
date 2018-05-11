@@ -24,7 +24,7 @@ pub fn test_frac() {
     assert_mathml(r"\frac{a}{b}{c}", r"<mrow><mfrac><mi>a</mi><mi>b</mi></mfrac><mi>c</mi></mrow>").unwrap();
     assert_mathml(
         r"-\frac{p - q}{\Delta}",
-        r#"<mrow><mo>-</mo><mfrac><mrow><mi>p</mi><mo>-</mo><mi>q</mi></mrow><mi mathvariant="normal">Δ</mi></mfrac></mrow>"#,
+        r#"<mrow><mo>−</mo><mfrac><mrow><mi>p</mi><mo>−</mo><mi>q</mi></mrow><mi mathvariant="normal">Δ</mi></mfrac></mrow>"#,
     )
     .unwrap();
 }
@@ -44,7 +44,7 @@ pub fn test_function() {
 }
 
 pub fn assert_mathml(source: &str, target: &str) -> Result<(), StopBecause> {
-    let context = LaTeXEngine::default();
+    let context = LaTeXEngine::builtin();
     let mathml = parse_latex(source)?.as_mathml(&context);
     assert_eq!(format!("{}", mathml), target);
     Ok(())

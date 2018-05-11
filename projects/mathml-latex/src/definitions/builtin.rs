@@ -2,9 +2,22 @@ use super::*;
 
 impl Default for LaTeXEngine {
     fn default() -> Self {
-        let mut empty = Self { functions: Default::default(), operators: Default::default() };
+        Self {
+            functions: Default::default(),
+            operators: Default::default(),
+            spaces: Default::default(),
+            letters: Default::default(),
+        }
+    }
+}
+
+impl LaTeXEngine {
+    pub fn builtin() -> Self {
+        let mut empty = Self::default();
         empty.add_builtin_operators();
         empty.add_builtin_functions();
+        empty.add_builtin_letters();
+        empty.add_builtin_space();
         empty
     }
 }
@@ -73,6 +86,13 @@ impl LaTeXEngine {
         }
 
         add_operator! {
+            "S" => "§",
+            "P" => "¶",
+            "%" => "%",
+            "_" => "_",
+            "&" => "&",
+            "#" => "#",
+            "$" => "$",
             "times"  => "×",
             "oplus"  => "⊕",
             "otimes" => "⊗",
@@ -88,7 +108,24 @@ impl LaTeXEngine {
             "amalg"  => "⨿",
             "bigcup" => "⋃",
             "bigcap" => "⋂",
-            // #region Greek letters
+        }
+    }
+}
+
+impl LaTeXEngine {
+    pub fn get_letters(&self, name: &str) -> Option<&str> {
+        Some(self.letters.get(name)?.as_str())
+    }
+    fn add_builtin_letters(&mut self) {
+        macro_rules! add_letter {
+            ($($name:literal => $symbol:literal),* $(,)?) => {
+                $(
+                    self.letters.insert($name.to_string(), $symbol.to_string());
+                )*
+            };
+        }
+
+        add_letter! {
             "Alpha"  => "Α",
             "alpha"  => "α",
             "Beta"   => "Β",
@@ -137,7 +174,65 @@ impl LaTeXEngine {
             "psi"  => "ψ",
             "Omega"  => "Ω",
             "omega"  => "ω",
-            // #endregion
+            //
+            "aleph" => "ℵ",
+            "beth" => "ℶ",
+            "gimel" => "ℷ",
+            "daleth" => "ℸ",
+            "A" => "Å",
+            "a" => "å",
+            "AE" => "Æ",
+            "ae" => "æ",
+            "DH" => "Ð",
+            "dh" => "ð",
+            "dj" => "đ",
+            "L" => "Ł",
+            "l" => "ł",
+            "NG" => "Ŋ",
+            "ng" => "ŋ",
+            "O" => "Ø",
+            "o" => "ø",
+            "OE" => "Œ",
+            "oe" => "œ",
+            "ss" => "ß",
+            "TH" => "Þ",
+            "th" => "þ",
+            "imath" => "ı",
+            "jmath" => "ȷ",
+            "ell" => "ℓ",
+            "hbar" => "ℏ",
+            "hslash" => "ℏ",
+            "infty" => "∞",
+            "mho" => "℧",
+            "Finv" => "Ⅎ",
+            "Re" => "ℜ",
+            "Im" => "ℑ",
+            "wp" => "℘",
+            "alef" => "ℵ",
+            "alefsym" => "ℵ",
+            "real" => "ℜ",
+            "partial" => "∂",
+            "prime" => "′",
+            "emptyset" => "∅",
+            "clubs" => "♣",
         }
+    }
+}
+
+impl LaTeXEngine {
+    pub fn get_space(&self, name: &str) -> Option<f32> {
+        Some(*self.spaces.get(name)?)
+    }
+    pub fn add_space(&mut self, name: &str, value: f32) {
+        self.spaces.insert(name.to_string(), value);
+    }
+    fn add_builtin_space(&mut self) {
+        self.spaces.insert("!".to_string(), -3.0 / 18.0);
+        self.spaces.insert(",".to_string(), 3.0 / 18.0);
+        self.spaces.insert(":".to_string(), 4.0 / 18.0);
+        self.spaces.insert(";".to_string(), 5.0 / 18.0);
+        self.spaces.insert(" ".to_string(), 1.0);
+        self.spaces.insert("quad".to_string(), 1.0);
+        self.spaces.insert("qquad".to_string(), 2.0);
     }
 }
