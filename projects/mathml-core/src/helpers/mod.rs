@@ -1,4 +1,11 @@
-use crate::{LineThickness, MathFraction, MathML, MathMultiScript};
+#![allow(non_snake_case)]
+#![allow(unused_variables)]
+
+mod matrix;
+
+use crate::{LineThickness, MathFraction, MathML, MathMultiScript, MathRow, MathTable};
+
+pub use self::matrix::*;
 
 pub fn frac(numerator: MathML, denominator: MathML) -> MathML {
     MathFraction::new(numerator, denominator).into()

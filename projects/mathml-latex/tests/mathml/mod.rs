@@ -47,12 +47,13 @@ pub fn test_function() {
 pub fn test_matrix() {
     assert_mathml(
         r#"\begin{matrix} a & b \\ c & d \end{matrix}"#,
-        "<mtable><mtr><mtd><mi>a</mi></mtd><mtd><mi>b</mi></mtr><mtr><mi>c</mi></mtd><mtd><mi>d</mi></mtd></mtr></mtable>",
+        "<mtable><mtr><mtd><mi>a</mi></mtd><mtd><mi>b</mi></mtd></mtr><mtr><mtd><mi>c</mi></mtd><mtd><mi>d</mi></mtd></mtr></mtable>",
     )
     .unwrap();
-    assert_mathml(r#"\begin{bmatrix} a & b \\ c & d \end{bmatrix}"#, "").unwrap();
-    assert_mathml(r#"\begin{vmatrix} a & b \\ c & d \end{vmatrix}"#, "").unwrap();
-    assert_mathml(r#"\begin{Vmatrix} a & b \\ c & d \end{Vmatrix}"#, "").unwrap();
+    assert_mathml(r#"\begin{bmatrix} a & b \\ c & d \end{bmatrix}"#, "<mrow><mo>[</mo><mtable><mtr><mtd><mi>a</mi></mtd><mtd><mi>b</mi></mtd></mtr><mtr><mtd><mi>c</mi></mtd><mtd><mi>d</mi></mtd></mtr></mtable><mo>]</mo></mrow>").unwrap();
+    assert_mathml(r#"\begin{Bmatrix} a & b \\ c & d \end{Bmatrix}"#, "<mrow><mo>{</mo><mtable><mtr><mtd><mi>a</mi></mtd><mtd><mi>b</mi></mtd></mtr><mtr><mtd><mi>c</mi></mtd><mtd><mi>d</mi></mtd></mtr></mtable><mo>}</mo></mrow>").unwrap();
+    assert_mathml(r#"\begin{vmatrix} a & b \\ c & d \end{vmatrix}"#, "<mrow><mo>|</mo><mtable><mtr><mtd><mi>a</mi></mtd><mtd><mi>b</mi></mtd></mtr><mtr><mtd><mi>c</mi></mtd><mtd><mi>d</mi></mtd></mtr></mtable><mo>|</mo></mrow>").unwrap();
+    assert_mathml(r#"\begin{Vmatrix} a & b \\ c & d \end{Vmatrix}"#, "<mrow><mo>‖</mo><mtable><mtr><mtd><mi>a</mi></mtd><mtd><mi>b</mi></mtd></mtr><mtr><mtd><mi>c</mi></mtd><mtd><mi>d</mi></mtd></mtr></mtable><mo>‖</mo></mrow>").unwrap();
 }
 
 pub fn assert_mathml(source: &str, target: &str) -> Result<(), StopBecause> {

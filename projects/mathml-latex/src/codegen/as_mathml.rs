@@ -1,8 +1,8 @@
 use super::*;
 use crate::{block::LaTeXCommand, LaTeXBlock};
 use mathml_core::{
-    helpers::{binom, frac},
-    MathFunction, MathIdentifier, MathML, MathMultiScript, MathNumber, MathOperator, MathRoot, MathRow, MathSpace, MathTable,
+    helpers::{binom, bmatrix, frac, matrix, pmatrix, vmatrix, Bmatrix, Pmatrix, Vmatrix},
+    MathFunction, MathIdentifier, MathML, MathMultiScript, MathNumber, MathOperator, MathRoot, MathRow, MathSpace,
 };
 
 impl<'i> LaTeXNode<'i> {
@@ -30,10 +30,17 @@ impl<'i> LaTeXNode<'i> {
 
 impl<'i> LaTeXBlock<'i> {
     pub fn as_mathml(&self, context: &LaTeXEngine) -> MathML {
-        if self.kind.eq("matrix") {
-            return MathTable::matrix(self.children.iter().map(|node| node.as_mathml(context))).into();
+        let stream = self.children.iter().map(|node| node.as_mathml(context));
+        match self.kind {
+            "matrix" => matrix(stream),
+            "Bmatrix" => Bmatrix(stream),
+            "bmatrix" => bmatrix(stream),
+            "Pmatrix" => Pmatrix(stream),
+            "pmatrix" => pmatrix(stream),
+            "Vmatrix" => Vmatrix(stream),
+            "vmatrix" => vmatrix(stream),
+            name => todo!("unknown block: {}", name),
         }
-        todo!()
     }
 }
 

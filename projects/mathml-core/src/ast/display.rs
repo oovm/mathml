@@ -38,33 +38,7 @@ impl Display for MathML {
                 MathML::Operator(x) => write!(f, "<mo>{}&#x0338;</mo>", x),
                 n => write!(f, "{}", n),
             },
-            MathML::Table(v) => {
-                Display::fmt(v, f)
-
-                // let mut mathml = format!("<mtable{}><mtr><mtd>", columnalign);
-                // for (i, node) in content.iter().enumerate() {
-                //     match node {
-                //         MathML::NewLine => {
-                //             mathml.push_str("</mtd></mtr>");
-                //             if i < content.len() {
-                //                 mathml.push_str("<mtr><mtd>")
-                //             }
-                //         }
-                //         MathML::Ampersand => {
-                //             mathml.push_str("</mtd>");
-                //             if i < content.len() {
-                //                 mathml.push_str("<mtd>")
-                //             }
-                //         }
-                //         node => {
-                //             mathml = format!("{}{}", mathml, node);
-                //         }
-                //     }
-                // }
-                // mathml.push_str("</mtd></mtr></mtable>");
-                //
-                // write!(f, "{}", mathml)
-            }
+            MathML::Table(v) => Display::fmt(v, f),
             MathML::Space(v) => Display::fmt(v, f),
             MathML::Text(v) => Display::fmt(v, f),
             MathML::Style(display, content) => match display {

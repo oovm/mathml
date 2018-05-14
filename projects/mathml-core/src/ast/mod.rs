@@ -2,17 +2,14 @@ pub mod attribute;
 mod display;
 
 use crate::{
-    ast::attribute::{Accent, ColumnAlign},
+    ast::attribute::Accent,
     blocks::MathRow,
     identifiers::MathText,
     operators::{MathOperator, MathSqrt, MathUnderOver},
     MathFenced, MathFraction, MathFunction, MathIdentifier, MathMultiScript, MathNumber, MathPhantom, MathRoot, MathSpace,
     MathTable,
 };
-use std::{
-    collections::BTreeMap,
-    fmt::{Display, Formatter},
-};
+use std::fmt::{Display, Formatter};
 
 /// AST node
 #[derive(Debug, Clone, PartialEq)]
