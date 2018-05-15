@@ -17,7 +17,7 @@ version = "0.0.7"
 #path = "C:\\Users\\Dell\\CLionProjects\\pex\\projects\\pex-core"
 
 [dependencies.mathml-core]
-version = "0.0.1"
+version = "0.0.*"
 path = "../mathml-core"
 
 [dev-dependencies]

@@ -1,7 +1,7 @@
 use super::*;
 use crate::{block::LaTeXCommand, LaTeXBlock};
 use mathml_core::{
-    helpers::{binom, bmatrix, frac, matrix, pmatrix, vmatrix, Bmatrix, Pmatrix, Vmatrix},
+    helpers::{binom, bmatrix, cases, frac, matrix, pmatrix, vmatrix, Bmatrix, Pmatrix, Vmatrix},
     MathFunction, MathIdentifier, MathML, MathMultiScript, MathNumber, MathOperator, MathRoot, MathRow, MathSpace,
 };
 
@@ -39,6 +39,7 @@ impl<'i> LaTeXBlock<'i> {
             "pmatrix" => pmatrix(stream),
             "Vmatrix" => Vmatrix(stream),
             "vmatrix" => vmatrix(stream),
+            "cases" => cases(stream),
             name => todo!("unknown block: {}", name),
         }
     }

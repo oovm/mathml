@@ -45,7 +45,19 @@ impl MathTable {
     {
         Self { stream: stream.into_iter().collect(), attributes: BTreeMap::new() }
     }
-    pub fn add_attribute(&mut self, key: &str, value: &str) {
+    pub fn with_attribute<K, V>(mut self, key: K, value: V) -> Self
+    where
+        K: ToString,
+        V: ToString,
+    {
+        self.add_attribute(key, value);
+        self
+    }
+    pub fn add_attribute<K, V>(&mut self, key: K, value: V)
+    where
+        K: ToString,
+        V: ToString,
+    {
         self.attributes.insert(key.to_string(), value.to_string());
     }
     pub fn get_attributes(&self) -> &BTreeMap<String, String> {
