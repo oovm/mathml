@@ -22,7 +22,17 @@ impl Display for MathPhantom {
         write!(f, "</mphantom>")
     }
 }
-
+impl Display for MathStyle {
+    fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
+        write!(f, "<mstyle")?;
+        for (key, value) in &self.attributes {
+            write!(f, " {}=\"{}\"", key, value)?;
+        }
+        write!(f, ">")?;
+        write!(f, "{}", self.base)?;
+        write!(f, "</mstyle>")
+    }
+}
 impl Display for MathRow {
     fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
         f.write_str("<mrow>")?;

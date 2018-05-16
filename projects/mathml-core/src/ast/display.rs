@@ -41,11 +41,7 @@ impl Display for MathML {
             MathML::Table(v) => Display::fmt(v, f),
             MathML::Space(v) => Display::fmt(v, f),
             MathML::Text(v) => Display::fmt(v, f),
-            MathML::Style(display, content) => match display {
-                Some(DisplayStyle::Block) => write!(f, r#"<mstyle displaystyle="true">{}</mstyle>"#, content),
-                Some(DisplayStyle::Inline) => write!(f, r#"<mstyle displaystyle="false">{}</mstyle>"#, content),
-                None => write!(f, "<mstyle>{}</mstyle>", content),
-            },
+            MathML::Style(v) => Display::fmt(v, f),
             MathML::Ampersand => Ok(()),
             MathML::NewLine => Ok(()),
             MathML::Undefined(_) => {

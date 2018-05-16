@@ -3,7 +3,7 @@ mod display;
 
 use crate::{
     ast::attribute::Accent,
-    blocks::MathRow,
+    blocks::{MathRow, MathStyle},
     identifiers::MathText,
     operators::{MathOperator, MathSqrt, MathUnderOver},
     MathFenced, MathFraction, MathFunction, MathIdentifier, MathMultiScript, MathNumber, MathPhantom, MathRoot, MathSpace,
@@ -41,6 +41,7 @@ pub enum MathML {
     Sqrt(Box<MathSqrt>),
     Frac(Box<MathFraction>),
     Phantom(Box<MathPhantom>),
+    Style(Box<MathStyle>),
     Fenced(Box<MathFenced>),
     StrechedOp(bool, String),
     SizedParen {
@@ -49,7 +50,6 @@ pub enum MathML {
     },
     Table(Box<MathTable>),
     Slashed(Box<MathML>),
-    Style(Option<DisplayStyle>, Box<MathML>),
     Undefined(String),
     Ampersand,
     NewLine,

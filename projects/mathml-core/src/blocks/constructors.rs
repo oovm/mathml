@@ -6,27 +6,6 @@ impl Default for MathRoot {
     }
 }
 
-impl MathRow {
-    pub fn new<I>(items: I) -> Self
-    where
-        I: IntoIterator<Item = MathML>,
-    {
-        Self { children: items.into_iter().collect(), has_grouping: false }
-    }
-    pub fn group<I>(items: I) -> Self
-    where
-        I: IntoIterator<Item = MathML>,
-    {
-        Self { children: items.into_iter().collect(), has_grouping: true }
-    }
-    pub fn get_items(&self) -> &[MathML] {
-        &self.children
-    }
-    pub fn mut_items(&mut self) -> &mut Vec<MathML> {
-        &mut self.children
-    }
-}
-
 impl MathRoot {
     pub fn new<I>(children: I) -> Self
     where
@@ -53,6 +32,49 @@ impl MathRoot {
     }
 }
 
+impl MathRow {
+    pub fn new<I>(items: I) -> Self
+    where
+        I: IntoIterator<Item = MathML>,
+    {
+        Self { children: items.into_iter().collect(), has_grouping: false }
+    }
+    pub fn group<I>(items: I) -> Self
+    where
+        I: IntoIterator<Item = MathML>,
+    {
+        Self { children: items.into_iter().collect(), has_grouping: true }
+    }
+    pub fn get_items(&self) -> &[MathML] {
+        &self.children
+    }
+    pub fn mut_items(&mut self) -> &mut Vec<MathML> {
+        &mut self.children
+    }
+}
+
+impl MathStyle {
+    pub fn display<M>(base: M) -> Self
+    where
+        M: Into<MathML>,
+    {
+        Self { base: base.into(), attributes: Default::default() }.with_attribute("displaystyle", "true")
+    }
+    pub fn inline<M>(base: M) -> Self
+    where
+        M: Into<MathML>,
+    {
+        Self { base: base.into(), attributes: Default::default() }.with_attribute("displaystyle", "false")
+    }
+    pub fn with_attribute<K, V>(mut self, key: K, value: V) -> Self
+    where
+        K: ToString,
+        V: ToString,
+    {
+        self.attributes.insert(key.to_string(), value.to_string());
+        self
+    }
+}
 impl MathPhantom {
     pub fn new(inner: MathML) -> Self {
         Self { inner }

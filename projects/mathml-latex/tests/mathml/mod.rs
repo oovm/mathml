@@ -54,21 +54,31 @@ pub fn test_matrix() {
     assert_mathml(r#"\begin{Bmatrix} a & b \\ c & d \end{Bmatrix}"#, "<mrow><mo>{</mo><mtable><mtr><mtd><mi>a</mi></mtd><mtd><mi>b</mi></mtd></mtr><mtr><mtd><mi>c</mi></mtd><mtd><mi>d</mi></mtd></mtr></mtable><mo>}</mo></mrow>").unwrap();
     assert_mathml(r#"\begin{vmatrix} a & b \\ c & d \end{vmatrix}"#, "<mrow><mo>|</mo><mtable><mtr><mtd><mi>a</mi></mtd><mtd><mi>b</mi></mtd></mtr><mtr><mtd><mi>c</mi></mtd><mtd><mi>d</mi></mtd></mtr></mtable><mo>|</mo></mrow>").unwrap();
     assert_mathml(r#"\begin{Vmatrix} a & b \\ c & d \end{Vmatrix}"#, "<mrow><mo>‖</mo><mtable><mtr><mtd><mi>a</mi></mtd><mtd><mi>b</mi></mtd></mtr><mtr><mtd><mi>c</mi></mtd><mtd><mi>d</mi></mtd></mtr></mtable><mo>‖</mo></mrow>").unwrap();
-    assert_mathml(include_str!("matrix_nested.tex"), include_str!("matrix_nested.xml")).unwrap();
-
+    assert_refine(include_str!("matrix_nested.tex"), include_str!("matrix_nested.xml")).unwrap();
     assert_mathml(r#"\begin{cases} a & b & c\\ d & e & f \\ \end{cases}"#, r#"<mrow><mo>{</mo><mtable columnalign="left"><mtr><mtd><mi>a</mi></mtd><mtd><mi>b</mi></mtd><mtd><mi>c</mi></mtd></mtr><mtr><mtd><mi>d</mi></mtd><mtd><mi>e</mi></mtd><mtd><mi>f</mi></mtd></mtr><mtr><mtd></mtd></mtr></mtable></mrow>"#).unwrap();
 }
 
 pub fn assert_mathml(source: &str, target: &str) -> Result<(), StopBecause> {
     let context = LaTeXEngine::builtin();
     let mathml = parse_latex(source)?.as_mathml(&context);
-    let mut refined = String::with_capacity(target.len());
-    for char in target.chars() {
+    assert_eq!(&format!("{}", mathml), target);
+    Ok(())
+}
+
+pub fn assert_refine(source: &str, target: &str) -> Result<(), StopBecause> {
+    let context = LaTeXEngine::builtin();
+    let mathml = parse_latex(source)?.as_mathml(&context);
+    assert_eq!(refine_string(&format!("{}", mathml)), refine_string(target));
+    Ok(())
+}
+
+pub fn refine_string(string: &str) -> String {
+    let mut refined = String::with_capacity(string.len());
+    for char in string.chars() {
         if char.is_whitespace() {
             continue;
         }
         refined.push(char);
     }
-    assert_eq!(format!("{}", mathml), refined);
-    Ok(())
+    refined
 }

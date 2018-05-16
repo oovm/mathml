@@ -32,6 +32,13 @@ pub struct MathPhantom {
     inner: MathML,
 }
 
+/// The [`<mspace>`](https://developer.mozilla.org/en-US/docs/Web/MathML/Element/mspace) element is used to insert space characters into a mathematical formula.
+#[derive(Debug, Clone, PartialEq)]
+pub struct MathStyle {
+    base: MathML,
+    attributes: BTreeMap<String, String>,
+}
+
 #[derive(Debug, Clone, PartialEq)]
 pub struct MathTable {
     stream: Vec<MathML>,

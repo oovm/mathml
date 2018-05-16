@@ -13,7 +13,7 @@ pub fn frac(numerator: MathML, denominator: MathML) -> MathML {
 
 // noinspection SpellCheckingInspection
 pub fn dfrac(numerator: MathML, denominator: MathML) -> MathML {
-    todo!()
+    display(frac(numerator, denominator))
 }
 
 // noinspection SpellCheckingInspection
