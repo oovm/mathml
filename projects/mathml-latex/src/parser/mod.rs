@@ -49,12 +49,7 @@ impl<'i> LaTeXNode<'i> {
 
 impl<'i> LaTeXNode<'i> {
     pub fn parse(input: ParseState<'i>) -> ParseResult<LaTeXNode<'i>> {
-        let (state, node) = input
-            .begin_choice()
-            .or_else(Self::parse_block)
-            .or_else(Self::parse_combined)
-            .or_else(Self::parse_row)
-            .end_choice()?;
+        let (state, node) = input.begin_choice().or_else(Self::parse_combined).or_else(Self::parse_row).end_choice()?;
         state.finish(node)
     }
     fn parse_block(input: ParseState<'i>) -> ParseResult<LaTeXNode<'i>> {
@@ -97,6 +92,7 @@ impl<'i> LaTeXNode<'i> {
         let (state, node) = input
             .skip(whitespace)
             .begin_choice()
+            .or_else(Self::parse_block)
             .or_else(Self::parse_group)
             .or_else(Self::parse_command)
             .or_else(Self::parse_letter)
