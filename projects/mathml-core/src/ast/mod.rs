@@ -115,5 +115,6 @@ make_mathml! {
     MathSqrt        => Sqrt,
     MathFraction    => Frac,
     MathPhantom     => Phantom,
+    MathStyle       => Style,
     MathFenced      => Fenced
 }

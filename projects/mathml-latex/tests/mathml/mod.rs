@@ -27,6 +27,8 @@ pub fn test_frac() {
         r#"<mrow><mo>−</mo><mfrac><mrow><mi>p</mi><mo>−</mo><mi>q</mi></mrow><mi mathvariant="normal">Δ</mi></mfrac></mrow>"#,
     )
     .unwrap();
+    assert_refine(include_str!("continued_frac.tex"), include_str!("continued_frac.xml")).unwrap();
+    assert_refine(include_str!("continued_dfrac.tex"), include_str!("continued_dfrac.xml")).unwrap();
 }
 
 #[test]
@@ -59,16 +61,18 @@ pub fn test_matrix() {
 }
 
 pub fn assert_mathml(source: &str, target: &str) -> Result<(), StopBecause> {
-    let context = LaTeXEngine::builtin();
-    let mathml = parse_latex(source)?.as_mathml(&context);
-    assert_eq!(&format!("{}", mathml), target);
+    assert_eq!(render_mathml(source)?, target);
     Ok(())
 }
 
-pub fn assert_refine(source: &str, target: &str) -> Result<(), StopBecause> {
+pub fn render_mathml(source: &str) -> Result<String, StopBecause> {
     let context = LaTeXEngine::builtin();
     let mathml = parse_latex(source)?.as_mathml(&context);
-    assert_eq!(refine_string(&format!("{}", mathml)), refine_string(target));
+    Ok(format!("{}", mathml))
+}
+
+pub fn assert_refine(source: &str, target: &str) -> Result<(), StopBecause> {
+    assert_eq!(refine_string(&render_mathml(source)?), refine_string(target));
     Ok(())
 }
 

@@ -1,7 +1,7 @@
 use super::*;
 use crate::{block::LaTeXCommand, LaTeXBlock};
 use mathml_core::{
-    helpers::{binom, bmatrix, cases, frac, matrix, pmatrix, vmatrix, Bmatrix, Pmatrix, Vmatrix},
+    helpers::{binom, bmatrix, cases, dfrac, frac, matrix, pmatrix, vmatrix, Bmatrix, Pmatrix, Vmatrix},
     MathFunction, MathIdentifier, MathML, MathMultiScript, MathNumber, MathOperator, MathRoot, MathRow, MathSpace,
 };
 
@@ -47,12 +47,16 @@ impl<'i> LaTeXBlock<'i> {
 
 impl<'i> LaTeXCommand<'i> {
     pub fn as_mathml(&self, context: &LaTeXEngine) -> MathML {
-        if self.name.eq("frac") {
-            match self.children.as_slice() {
+        match self.name {
+            kind @ ("frac" | "dfrac") => match self.children.as_slice() {
                 [] => panic!("frac command must have at least two arguments"),
                 [numerator] => panic!("frac command must have at least two arguments"),
                 [numerator, denominator, rest @ ..] => {
-                    let term = frac(numerator.as_mathml(context), denominator.as_mathml(context));
+                    let term = match kind {
+                        "frac" => frac(numerator.as_mathml(context), denominator.as_mathml(context)),
+                        "dfrac" => dfrac(numerator.as_mathml(context), denominator.as_mathml(context)),
+                        _ => unreachable!(),
+                    };
                     if rest.len() == 0 {
                         return term;
                     }
@@ -60,7 +64,8 @@ impl<'i> LaTeXCommand<'i> {
                     terms.mut_items().extend(rest.iter().map(|node| node.as_mathml(context)));
                     return terms.into();
                 }
-            }
+            },
+            _ => {}
         }
         if self.name.eq("binom") {
             match self.children.as_slice() {

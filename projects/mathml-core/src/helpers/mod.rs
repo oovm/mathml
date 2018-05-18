@@ -3,17 +3,25 @@
 
 mod matrix;
 
-use crate::{LineThickness, MathFraction, MathML, MathMultiScript, MathRow, MathTable};
+use crate::{blocks::MathStyle, LineThickness, MathFraction, MathML, MathMultiScript, MathRow, MathTable};
 
 pub use self::matrix::*;
 
-pub fn frac(numerator: MathML, denominator: MathML) -> MathML {
+pub fn frac<N, D>(numerator: N, denominator: D) -> MathML
+where
+    N: Into<MathML>,
+    D: Into<MathML>,
+{
     MathFraction::new(numerator, denominator).into()
 }
 
 // noinspection SpellCheckingInspection
-pub fn dfrac(numerator: MathML, denominator: MathML) -> MathML {
-    display(frac(numerator, denominator))
+pub fn dfrac<N, D>(numerator: N, denominator: D) -> MathML
+where
+    N: Into<MathML>,
+    D: Into<MathML>,
+{
+    MathStyle::display(frac(numerator, denominator)).into()
 }
 
 // noinspection SpellCheckingInspection

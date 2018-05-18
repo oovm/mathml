@@ -1,0 +1,37 @@
+<mrow>
+	<mi>a</mi>
+	<mo>+</mo>
+	<mstyle displaystyle="true">
+		<mfrac>
+			<mn>1</mn>
+			<mrow>
+				<mi>b</mi>
+				<mo>+</mo>
+				<mstyle displaystyle="true">
+					<mfrac>
+						<mn>1</mn>
+						<mrow>
+							<mi>c</mi>
+							<mo>+</mo>
+							<mstyle displaystyle="true">
+								<mfrac>
+									<mn>1</mn>
+									<mrow>
+										<mi>d</mi>
+										<mo>+</mo>
+										<mstyle displaystyle="true">
+											<mfrac>
+												<mn>1</mn>
+												<mi>e</mi>
+											</mfrac>
+										</mstyle>
+									</mrow>
+								</mfrac>
+							</mstyle>
+						</mrow>
+					</mfrac>
+				</mstyle>
+			</mrow>
+		</mfrac>
+	</mstyle>
+</mrow>
