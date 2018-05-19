@@ -1,14 +1,5 @@
 use super::*;
 
-impl Display for DisplayStyle {
-    fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
-        match self {
-            DisplayStyle::Block => write!(f, "block"),
-            DisplayStyle::Inline => write!(f, "inline"),
-        }
-    }
-}
-
 impl Display for MathML {
     fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
         match self {

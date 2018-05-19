@@ -55,13 +55,6 @@ pub enum MathML {
     NewLine,
 }
 
-/// display style
-#[derive(Debug, Clone, Copy, PartialEq, Eq)]
-pub enum DisplayStyle {
-    Block,
-    Inline,
-}
-
 macro_rules! make_mathml {
     ($($name:ident => $variant:ident),*) => {
         $(

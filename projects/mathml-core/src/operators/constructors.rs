@@ -47,42 +47,45 @@ impl MathSqrt {
 }
 
 impl MathMultiScript {
-    pub fn new(base: MathML, ru: Vec<MathML>, rd: Vec<MathML>, lu: Vec<MathML>, ld: Vec<MathML>) -> Self {
+    pub fn new(base: MathML, lu: Vec<MathML>, ld: Vec<MathML>, ru: Vec<MathML>, rd: Vec<MathML>) -> Self {
         Self { base, ru, rd, lu, ld, attributes: BTreeMap::new() }
     }
     pub fn sub_script(base: MathML, sub: MathML) -> Self {
-        Self { base, ru: Vec::new(), rd: Vec::new(), lu: Vec::new(), ld: vec![sub], attributes: BTreeMap::new() }
+        MathMultiScript::new(base, vec![], vec![], vec![], vec![sub])
     }
     pub fn is_sub_script(&self) -> bool {
-        self.ru.is_empty() && self.rd.is_empty() && self.lu.is_empty() && self.ld.len() == 1
+        self.lu.is_empty() && self.ld.is_empty() && self.ru.is_empty() && self.rd.len() == 1
     }
     pub fn super_script(base: MathML, sup: MathML) -> Self {
-        Self { base, ru: Vec::new(), rd: Vec::new(), lu: vec![sup], ld: Vec::new(), attributes: BTreeMap::new() }
+        MathMultiScript::new(base, vec![], vec![], vec![sup], vec![])
     }
     pub fn is_super_script(&self) -> bool {
-        self.ru.is_empty() && self.rd.is_empty() && self.lu.len() == 1 && self.ld.is_empty()
+        self.lu.is_empty() && self.ld.is_empty() && self.ru.len() == 1 && self.rd.is_empty()
     }
     pub fn sub_super_script(base: MathML, sub: MathML, sup: MathML) -> Self {
-        Self { base, ru: Vec::new(), rd: Vec::new(), lu: vec![sup], ld: vec![sub], attributes: BTreeMap::new() }
+        MathMultiScript::new(base, vec![], vec![], vec![sup], vec![sub])
     }
     pub fn is_sub_super_script(&self) -> bool {
-        self.ru.is_empty() && self.rd.is_empty() && self.lu.len() == 1 && self.ld.len() == 1
+        self.lu.is_empty() && self.ld.is_empty() && self.ru.len() == 1 && self.rd.len() == 1
     }
 }
 
 impl MathFenced {
-    pub fn new<I>(base: I, lhs: char, rhs: char) -> Self
+    pub fn new<I, T>(base: I, lhs: char, rhs: char) -> Self
     where
-        I: IntoIterator<Item = MathML>,
+        I: IntoIterator<Item = T>,
+        T: Into<MathML>,
     {
-        Self { base: Vec::from_iter(base.into_iter()), open: lhs, close: rhs, separators: String::new() }
+        Self { base: base.into_iter().map(T::into).collect(), open: lhs, close: rhs, separators: String::new() }
     }
-    pub fn parentheses<I>(base: I) -> Self
+    pub fn parentheses<I, T>(base: I) -> Self
     where
-        I: IntoIterator<Item = MathML>,
+        I: IntoIterator<Item = T>,
+        T: Into<MathML>,
     {
         Self::new(base, '(', ')')
     }
+
     pub fn brackets<I>(base: I) -> Self
     where
         I: IntoIterator<Item = MathML>,

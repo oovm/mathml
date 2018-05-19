@@ -1,5 +1,15 @@
 use super::*;
 
+/// Renders a matrix with vertical bars.
+///
+/// # Input
+///
+/// ```tex
+/// \begin{vmatrix} a & b \\ c & d \end{vmatrix}
+/// ```
+///
+/// # Output
+#[doc = include_str!("vmatrix.xml")]
 pub fn matrix<I>(rows: I) -> MathML
 where
     I: IntoIterator<Item = MathML>,
@@ -7,6 +17,16 @@ where
     MathTable::matrix(rows).into()
 }
 
+/// Renders a matrix with vertical bars.
+///
+/// # Input
+///
+/// ```tex
+/// \begin{vmatrix} a & b \\ c & d \end{vmatrix}
+/// ```
+///
+/// # Output
+#[doc = include_str!("vmatrix.xml")]
 // noinspection SpellCheckingInspection
 pub fn smallmatrix<I>(rows: I) -> MathML
 where
@@ -16,6 +36,16 @@ where
     todo!()
 }
 
+/// Renders a matrix with vertical bars.
+///
+/// # Input
+///
+/// ```tex
+/// \begin{vmatrix} a & b \\ c & d \end{vmatrix}
+/// ```
+///
+/// # Output
+#[doc = include_str!("vmatrix.xml")]
 // noinspection SpellCheckingInspection
 pub fn bmatrix<I>(rows: I) -> MathML
 where
@@ -24,6 +54,16 @@ where
     MathRow::new(vec![MathML::operation("[").into(), MathTable::matrix(rows).into(), MathML::operation("]").into()]).into()
 }
 
+/// Renders a matrix with vertical bars.
+///
+/// # Input
+///
+/// ```tex
+/// \begin{vmatrix} a & b \\ c & d \end{vmatrix}
+/// ```
+///
+/// # Output
+#[doc = include_str!("vmatrix.xml")]
 // noinspection SpellCheckingInspection
 pub fn Bmatrix<I>(rows: I) -> MathML
 where
@@ -32,6 +72,16 @@ where
     MathRow::new(vec![MathML::operation("{").into(), MathTable::matrix(rows).into(), MathML::operation("}").into()]).into()
 }
 
+/// Renders a matrix with vertical bars.
+///
+/// # Input
+///
+/// ```tex
+/// \begin{vmatrix} a & b \\ c & d \end{vmatrix}
+/// ```
+///
+/// # Output
+#[doc = include_str!("vmatrix.xml")]
 // noinspection SpellCheckingInspection
 pub fn vmatrix<I>(rows: I) -> MathML
 where
@@ -42,21 +92,15 @@ where
 
 /// Renders a matrix with double vertical bars.
 ///
-/// # Arguments
 ///
-/// * `rows`:
+/// # Input
 ///
-/// returns: MathML
-///
-/// # Examples
-///
-/// ```
-/// # use mathml_core::helpers::Vmatrix;
+/// ```tex
+/// \begin{Vmatrix} a & b \\ c & d \end{Vmatrix}
 /// ```
 ///
 /// # Output
-///
-/// <math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mo>‖</mo><mtable><mtr><mtd><mi>a</mi></mtd><mtd><mi>b</mi></mtd></mtr><mtr><mtd><mi>c</mi></mtd><mtd><mi>d</mi></mtd></mtr></mtable><mo>‖</mo></mrow></math>
+#[doc = include_str!("vmatrix2.xml")]
 // noinspection SpellCheckingInspection
 pub fn Vmatrix<I>(items: I) -> MathML
 where
@@ -65,6 +109,16 @@ where
     MathRow::new(vec![MathML::operation("‖").into(), MathTable::matrix(items).into(), MathML::operation("‖").into()]).into()
 }
 
+/// Renders a matrix with vertical bars.
+///
+/// # Input
+///
+/// ```tex
+/// \begin{vmatrix} a & b \\ c & d \end{vmatrix}
+/// ```
+///
+/// # Output
+#[doc = include_str!("vmatrix.xml")]
 // noinspection SpellCheckingInspection
 pub fn pmatrix<I>(items: I) -> MathML
 where
@@ -73,6 +127,16 @@ where
     MathRow::new(vec![MathML::operation("(").into(), MathTable::matrix(items).into(), MathML::operation(")").into()]).into()
 }
 
+/// Renders a matrix with vertical bars.
+///
+/// # Input
+///
+/// ```tex
+/// \begin{vmatrix} a & b \\ c & d \end{vmatrix}
+/// ```
+///
+/// # Output
+#[doc = include_str!("vmatrix.xml")]
 // noinspection SpellCheckingInspection
 pub fn Pmatrix<I>(items: I) -> MathML
 where
@@ -81,6 +145,16 @@ where
     MathRow::new(vec![MathML::operation("⎛").into(), MathTable::matrix(items).into(), MathML::operation("⎞").into()]).into()
 }
 
+/// Renders a matrix with vertical bars.
+///
+/// # Input
+///
+/// ```tex
+/// \begin{vmatrix} a & b \\ c & d \end{vmatrix}
+/// ```
+///
+/// # Output
+#[doc = include_str!("vmatrix.xml")]
 // noinspection SpellCheckingInspection
 pub fn cases<I>(items: I) -> MathML
 where

@@ -63,13 +63,13 @@ impl Display for MathFenced {
 impl Display for MathMultiScript {
     fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
         if self.is_sub_super_script() {
-            write!(f, "<msubsup>{}{}{}</msubsup>", self.base, self.ld[0], self.lu[0])
+            write!(f, "<msubsup>{}{}{}</msubsup>", self.base, self.rd[0], self.ru[0])
         }
         else if self.is_sub_script() {
-            write!(f, "<msub>{}{}</msub>", self.base, self.ld[0])
+            write!(f, "<msub>{}{}</msub>", self.base, self.rd[0])
         }
         else if self.is_super_script() {
-            write!(f, "<msup>{}{}</msup>", self.base, self.lu[0])
+            write!(f, "<msup>{}{}</msup>", self.base, self.ru[0])
         }
         else {
             f.write_str("<mmultiscripts>")?;
