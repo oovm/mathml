@@ -79,11 +79,11 @@ impl Display for MathMultiScript {
             for i in 0..r_max {
                 match self.rd.get(i) {
                     Some(s) => write!(f, "{}", s)?,
-                    None => write!(f, "<mrow></mrow>")?,
+                    None => f.write_str("<mrow/>")?,
                 }
                 match self.ru.get(i) {
                     Some(s) => write!(f, "{}", s)?,
-                    None => write!(f, "<mrow></mrow>")?,
+                    None => f.write_str("<mrow/>")?,
                 }
             }
             f.write_str("<mprescripts/>")?;
@@ -91,11 +91,11 @@ impl Display for MathMultiScript {
             for i in 0..l_max {
                 match self.ld.get(i) {
                     Some(s) => write!(f, "{}", s)?,
-                    None => write!(f, "<mrow></mrow>")?,
+                    None => f.write_str("<mrow/>")?,
                 }
                 match self.lu.get(i) {
                     Some(s) => write!(f, "{}", s)?,
-                    None => write!(f, "<mrow></mrow>")?,
+                    None => f.write_str("<mrow/>")?,
                 }
             }
             f.write_str("</mmultiscripts>")

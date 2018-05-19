@@ -13,6 +13,13 @@ pub struct MathFraction {
     line_thickness: LineThickness,
 }
 
+// noinspection SpellCheckingInspection
+/// Line thickness for [`<mmfraci>`](https://developer.mozilla.org/en-US/docs/Web/MathML/Element/mfrac),
+/// used as [`linethickness`](https://developer.mozilla.org/en-US/docs/Web/MathML/Global_attributes/mathvariant) attribute.
+///
+/// ## Polyfill
+///
+/// We provide a polyfill for this attribute, which supports deprecated values `thin`, `medium`, `thick` and `length`.
 #[derive(Debug, Clone, Copy, PartialEq)]
 pub enum LineThickness {
     Thin,

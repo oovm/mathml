@@ -23,11 +23,6 @@ fn node_display() {
 
 #[test]
 fn test() {
-    let math = MathFenced::new(
-        vec![MathFraction::new(1, 2).into(), MathNumber::from(2.1).into(), MathNumber::from(3.1).into()],
-        '<',
-        '>',
-    )
-    .with_separators("&#");
+    let math = MathFenced::new(vec![MathFraction::new(1, 2).into(), 2.into(), 3.14.into()], '<', '>').with_separators("&#");
     println!("{}", math)
 }

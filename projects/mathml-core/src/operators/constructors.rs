@@ -71,17 +71,15 @@ impl MathMultiScript {
 }
 
 impl MathFenced {
-    pub fn new<I, T>(base: I, lhs: char, rhs: char) -> Self
+    pub fn new<I>(base: I, lhs: char, rhs: char) -> Self
     where
-        I: IntoIterator<Item = T>,
-        T: Into<MathML>,
+        I: IntoIterator<Item = MathML>,
     {
-        Self { base: base.into_iter().map(T::into).collect(), open: lhs, close: rhs, separators: String::new() }
+        Self { base: base.into_iter().collect(), open: lhs, close: rhs, separators: String::new() }
     }
-    pub fn parentheses<I, T>(base: I) -> Self
+    pub fn parentheses<I>(base: I) -> Self
     where
-        I: IntoIterator<Item = T>,
-        T: Into<MathML>,
+        I: IntoIterator<Item = MathML>,
     {
         Self::new(base, '(', ')')
     }

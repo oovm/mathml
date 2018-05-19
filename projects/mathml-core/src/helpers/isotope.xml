@@ -1,26 +1,34 @@
 <div>
-	<mrow>
-		<mo stretchy="true" form="prefix">(</mo>
-		<mmultiscripts>
-			<mi>H</mi>
-			<mprescripts/>
-			<mrow></mrow>
-			<mn>1</mn>
-		</mmultiscripts>
-		<mo>,</mo>
-		<mmultiscripts>
-			<mi>H</mi>
-			<mprescripts/>
-			<mrow></mrow>
-			<mn>2</mn>
-		</mmultiscripts>
-		<mo>,</mo>
-		<mmultiscripts>
-			<mi>H</mi>
-			<mprescripts/>
-			<mrow></mrow>
-			<mn>3</mn>
-		</mmultiscripts>
-		<mo stretchy="true" form="postfix">)</mo>
-	</mrow>
+	<math xmlns="http://www.w3.org/1998/Math/MathML" display="block">
+		<mrow>
+			<mo stretchy="true" form="prefix">(</mo>
+			<mmultiscripts>
+				<mi>H</mi>
+				<mrow/>
+				<mrow/>
+				<mprescripts/>
+				<mrow/>
+				<mn>1</mn>
+			</mmultiscripts>
+			<mo>,</mo>
+			<mmultiscripts>
+				<mi>H</mi>
+				<mrow/>
+				<mrow/>
+				<mprescripts/>
+				<mrow/>
+				<mn>2</mn>
+			</mmultiscripts>
+			<mo>,</mo>
+			<mmultiscripts>
+				<mi>H</mi>
+				<mrow/>
+				<mrow/>
+				<mprescripts/>
+				<mrow/>
+				<mn>3</mn>
+			</mmultiscripts>
+			<mo stretchy="true" form="postfix">)</mo>
+		</mrow>
+	</math>
 </div>

@@ -4,7 +4,7 @@
 
 mod matrix;
 
-use crate::{blocks::MathStyle, LineThickness, MathFenced, MathFraction, MathML, MathMultiScript, MathRow, MathTable};
+use crate::{blocks::MathStyle, LineThickness, MathFraction, MathML, MathMultiScript, MathRow, MathTable};
 
 pub use self::matrix::*;
 
@@ -26,7 +26,8 @@ where
     MathFraction::new(numerator, denominator).into()
 }
 
-/// Renders a matrix with vertical bars.
+// noinspection SpellCheckingInspection
+/// Renders a display style fraction.
 ///
 /// # Input
 ///
@@ -36,7 +37,6 @@ where
 ///
 /// # Output
 #[doc = include_str!("vmatrix.xml")]
-// noinspection SpellCheckingInspection
 pub fn dfrac<N, D>(numerator: N, denominator: D) -> MathML
 where
     N: Into<MathML>,
@@ -44,7 +44,7 @@ where
 {
     MathStyle::display(frac(numerator, denominator)).into()
 }
-
+// noinspection SpellCheckingInspection
 /// Renders a matrix with vertical bars.
 ///
 /// # Input
@@ -55,39 +55,50 @@ where
 ///
 /// # Output
 #[doc = include_str!("vmatrix.xml")]
-// noinspection SpellCheckingInspection
 pub fn cfrac(numerator: MathML, denominator: MathML) -> MathML {
     todo!()
 }
-
-/// Renders a matrix with vertical bars.
-///
-/// # Input
-///
-/// ```tex
-/// \begin{vmatrix} a & b \\ c & d \end{vmatrix}
-/// ```
-///
-/// # Output
-#[doc = include_str!("vmatrix.xml")]
-pub fn binom(numerator: MathML, denominator: MathML) -> MathML {
-    MathFraction::new(numerator, denominator).with_thickness(LineThickness::Length(0)).into()
-}
-
-/// Renders a matrix with vertical bars.
-///
-/// # Input
-///
-/// ```tex
-/// \begin{vmatrix} a & b \\ c & d \end{vmatrix}
-/// ```
-///
-/// # Output
-#[doc = include_str!("vmatrix.xml")]
 // noinspection SpellCheckingInspection
-pub fn cbinom(numerator: MathML, denominator: MathML) -> MathML {
-    MathMultiScript::sub_super_script(MathML::identifier("C"), numerator, denominator).into()
+/// Renders binomial coefficient as `\binom{n}{k}`.
+///
+/// # Input
+///
+/// ```
+/// # use mathml_core::helpers::binom;
+/// binom('n', 'k');
+/// ```
+///
+/// # Output
+#[doc = include_str!("vmatrix.xml")]
+pub fn binom<N, D>(numerator: N, denominator: D) -> MathML
+where
+    N: Into<MathML>,
+    D: Into<MathML>,
+{
+    MathFraction::new(numerator.into(), denominator.into()).with_thickness(LineThickness::Length(0)).into()
 }
+
+// noinspection SpellCheckingInspection
+/// Renders binomial coefficient as `C_{n}^{k}`.
+///
+/// # Input
+///
+/// ```
+/// # use mathml_core::helpers::cbinom;
+/// cbinom('n', 'k');
+/// ```
+///
+/// # Output
+#[doc = include_str!("vmatrix.xml")]
+pub fn cbinom<N, D>(numerator: N, denominator: D) -> MathML
+where
+    N: Into<MathML>,
+    D: Into<MathML>,
+{
+    MathMultiScript::sub_super_script(MathML::identifier("C"), numerator.into(), denominator.into()).into()
+}
+
+// noinspection SpellCheckingInspection
 /// Renders a matrix with vertical bars.
 ///
 /// # Input
@@ -119,16 +130,13 @@ pub fn legendre_symbols(numerator: MathML, denominator: MathML) -> MathML {
 #[doc = include_str!("isotope.xml")]
 pub fn isotope(symbol: &str, mass_number: usize, atomic_number: Option<usize>) -> MathMultiScript {
     let ld = match atomic_number {
-        Some(s) => {
-            vec![s.into()]
-        }
-        None => {
-            vec![]
-        }
+        Some(s) => vec![s.into()],
+        None => vec![],
     };
     MathMultiScript::new(MathML::identifier(symbol), vec![mass_number.into()], ld, vec![], vec![])
 }
 
+/// Build a isotopic symbol.
 #[inline(always)]
 pub fn safe_html_char<W>(writer: &mut W, c: char) -> std::fmt::Result
 where
@@ -144,6 +152,7 @@ where
     }
 }
 
+/// Build a isotopic symbol.
 #[inline(always)]
 pub fn safe_html_str<W>(writer: &mut W, s: &str) -> std::fmt::Result
 where

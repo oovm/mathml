@@ -7,11 +7,15 @@ use std::{
 mod constructors;
 mod display;
 
+/// The [`<mo>`](https://developer.mozilla.org/en-US/docs/Web/MathML/Element/mo) element represents an operator in a broad sense.
+///
+/// Besides operators in strict mathematical meaning, this element also includes "operators" like parentheses, separators like comma and semicolon, or "absolute value" bars.
 #[derive(Clone, Debug, PartialEq)]
 pub struct MathOperator {
     operator: String,
 }
 
+/// The [`<mspace>`](https://developer.mozilla.org/en-US/docs/Web/MathML/Element/mspace) element is used to display a blank space, whose size is set by its attributes.
 #[derive(Clone, Debug, PartialEq)]
 pub struct MathSpace {
     attributes: BTreeMap<String, String>,
@@ -24,7 +28,7 @@ pub struct MathSqrt {
     surd: Option<MathML>,
 }
 
-/// The [`<mmultiscripts>`](https://developer.mozilla.org/en-US/docs/Web/MathML/Element/mmultiscripts) element is used to attach multiple subscripts and superscripts to a base.
+/// The [`<mmultiscripts>`](https://developer.mozilla.org/en-US/docs/Web/MathML/Element/mmultiscripts) element is used to attach an arbitrary number of subscripts and superscripts to an expression at once
 #[derive(Clone, Debug, PartialEq)]
 pub struct MathMultiScript {
     base: MathML,
@@ -35,7 +39,7 @@ pub struct MathMultiScript {
     attributes: BTreeMap<String, String>,
 }
 
-/// The [`<munderover>`](https://developer.mozilla.org/en-US/docs/Web/MathML/Element/munderover) element is used to attach an accent or a limit under and over an expression.
+/// The [`<munderover>`](https://developer.mozilla.org/en-US/docs/Web/MathML/Element/munderover) element is used to attach accents or limits both under and over an expression.
 #[derive(Clone, Debug, PartialEq)]
 pub struct MathUnderOver {
     base: MathML,
@@ -44,11 +48,11 @@ pub struct MathUnderOver {
     attributes: BTreeMap<String, String>,
 }
 
-/// The [`<mfenced>`](https://developer.mozilla.org/en-US/docs/Web/MathML/Element/mfenced) element provides the possibility to add custom opening and closing parentheses (such as brackets) and separators (such as commas or semicolons) to an expression.
+/// The [`<mfenced>`](https://developer.mozilla.org/en-US/docs/Web/MathML/Element/mfenced) element provides the possibility to add custom opening and closing parentheses and separators to an expression.
 ///
-/// ## Syntax
+/// ## Polyfill
 ///
-/// Since it is deprecated by the MathML standard, the syntax is not well defined.
+/// Since it is deprecated by the MathML standard, we provide a polyfill to `<mrow>` for this element.
 #[derive(Clone, Debug, PartialEq)]
 pub struct MathFenced {
     base: Vec<MathML>,

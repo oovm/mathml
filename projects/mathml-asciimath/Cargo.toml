@@ -1,8 +1,8 @@
 [package]
-name = "mathml-latex"
+name = "mathml-asciimath"
 version = "0.0.1"
 authors = ["Aster <192607617@qq.com>"]
-description = "Convert between MathML and LaTeX."
+description = "Convert between MathML and AsciiMath."
 repository = "https://github.com/oovm/mathml"
 documentation = "https://docs.rs/mathml-latex"
 readme = "Readme.md"
