@@ -1,17 +1,38 @@
 use super::*;
 
+impl Default for MathSpace {
+    fn default() -> Self {
+        MathSpace::new(1.0)
+    }
+}
+
 impl MathOperator {
     pub fn new<S>(text: S) -> Self
     where
         S: ToString,
     {
-        Self { operator: text.to_string() }
+        Self { operator: text.to_string(), attributes: Default::default() }
     }
-}
-
-impl Default for MathSpace {
-    fn default() -> Self {
-        MathSpace::new(1.0)
+    pub fn get_attribute(&self, key: &str) -> Option<&str> {
+        self.attributes.get(key).map(|s| s.as_str())
+    }
+    pub fn add_attribute<K, V>(&mut self, key: K, value: V)
+    where
+        K: ToString,
+        V: ToString,
+    {
+        self.attributes.insert(key.to_string(), value.to_string());
+    }
+    pub fn with_attribute<K, V>(mut self, key: K, value: V) -> Self
+    where
+        K: ToString,
+        V: ToString,
+    {
+        self.add_attribute(key, value);
+        self
+    }
+    pub fn mut_attributes(&mut self) -> &mut BTreeMap<String, String> {
+        &mut self.attributes
     }
 }
 
@@ -24,16 +45,23 @@ impl MathSpace {
     pub fn get_attribute(&self, key: &str) -> Option<&str> {
         self.attributes.get(key).map(|s| s.as_str())
     }
-    pub fn add_attribute<K, V>(mut self, key: K, value: V) -> Self
+    pub fn add_attribute<K, V>(&mut self, key: K, value: V)
     where
         K: ToString,
         V: ToString,
     {
         self.attributes.insert(key.to_string(), value.to_string());
+    }
+    pub fn with_attribute<K, V>(mut self, key: K, value: V) -> Self
+    where
+        K: ToString,
+        V: ToString,
+    {
+        self.add_attribute(key, value);
         self
     }
-    pub fn remove_attribute(&mut self, key: &str) -> Option<String> {
-        self.attributes.remove(key)
+    pub fn mut_attributes(&mut self) -> &mut BTreeMap<String, String> {
+        &mut self.attributes
     }
 }
 

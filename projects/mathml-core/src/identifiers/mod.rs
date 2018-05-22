@@ -1,6 +1,7 @@
+use crate::{helpers::safe_html_str, MathML};
 use std::fmt::{Display, Formatter};
+
 mod display;
-use crate::MathML;
 
 /// The [`<mi>`](https://developer.mozilla.org/en-US/docs/Web/MathML/Element/mi) element indicates that the content should be rendered as an identifier such as function names, variables or symbolic constants.
 ///

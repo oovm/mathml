@@ -11,7 +11,8 @@ use crate::{
 };
 use std::fmt::{Display, Formatter};
 
-/// AST node
+// noinspection SpellCheckingInspection
+/// A MathML element node.
 #[derive(Debug, Clone, PartialEq)]
 pub enum MathML {
     /// [`<math>`](https://developer.mozilla.org/en-US/docs/Web/MathML/Element/math)
@@ -35,23 +36,32 @@ pub enum MathML {
     MultiScripts(Box<MathMultiScript>),
     /// [`<munder>`](https://developer.mozilla.org/en-US/docs/Web/MathML/Element/munder) / [`<mover>`](https://developer.mozilla.org/en-US/docs/Web/MathML/Element/mover) / [`<munderover>`](https://developer.mozilla.org/en-US/docs/Web/MathML/Element/munderover)
     UnderOver(Box<MathUnderOver>),
+    /// Used for compatibility of `\operatorname` in LaTeX
     Function(Box<MathFunction>),
     OverOp(char, Accent, Box<MathML>),
     UnderOp(char, Accent, Box<MathML>),
+    /// [`<msqrt>`](https://developer.mozilla.org/en-US/docs/Web/MathML/Element/msqrt)
     Sqrt(Box<MathSqrt>),
+    /// [`<mfrac>`](https://developer.mozilla.org/en-US/docs/Web/MathML/Element/mfrac)
     Frac(Box<MathFraction>),
+    /// [`<mphantom>`](https://developer.mozilla.org/en-US/docs/Web/MathML/Element/mphantom)
     Phantom(Box<MathPhantom>),
+    /// [`<mstyle>`](https://developer.mozilla.org/en-US/docs/Web/MathML/Element/mstyle)
     Style(Box<MathStyle>),
+    /// [`<mfenced>`](https://developer.mozilla.org/en-US/docs/Web/MathML/Element/mfenced), but polyfill as [`<mrow>`](https://developer.mozilla.org/en-US/docs/Web/MathML/Element/mrow)
     Fenced(Box<MathFenced>),
     StrechedOp(bool, String),
     SizedParen {
         size: &'static str,
         paren: &'static str,
     },
+    /// [`<mtable>`](https://developer.mozilla.org/en-US/docs/Web/MathML/Element/mtable)
     Table(Box<MathTable>),
     Slashed(Box<MathML>),
     Undefined(String),
+    /// Used for compatibility of `&` in LaTeX
     Ampersand,
+    /// Used for compatibility of `\\` in LaTeX
     NewLine,
 }
 

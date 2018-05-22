@@ -2,12 +2,13 @@ use super::*;
 
 impl Display for MathOperator {
     fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
-        if self.operator.eq(&"∂") {
-            write!(f, r#"<mo mathvariant="italic">∂</mo>"#)
+        f.write_str("<mo")?;
+        for (key, value) in &self.attributes {
+            write!(f, " {}=\"{}\"", key, value)?;
         }
-        else {
-            write!(f, r#"<mo>{}</mo>"#, self.operator)
-        }
+        f.write_str(">")?;
+        safe_html_str(f, &self.operator)?;
+        f.write_str("</mo>")
     }
 }
 

@@ -1,4 +1,7 @@
-use crate::{helpers::safe_html_char, MathML};
+use crate::{
+    helpers::{safe_html_char, safe_html_str},
+    MathML,
+};
 use std::{
     collections::BTreeMap,
     fmt::{Display, Formatter},
@@ -13,6 +16,7 @@ mod display;
 #[derive(Clone, Debug, PartialEq)]
 pub struct MathOperator {
     operator: String,
+    attributes: BTreeMap<String, String>,
 }
 
 /// The [`<mspace>`](https://developer.mozilla.org/en-US/docs/Web/MathML/Element/mspace) element is used to display a blank space, whose size is set by its attributes.
