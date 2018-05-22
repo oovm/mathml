@@ -57,7 +57,6 @@ pub enum MathML {
     },
     /// [`<mtable>`](https://developer.mozilla.org/en-US/docs/Web/MathML/Element/mtable)
     Table(Box<MathTable>),
-    Slashed(Box<MathML>),
     Undefined(String),
     /// Used for compatibility of `&` in LaTeX
     Ampersand,

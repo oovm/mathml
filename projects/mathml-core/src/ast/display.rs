@@ -21,14 +21,6 @@ impl Display for MathML {
             MathML::SizedParen { size, paren } => {
                 write!(f, r#"<mrow><mo maxsize="{0}" minsize="{0}">{1}</mro></mrow>"#, size, paren)
             }
-            MathML::Slashed(node) => match &**node {
-                // force set math-variant here
-                MathML::Identifier(mi) => {
-                    write!(f, "{:}", mi)
-                }
-                MathML::Operator(x) => write!(f, "<mo>{}&#x0338;</mo>", x),
-                n => write!(f, "{}", n),
-            },
             MathML::Table(v) => Display::fmt(v, f),
             MathML::Space(v) => Display::fmt(v, f),
             MathML::Text(v) => Display::fmt(v, f),
