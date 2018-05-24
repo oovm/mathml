@@ -56,3 +56,35 @@ impl Display for MathFunction {
         }
     }
 }
+
+impl Display for MathTable {
+    fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
+        f.write_str("<mtable")?;
+        for (key, value) in &self.attributes {
+            write!(f, " {}=\"{}\"", key, value)?;
+        }
+        f.write_str(">")?;
+        f.write_str("<mtr><mtd>")?;
+        for (i, node) in self.stream.iter().enumerate() {
+            match node {
+                MathML::NewLine => {
+                    f.write_str("</mtd></mtr>")?;
+                    if i < self.stream.len() {
+                        f.write_str("<mtr><mtd>")?;
+                    }
+                }
+                MathML::Ampersand => {
+                    f.write_str("</mtd>")?;
+                    if i < self.stream.len() {
+                        f.write_str("<mtd>")?;
+                    }
+                }
+                _ => {
+                    write!(f, "{}", node)?;
+                }
+            }
+        }
+        f.write_str("</mtd></mtr>")?;
+        f.write_str("</mtable>")
+    }
+}

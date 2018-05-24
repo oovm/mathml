@@ -12,7 +12,7 @@ use crate::{
 use std::fmt::{Display, Formatter};
 
 // noinspection SpellCheckingInspection
-/// A MathML element node.
+/// Represent the [MathML](https://w3c.github.io/mathml/) AST node, For semantic considerations, not exactly the same as the standard.
 #[derive(Debug, Clone, PartialEq)]
 pub enum MathML {
     /// [`<math>`](https://developer.mozilla.org/en-US/docs/Web/MathML/Element/math)

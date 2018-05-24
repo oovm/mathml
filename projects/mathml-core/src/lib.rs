@@ -10,6 +10,7 @@ mod fractions;
 mod identifiers;
 mod numbers;
 mod operators;
+mod traits;
 
 pub mod helpers;
 
@@ -20,4 +21,5 @@ pub use crate::{
     identifiers::{FontVariant, MathIdentifier},
     numbers::MathNumber,
     operators::{MathFenced, MathMultiScript, MathOperator, MathSpace, MathUnderOver},
+    traits::MathElement,
 };

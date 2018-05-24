@@ -1,21 +1,16 @@
 use super::*;
 
-impl Default for MathSpace {
-    fn default() -> Self {
-        MathSpace::new(1.0)
-    }
-}
-
+// noinspection DuplicatedCode
+// noinspection SpellCheckingInspection
 impl MathOperator {
+    /// Create a simple math operator without any attributes.
     pub fn new<S>(text: S) -> Self
     where
         S: ToString,
     {
         Self { operator: text.to_string(), attributes: Default::default() }
     }
-    pub fn get_attribute(&self, key: &str) -> Option<&str> {
-        self.attributes.get(key).map(|s| s.as_str())
-    }
+    /// Add an attribute to the operator.
     pub fn add_attribute<K, V>(&mut self, key: K, value: V)
     where
         K: ToString,
@@ -23,28 +18,65 @@ impl MathOperator {
     {
         self.attributes.insert(key.to_string(), value.to_string());
     }
-    pub fn with_attribute<K, V>(mut self, key: K, value: V) -> Self
-    where
-        K: ToString,
-        V: ToString,
-    {
-        self.add_attribute(key, value);
-        self
-    }
+    /// Modify all attributes directly
     pub fn mut_attributes(&mut self) -> &mut BTreeMap<String, String> {
         &mut self.attributes
     }
+    /// Mark the operator as a fence (such as parentheses). There is no visual effect for this attribute.
+    pub fn mark_fence(mut self) -> Self {
+        self.add_attribute("fence", true);
+        self
+    }
+    ///  Mark the operator as a separator (such as commas). There is no visual effect for this attribute.
+    pub fn mark_separator(mut self) -> Self {
+        self.add_attribute("separator", true);
+        self
+    }
+    /// Mark the operator should be drawn bigger when math-style is set to normal.
+    pub fn mark_large_operator(mut self) -> Self {
+        self.add_attribute("largeop", true);
+        self
+    }
+    /// Mark the operator stretches to the size of the adjacent element.
+    pub fn mark_stretchy(mut self) -> Self {
+        self.add_attribute("stretchy", true);
+        self
+    }
+    /// Mark the stretchy operator should be vertically symmetric around the imaginary math axis (centered fraction line).
+    pub fn mark_symmetric(mut self) -> Self {
+        self.add_attribute("symmetric", true);
+        self.mark_stretchy()
+    }
+    /// A <length-percentage> indicating the amount of space before the operator.
+    /// A <length-percentage> indicating the amount of space after the operator.
+    pub fn with_space(mut self, lhs: f32, rhs: f32) -> Self {
+        self.add_attribute("lspace", lhs);
+        self.add_attribute("rspace", rhs);
+        self
+    }
+    /// A <length-percentage> indicating the maximum size of the operator when it is stretchy.
+    pub fn with_size(mut self, min: f32, max: f32) -> Self {
+        self.add_attribute("minsize", min);
+        self.add_attribute("maxsize", max);
+        self.mark_stretchy()
+    }
 }
 
+impl Default for MathSpace {
+    fn default() -> Self {
+        MathSpace::new(1.0)
+    }
+}
+
+// noinspection DuplicatedCode
 impl MathSpace {
+    /// Create a simple math space without any attributes, the unit is `rem`.
     pub fn new(width: f32) -> Self {
         let mut attributes = BTreeMap::new();
         attributes.insert("width".to_string(), format!("{}rem", width));
         Self { attributes }
     }
-    pub fn get_attribute(&self, key: &str) -> Option<&str> {
-        self.attributes.get(key).map(|s| s.as_str())
-    }
+    /// Add an attribute to the operator.
     pub fn add_attribute<K, V>(&mut self, key: K, value: V)
     where
         K: ToString,
@@ -52,14 +84,7 @@ impl MathSpace {
     {
         self.attributes.insert(key.to_string(), value.to_string());
     }
-    pub fn with_attribute<K, V>(mut self, key: K, value: V) -> Self
-    where
-        K: ToString,
-        V: ToString,
-    {
-        self.add_attribute(key, value);
-        self
-    }
+    /// Modify all attributes directly
     pub fn mut_attributes(&mut self) -> &mut BTreeMap<String, String> {
         &mut self.attributes
     }

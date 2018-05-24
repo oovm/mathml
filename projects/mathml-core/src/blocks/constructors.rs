@@ -6,6 +6,12 @@ impl Default for MathRoot {
     }
 }
 
+impl MathElement for MathRoot {
+    fn mut_attributes(&mut self) -> &mut BTreeMap<String, String> {
+        &mut self.attributes
+    }
+}
+
 impl MathRoot {
     pub fn new<I>(children: I) -> Self
     where
@@ -13,19 +19,9 @@ impl MathRoot {
     {
         Self { children: children.into_iter().collect(), ..Default::default() }
     }
-    pub fn with_attribute<K, V>(mut self, key: K, value: V) -> MathRoot
-    where
-        K: ToString,
-        V: ToString,
-    {
-        self.attributes.insert(key.to_string(), value.to_string());
-        self
-    }
-    pub fn with_display_style(self) -> Self {
-        self.with_attribute("display", "block")
-    }
-    pub fn with_inline_style(self) -> Self {
-        self.with_attribute("display", "inline")
+    pub fn with_display_style(self, display: bool) -> Self {
+        let display = if display { "block" } else { "inline" };
+        self.with_attribute("display", display)
     }
     pub fn with_namespace(self) -> Self {
         self.with_attribute("xmlns", "http://www.w3.org/1998/Math/MathML")
@@ -53,6 +49,13 @@ impl MathRow {
     }
 }
 
+impl MathElement for MathStyle {
+    fn mut_attributes(&mut self) -> &mut BTreeMap<String, String> {
+        &mut self.attributes
+    }
+}
+
+// noinspection DuplicatedCode
 impl MathStyle {
     pub fn display<M>(base: M) -> Self
     where
@@ -66,13 +69,17 @@ impl MathStyle {
     {
         Self { base: base.into(), attributes: Default::default() }.with_attribute("displaystyle", "false")
     }
-    pub fn with_attribute<K, V>(mut self, key: K, value: V) -> Self
+    /// Add an attribute to the operator.
+    pub fn add_attribute<K, V>(&mut self, key: K, value: V)
     where
         K: ToString,
         V: ToString,
     {
         self.attributes.insert(key.to_string(), value.to_string());
-        self
+    }
+    /// Modify all attributes directly
+    pub fn mut_attributes(&mut self) -> &mut BTreeMap<String, String> {
+        &mut self.attributes
     }
 }
 impl MathPhantom {
@@ -103,5 +110,27 @@ impl MathFunction {
     }
     pub fn mut_arguments(&mut self) -> &mut Vec<MathML> {
         &mut self.body
+    }
+}
+
+// noinspection DuplicatedCode
+impl MathTable {
+    pub fn matrix<I>(stream: I) -> Self
+    where
+        I: IntoIterator<Item = MathML>,
+    {
+        Self { stream: stream.into_iter().collect(), attributes: BTreeMap::new() }
+    }
+    /// Add an attribute to the operator.
+    pub fn add_attribute<K, V>(&mut self, key: K, value: V)
+    where
+        K: ToString,
+        V: ToString,
+    {
+        self.attributes.insert(key.to_string(), value.to_string());
+    }
+    /// Modify all attributes directly
+    pub fn mut_attributes(&mut self) -> &mut BTreeMap<String, String> {
+        &mut self.attributes
     }
 }

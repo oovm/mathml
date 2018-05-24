@@ -118,11 +118,11 @@ pub fn legendre_symbols(numerator: MathML, denominator: MathML) -> MathML {
 /// # Input
 ///
 /// ```
-/// # use mathml_core::{helpers::isotope,MathFenced};
+/// # use mathml_core::{helpers::isotope, MathFenced};
 /// MathFenced::parentheses(vec![
-///     isotope("H", 1, None),
-///     isotope("H", 2, None),
-///     isotope("H", 3, None),
+///     isotope("H", 1, None).into(),
+///     isotope("H", 2, Some(2)).into(),
+///     isotope("H", 3, None).into(),
 /// ]);
 /// ```
 ///

@@ -3,7 +3,12 @@ use super::*;
 impl Display for MathIdentifier {
     fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
         // maybe short form
-        write!(f, "<mi mathvariant=\"{}\">", self.variant)?;
+        if self.variant == FontVariant::Italic {
+            f.write_str("<mi>")?;
+        }
+        else {
+            write!(f, "<mi mathvariant=\"{}\">", self.variant)?;
+        }
         safe_html_str(f, &self.identifier)?;
         f.write_str("</mi>")
     }
