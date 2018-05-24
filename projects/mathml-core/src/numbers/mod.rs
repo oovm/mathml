@@ -1,3 +1,4 @@
+use crate::MathML;
 use std::fmt::{Display, Formatter};
 
 mod display;
@@ -11,6 +12,7 @@ pub struct MathNumber {
 }
 
 impl MathNumber {
+    /// Creates a new [`MathNumber`] with the given number.
     pub fn new<S>(text: S) -> Self
     where
         S: ToString,
@@ -24,7 +26,7 @@ macro_rules! make_number {
         $(
             impl From<$t> for MathNumber {
                 fn from(value: $t) -> Self {
-                    Self { number: value.to_string() }
+                    Self::new(value)
                 }
             }
         )*
@@ -34,3 +36,13 @@ macro_rules! make_number {
 make_number!(i8, i16, i32, i64, i128, isize);
 make_number!(u8, u16, u32, u64, u128, usize);
 make_number!(f32, f64);
+
+impl MathML {
+    /// Creates a new [`MathNumber`] with the given number.
+    pub fn number<N>(n: N) -> Self
+    where
+        N: Into<MathNumber>,
+    {
+        n.into().into()
+    }
+}

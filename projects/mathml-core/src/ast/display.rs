@@ -10,17 +10,11 @@ impl Display for MathML {
             MathML::Identifier(v) => Display::fmt(v, f),
             MathML::Operator(v) => Display::fmt(v, f),
             MathML::MultiScripts(v) => Display::fmt(v, f),
-            MathML::OverOp(op, acc, target) => write!(f, r#"<mover>{}<mo accent="{}">{}</mo></mover>"#, target, acc, op),
-            MathML::UnderOp(op, acc, target) => write!(f, r#"<munder>{}<mo accent="{}">{}</mo></munder>"#, target, acc, op),
             MathML::UnderOver(v) => Display::fmt(v, f),
             MathML::Sqrt(v) => Display::fmt(v, f),
             MathML::Frac(v) => Display::fmt(v, f),
             MathML::Phantom(v) => Display::fmt(v, f),
             MathML::Fenced(v) => Display::fmt(v, f),
-            MathML::StrechedOp(stretchy, op) => write!(f, r#"<mo stretchy="{}">{}</mo>"#, stretchy, op),
-            MathML::SizedParen { size, paren } => {
-                write!(f, r#"<mrow><mo maxsize="{0}" minsize="{0}">{1}</mro></mrow>"#, size, paren)
-            }
             MathML::Table(v) => Display::fmt(v, f),
             MathML::Space(v) => Display::fmt(v, f),
             MathML::Text(v) => Display::fmt(v, f),

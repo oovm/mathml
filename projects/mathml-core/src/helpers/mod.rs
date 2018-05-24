@@ -95,7 +95,7 @@ where
     N: Into<MathML>,
     D: Into<MathML>,
 {
-    MathMultiScript::sub_super_script(MathML::identifier("C"), numerator.into(), denominator.into()).into()
+    MathMultiScript::sub_super_script(MathML::identifier("C").into(), numerator.into(), denominator.into()).into()
 }
 
 // noinspection SpellCheckingInspection
@@ -133,7 +133,7 @@ pub fn isotope(symbol: &str, mass_number: usize, atomic_number: Option<usize>) -
         Some(s) => vec![s.into()],
         None => vec![],
     };
-    MathMultiScript::new(MathML::identifier(symbol), vec![mass_number.into()], ld, vec![], vec![])
+    MathMultiScript::new(MathML::identifier(symbol).into(), vec![mass_number.into()], ld, vec![], vec![])
 }
 
 /// Build a isotopic symbol.

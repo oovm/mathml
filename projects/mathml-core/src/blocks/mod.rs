@@ -1,4 +1,4 @@
-use crate::{traits::MathElementWriter, MathElement, MathIdentifier, MathML};
+use crate::{MathElement, MathIdentifier, MathML};
 use std::{
     collections::BTreeMap,
     fmt::{Debug, Display, Formatter},
@@ -13,6 +13,7 @@ pub struct MathRoot {
     attributes: BTreeMap<String, String>,
 }
 
+/// <https://developer.mozilla.org/en-US/docs/Web/MathML/Element/mi>
 #[derive(Debug, Clone, PartialEq)]
 pub struct MathFunction {
     name: String,

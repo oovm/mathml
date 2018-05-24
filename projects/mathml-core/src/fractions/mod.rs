@@ -22,9 +22,13 @@ pub struct MathFraction {
 /// We provide a polyfill for this attribute, which supports deprecated values `thin`, `medium`, `thick` and `length`.
 #[derive(Debug, Clone, Copy, PartialEq)]
 pub enum LineThickness {
+    /// <math><mfrac linethickness="thin">1</mfrac></math>
     Thin,
+    /// <math><mfrac linethickness="medium">1</mfrac></math>
     Medium,
+    /// <math><mfrac linethickness="thick">1</mfrac></math>
     Thick,
+    /// <math><mfrac linethickness="length">1</mfrac></math>
     Length(u8),
 }
 
@@ -35,6 +39,7 @@ impl Default for LineThickness {
 }
 
 impl MathFraction {
+    /// Creates a new [`MathFraction`].
     pub fn new<N, D>(numerator: N, denominator: D) -> Self
     where
         N: Into<MathML>,
@@ -42,6 +47,7 @@ impl MathFraction {
     {
         Self { numerator: numerator.into(), denominator: denominator.into(), line_thickness: Default::default() }
     }
+    /// Creates a new [`MathFraction`] with the given [`LineThickness`].
     pub fn with_thickness<T>(mut self, line_thickness: T) -> Self
     where
         T: Into<LineThickness>,

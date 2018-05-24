@@ -8,6 +8,7 @@ pub trait MathElement
 where
     Self: Clone + Display,
 {
+    /// Get the tag name of the element.
     fn tag_name(&self) -> &'static str;
     /// Get all attributes directly
     fn get_attributes(&self) -> &BTreeMap<String, String>;
@@ -21,6 +22,7 @@ where
     {
         self.mut_attributes().insert(key.to_string(), value.to_string());
     }
+    /// Add an attribute to the operator.
     fn with_attribute<K, V>(mut self, key: K, value: V) -> Self
     where
         K: ToString,
@@ -31,23 +33,7 @@ where
     }
 }
 
-pub(crate) trait MathElementWriter
-where
-    Self: MathElement,
-{
-    fn write_tag_start(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
-        write!(f, "<{}", self.tag_name())?;
-        for (key, value) in self.get_attributes() {
-            write!(f, " {}=\"{}\"", key, value)?;
-        }
-        f.write_str(">")
-    }
-    fn write_tag_end(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
-        write!(f, "</{}>", self.tag_name())
-    }
-}
-
-pub(crate) fn write_tag_start<T>(element: &T, f: &mut Formatter<'_>) -> std::fmt::Result
+pub(crate) fn write_tag_start<T>(f: &mut Formatter<'_>, element: &T) -> std::fmt::Result
 where
     T: MathElement,
 {
@@ -58,9 +44,20 @@ where
     f.write_str(">")
 }
 
-pub(crate) fn write_tag_end<T>(element: &T, f: &mut Formatter<'_>) -> std::fmt::Result
+pub(crate) fn write_tag_close<T>(f: &mut Formatter<'_>, element: &T) -> std::fmt::Result
 where
     T: MathElement,
 {
     write!(f, "</{}>", element.tag_name())
+}
+
+pub(crate) fn write_tag_self_close<T>(f: &mut Formatter<'_>, element: &T) -> std::fmt::Result
+where
+    T: MathElement,
+{
+    write!(f, "<{}", element.tag_name())?;
+    for (key, value) in element.get_attributes() {
+        write!(f, " {}=\"{}\"", key, value)?;
+    }
+    f.write_str("/>")
 }

@@ -1,5 +1,6 @@
 use crate::{
     helpers::{safe_html_char, safe_html_str},
+    traits::{write_tag_close, write_tag_self_close, write_tag_start},
     MathElement, MathML,
 };
 use std::{

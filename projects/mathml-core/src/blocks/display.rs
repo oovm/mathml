@@ -1,17 +1,16 @@
 use super::*;
-use crate::MathSpace;
+use crate::{
+    traits::{write_tag_close, write_tag_start},
+    MathSpace,
+};
 
 impl Display for MathRoot {
     fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
-        write!(f, "<math")?;
-        for (key, value) in &self.attributes {
-            write!(f, " {}=\"{}\"", key, value)?;
-        }
-        write!(f, ">")?;
+        write_tag_start(f, self)?;
         for child in &self.children {
             write!(f, "{}", child)?;
         }
-        write!(f, "</math>")
+        write_tag_close(f, self)
     }
 }
 
@@ -24,13 +23,9 @@ impl Display for MathPhantom {
 }
 impl Display for MathStyle {
     fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
-        write!(f, "<mstyle")?;
-        for (key, value) in &self.attributes {
-            write!(f, " {}=\"{}\"", key, value)?;
-        }
-        write!(f, ">")?;
+        write_tag_start(f, self)?;
         write!(f, "{}", self.base)?;
-        write!(f, "</mstyle>")
+        write_tag_close(f, self)
     }
 }
 impl Display for MathRow {
@@ -57,11 +52,9 @@ impl Display for MathFunction {
     }
 }
 
-impl MathElementWriter for MathTable {}
-
 impl Display for MathTable {
     fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
-        self.write_tag_start(f)?;
+        write_tag_start(f, self)?;
         f.write_str("<mtr><mtd>")?;
         for (i, node) in self.stream.iter().enumerate() {
             match node {
@@ -83,6 +76,6 @@ impl Display for MathTable {
             }
         }
         f.write_str("</mtd></mtr>")?;
-        self.write_tag_end()
+        write_tag_start(f, self)
     }
 }

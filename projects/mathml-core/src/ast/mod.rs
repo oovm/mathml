@@ -1,8 +1,6 @@
-pub mod attribute;
 mod display;
 
 use crate::{
-    ast::attribute::Accent,
     blocks::{MathRow, MathStyle},
     identifiers::MathText,
     operators::{MathOperator, MathSqrt, MathUnderOver},
@@ -38,8 +36,6 @@ pub enum MathML {
     UnderOver(Box<MathUnderOver>),
     /// Used for compatibility of `\operatorname` in LaTeX
     Function(Box<MathFunction>),
-    OverOp(char, Accent, Box<MathML>),
-    UnderOp(char, Accent, Box<MathML>),
     /// [`<msqrt>`](https://developer.mozilla.org/en-US/docs/Web/MathML/Element/msqrt)
     Sqrt(Box<MathSqrt>),
     /// [`<mfrac>`](https://developer.mozilla.org/en-US/docs/Web/MathML/Element/mfrac)
@@ -50,13 +46,9 @@ pub enum MathML {
     Style(Box<MathStyle>),
     /// [`<mfenced>`](https://developer.mozilla.org/en-US/docs/Web/MathML/Element/mfenced), but polyfill as [`<mrow>`](https://developer.mozilla.org/en-US/docs/Web/MathML/Element/mrow)
     Fenced(Box<MathFenced>),
-    StrechedOp(bool, String),
-    SizedParen {
-        size: &'static str,
-        paren: &'static str,
-    },
     /// [`<mtable>`](https://developer.mozilla.org/en-US/docs/Web/MathML/Element/mtable)
     Table(Box<MathTable>),
+    /// Used for unknown element
     Undefined(String),
     /// Used for compatibility of `&` in LaTeX
     Ampersand,
@@ -90,7 +82,7 @@ macro_rules! make_number {
 
 impl From<char> for MathML {
     fn from(value: char) -> Self {
-        MathML::identifier(value)
+        MathML::identifier(value).into()
     }
 }
 

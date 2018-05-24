@@ -46,11 +46,11 @@ impl MathOperator {
     }
     /// A <length-percentage> indicating the amount of space before the operator.
     /// A <length-percentage> indicating the amount of space after the operator.
-    pub fn with_space(mut self, lhs: f32, rhs: f32) -> Self {
+    pub fn with_space(self, lhs: f32, rhs: f32) -> Self {
         self.with_attribute("lspace", lhs).with_attribute("rspace", rhs)
     }
     /// A <length-percentage> indicating the maximum size of the operator when it is stretchy.
-    pub fn with_size(mut self, min: f32, max: f32) -> Self {
+    pub fn with_size(self, min: f32, max: f32) -> Self {
         self.mark_stretchy().with_attribute("minsize", min).with_attribute("maxsize", max)
     }
 }
@@ -86,64 +86,103 @@ impl MathSpace {
 }
 
 impl MathSqrt {
-    pub fn new(base: MathML) -> Self {
+    /// Create a new square root element with the given base and the given left and right fence characters.
+    pub fn sqrt(base: MathML) -> Self {
         Self { base, surd: None }
     }
+    /// Create a new square root element with the given base and the given left and right fence characters.
     pub fn surd(base: MathML, power: MathML) -> Self {
         Self { base, surd: Some(power) }
     }
 }
 
+// noinspection SpellCheckingInspection
+impl MathElement for MathMultiScript {
+    fn tag_name(&self) -> &'static str {
+        if self.is_sub_super_script() {
+            "msubsup"
+        }
+        else if self.is_sub_script() {
+            "msub"
+        }
+        else if self.is_super_script() {
+            "msup"
+        }
+        else {
+            "mmultiscripts"
+        }
+    }
+
+    fn get_attributes(&self) -> &BTreeMap<String, String> {
+        &self.attributes
+    }
+
+    fn mut_attributes(&mut self) -> &mut BTreeMap<String, String> {
+        &mut self.attributes
+    }
+}
+
 impl MathMultiScript {
+    /// Create a new multi script element with the given base and the given left and right fence characters.
     pub fn new(base: MathML, lu: Vec<MathML>, ld: Vec<MathML>, ru: Vec<MathML>, rd: Vec<MathML>) -> Self {
         Self { base, ru, rd, lu, ld, attributes: BTreeMap::new() }
     }
+    /// Create a new multi script element with the given base and the given left and right fence characters.
     pub fn sub_script(base: MathML, sub: MathML) -> Self {
         MathMultiScript::new(base, vec![], vec![], vec![], vec![sub])
     }
+    /// Create a new multi script element with the given base and the given left and right fence characters.
     pub fn is_sub_script(&self) -> bool {
         self.lu.is_empty() && self.ld.is_empty() && self.ru.is_empty() && self.rd.len() == 1
     }
+    /// Create a new multi script element with the given base and the given left and right fence characters.
     pub fn super_script(base: MathML, sup: MathML) -> Self {
         MathMultiScript::new(base, vec![], vec![], vec![sup], vec![])
     }
+    /// Create a new multi script element with the given base and the given left and right fence characters.
     pub fn is_super_script(&self) -> bool {
         self.lu.is_empty() && self.ld.is_empty() && self.ru.len() == 1 && self.rd.is_empty()
     }
+    /// Create a new multi script element with the given base and the given left and right fence characters.
     pub fn sub_super_script(base: MathML, sub: MathML, sup: MathML) -> Self {
         MathMultiScript::new(base, vec![], vec![], vec![sup], vec![sub])
     }
+    /// Create a new multi script element with the given base and the given left and right fence characters.
     pub fn is_sub_super_script(&self) -> bool {
         self.lu.is_empty() && self.ld.is_empty() && self.ru.len() == 1 && self.rd.len() == 1
     }
 }
 
 impl MathFenced {
+    /// Create a new fenced element with the given base and the given left and right fence characters.
     pub fn new<I>(base: I, lhs: char, rhs: char) -> Self
     where
         I: IntoIterator<Item = MathML>,
     {
         Self { base: base.into_iter().collect(), open: lhs, close: rhs, separators: String::new() }
     }
+    /// Create a new fenced element with the given base and the given left and right fence characters.
     pub fn parentheses<I>(base: I) -> Self
     where
         I: IntoIterator<Item = MathML>,
     {
         Self::new(base, '(', ')')
     }
-
+    /// Create a new fenced element with the given base and the given left and right fence characters.
     pub fn brackets<I>(base: I) -> Self
     where
         I: IntoIterator<Item = MathML>,
     {
         Self::new(base, '[', ']')
     }
+    /// Create a new fenced element with the given base and the given left and right fence characters.
     pub fn curly<I>(base: I) -> Self
     where
         I: IntoIterator<Item = MathML>,
     {
         Self::new(base, '{', '}')
     }
+    /// A string of characters to be inserted between consecutive pairs of elements in the list.
     pub fn with_separators<S>(mut self, separators: S) -> Self
     where
         S: ToString,
@@ -153,36 +192,52 @@ impl MathFenced {
     }
 }
 
+// noinspection SpellCheckingInspection
+impl MathElement for MathUnderOver {
+    fn tag_name(&self) -> &'static str {
+        match (&self.under, &self.over) {
+            (Some(_), Some(_)) => "munderover",
+            (Some(_), None) => "munder",
+            (None, Some(_)) => "mover",
+            (None, None) => unreachable!("MathUnderOver must have at least one of under or over"),
+        }
+    }
+
+    fn get_attributes(&self) -> &BTreeMap<String, String> {
+        &self.attributes
+    }
+
+    fn mut_attributes(&mut self) -> &mut BTreeMap<String, String> {
+        &mut self.attributes
+    }
+}
+
+// noinspection SpellCheckingInspection
 impl MathUnderOver {
+    /// Creates a new `MathUnderOver` element with the given base and optional under and over elements.
     pub fn under(base: MathML, under: MathML) -> Self {
         Self { base, under: Some(under), over: None, attributes: BTreeMap::new() }
     }
+    /// Creates a new `MathUnderOver` element with the given base and optional under and over elements.
     pub fn over(base: MathML, over: MathML) -> Self {
         Self { base, under: None, over: Some(over), attributes: BTreeMap::new() }
     }
+    /// Creates a new `MathUnderOver` element with the given base and optional under and over elements.
     pub fn under_over(base: MathML, under: MathML, over: MathML) -> Self {
         Self { base, under: Some(under), over: Some(over), attributes: BTreeMap::new() }
     }
-    pub fn with_accent_over(mut self, accent: bool) -> Self {
-        if accent {
-            self.attributes.insert("accent".to_string(), "true".to_string());
-        }
-        else {
-            self.attributes.remove("accent");
-        }
-        self
+    /// Creates a new `MathUnderOver` element with the given base and optional under and over elements.
+    pub fn with_accent_over(self) -> Self {
+        self.with_attribute("accent", true)
     }
-    pub fn with_accent_under(mut self, accent: bool) -> Self {
-        if accent {
-            self.attributes.insert("accentunder".to_string(), "true".to_string());
-        }
-        else {
-            self.attributes.remove("accentunder");
-        }
-        self
+    /// Creates a new `MathUnderOver` element with the given base and optional under and over elements.
+    pub fn with_accent_under(self) -> Self {
+        self.with_attribute("accentunder", true)
     }
 }
+
 impl MathML {
+    /// Create a new MathML element with the given tag name.
     pub fn operation<S>(text: S) -> Self
     where
         S: ToString,
