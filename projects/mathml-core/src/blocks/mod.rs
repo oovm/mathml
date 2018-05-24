@@ -1,4 +1,4 @@
-use crate::{MathElement, MathIdentifier, MathML};
+use crate::{traits::MathElementWriter, MathElement, MathIdentifier, MathML};
 use std::{
     collections::BTreeMap,
     fmt::{Debug, Display, Formatter},
@@ -19,6 +19,14 @@ pub struct MathFunction {
     body: Vec<MathML>,
 }
 
+/// The [`<mrow>`](https://developer.mozilla.org/en-US/docs/Web/MathML/Element/mrow) element is used to group sub-expressions, which usually contain one or more operators with their respective operands (such as <mi> and <mn>).
+///
+/// This element renders as a horizontal row containing its arguments.
+///
+/// When writing a MathML expression, you should group elements within an <mrow> in the same way as they are grouped in the mathematical interpretation of the expression. Proper grouping helps the rendering of the expression in several ways:
+///
+/// - It can improve the display by possibly affecting spacing and preventing line breaks.
+/// - It simplifies the interpretation of the expression by automated systems such as computer algebra systems and audio renderers.
 #[derive(Debug, Clone, PartialEq)]
 pub struct MathRow {
     children: Vec<MathML>,
@@ -38,6 +46,9 @@ pub struct MathStyle {
     attributes: BTreeMap<String, String>,
 }
 
+/// The [`<mtable>`](https://developer.mozilla.org/en-US/docs/Web/MathML/Element/mtable) element allows you to create tables or matrices. Its children are <mtr> elements (representing rows), each of them having <mtd> elements as its children (representing cells).
+///
+/// These elements are similar to `<table>`, `<tr>` and `<td>` elements of HTML.
 #[derive(Debug, Clone, PartialEq)]
 pub struct MathTable {
     stream: Vec<MathML>,

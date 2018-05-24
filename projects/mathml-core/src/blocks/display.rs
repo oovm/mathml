@@ -57,13 +57,11 @@ impl Display for MathFunction {
     }
 }
 
+impl MathElementWriter for MathTable {}
+
 impl Display for MathTable {
     fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
-        f.write_str("<mtable")?;
-        for (key, value) in &self.attributes {
-            write!(f, " {}=\"{}\"", key, value)?;
-        }
-        f.write_str(">")?;
+        self.write_tag_start(f)?;
         f.write_str("<mtr><mtd>")?;
         for (i, node) in self.stream.iter().enumerate() {
             match node {
@@ -85,6 +83,6 @@ impl Display for MathTable {
             }
         }
         f.write_str("</mtd></mtr>")?;
-        f.write_str("</mtable>")
+        self.write_tag_end()
     }
 }

@@ -6,7 +6,16 @@ impl Default for MathRoot {
     }
 }
 
+// noinspection SpellCheckingInspection
 impl MathElement for MathRoot {
+    fn tag_name(&self) -> &'static str {
+        "mroot"
+    }
+
+    fn get_attributes(&self) -> &BTreeMap<String, String> {
+        &self.attributes
+    }
+
     fn mut_attributes(&mut self) -> &mut BTreeMap<String, String> {
         &mut self.attributes
     }
@@ -49,7 +58,16 @@ impl MathRow {
     }
 }
 
+// noinspection SpellCheckingInspection
 impl MathElement for MathStyle {
+    fn tag_name(&self) -> &'static str {
+        "mstyle"
+    }
+
+    fn get_attributes(&self) -> &BTreeMap<String, String> {
+        &self.attributes
+    }
+
     fn mut_attributes(&mut self) -> &mut BTreeMap<String, String> {
         &mut self.attributes
     }
@@ -68,18 +86,6 @@ impl MathStyle {
         M: Into<MathML>,
     {
         Self { base: base.into(), attributes: Default::default() }.with_attribute("displaystyle", "false")
-    }
-    /// Add an attribute to the operator.
-    pub fn add_attribute<K, V>(&mut self, key: K, value: V)
-    where
-        K: ToString,
-        V: ToString,
-    {
-        self.attributes.insert(key.to_string(), value.to_string());
-    }
-    /// Modify all attributes directly
-    pub fn mut_attributes(&mut self) -> &mut BTreeMap<String, String> {
-        &mut self.attributes
     }
 }
 impl MathPhantom {
@@ -113,6 +119,21 @@ impl MathFunction {
     }
 }
 
+// noinspection SpellCheckingInspection
+impl MathElement for MathTable {
+    fn tag_name(&self) -> &'static str {
+        "mtable"
+    }
+
+    fn get_attributes(&self) -> &BTreeMap<String, String> {
+        &self.attributes
+    }
+
+    fn mut_attributes(&mut self) -> &mut BTreeMap<String, String> {
+        &mut self.attributes
+    }
+}
+
 // noinspection DuplicatedCode
 impl MathTable {
     pub fn matrix<I>(stream: I) -> Self
@@ -120,17 +141,5 @@ impl MathTable {
         I: IntoIterator<Item = MathML>,
     {
         Self { stream: stream.into_iter().collect(), attributes: BTreeMap::new() }
-    }
-    /// Add an attribute to the operator.
-    pub fn add_attribute<K, V>(&mut self, key: K, value: V)
-    where
-        K: ToString,
-        V: ToString,
-    {
-        self.attributes.insert(key.to_string(), value.to_string());
-    }
-    /// Modify all attributes directly
-    pub fn mut_attributes(&mut self) -> &mut BTreeMap<String, String> {
-        &mut self.attributes
     }
 }

@@ -1,6 +1,20 @@
 use super::*;
 
-// noinspection DuplicatedCode
+// noinspection SpellCheckingInspection
+impl MathElement for MathOperator {
+    fn tag_name(&self) -> &'static str {
+        "mo"
+    }
+
+    fn get_attributes(&self) -> &BTreeMap<String, String> {
+        &self.attributes
+    }
+
+    fn mut_attributes(&mut self) -> &mut BTreeMap<String, String> {
+        &mut self.attributes
+    }
+}
+
 // noinspection SpellCheckingInspection
 impl MathOperator {
     /// Create a simple math operator without any attributes.
@@ -10,55 +24,34 @@ impl MathOperator {
     {
         Self { operator: text.to_string(), attributes: Default::default() }
     }
-    /// Add an attribute to the operator.
-    pub fn add_attribute<K, V>(&mut self, key: K, value: V)
-    where
-        K: ToString,
-        V: ToString,
-    {
-        self.attributes.insert(key.to_string(), value.to_string());
-    }
-    /// Modify all attributes directly
-    pub fn mut_attributes(&mut self) -> &mut BTreeMap<String, String> {
-        &mut self.attributes
-    }
     /// Mark the operator as a fence (such as parentheses). There is no visual effect for this attribute.
-    pub fn mark_fence(mut self) -> Self {
-        self.add_attribute("fence", true);
-        self
+    pub fn mark_fence(self) -> Self {
+        self.with_attribute("fence", true)
     }
     ///  Mark the operator as a separator (such as commas). There is no visual effect for this attribute.
-    pub fn mark_separator(mut self) -> Self {
-        self.add_attribute("separator", true);
-        self
+    pub fn mark_separator(self) -> Self {
+        self.with_attribute("separator", true)
     }
     /// Mark the operator should be drawn bigger when math-style is set to normal.
-    pub fn mark_large_operator(mut self) -> Self {
-        self.add_attribute("largeop", true);
-        self
+    pub fn mark_large_operator(self) -> Self {
+        self.with_attribute("largeop", true)
     }
     /// Mark the operator stretches to the size of the adjacent element.
-    pub fn mark_stretchy(mut self) -> Self {
-        self.add_attribute("stretchy", true);
-        self
+    pub fn mark_stretchy(self) -> Self {
+        self.with_attribute("stretchy", true)
     }
     /// Mark the stretchy operator should be vertically symmetric around the imaginary math axis (centered fraction line).
-    pub fn mark_symmetric(mut self) -> Self {
-        self.add_attribute("symmetric", true);
-        self.mark_stretchy()
+    pub fn mark_symmetric(self) -> Self {
+        self.mark_stretchy().with_attribute("symmetric", true)
     }
     /// A <length-percentage> indicating the amount of space before the operator.
     /// A <length-percentage> indicating the amount of space after the operator.
     pub fn with_space(mut self, lhs: f32, rhs: f32) -> Self {
-        self.add_attribute("lspace", lhs);
-        self.add_attribute("rspace", rhs);
-        self
+        self.with_attribute("lspace", lhs).with_attribute("rspace", rhs)
     }
     /// A <length-percentage> indicating the maximum size of the operator when it is stretchy.
     pub fn with_size(mut self, min: f32, max: f32) -> Self {
-        self.add_attribute("minsize", min);
-        self.add_attribute("maxsize", max);
-        self.mark_stretchy()
+        self.mark_stretchy().with_attribute("minsize", min).with_attribute("maxsize", max)
     }
 }
 
@@ -68,25 +61,27 @@ impl Default for MathSpace {
     }
 }
 
-// noinspection DuplicatedCode
+// noinspection SpellCheckingInspection
+impl MathElement for MathSpace {
+    fn tag_name(&self) -> &'static str {
+        "mspace"
+    }
+
+    fn get_attributes(&self) -> &BTreeMap<String, String> {
+        &self.attributes
+    }
+
+    fn mut_attributes(&mut self) -> &mut BTreeMap<String, String> {
+        &mut self.attributes
+    }
+}
+
 impl MathSpace {
     /// Create a simple math space without any attributes, the unit is `rem`.
     pub fn new(width: f32) -> Self {
         let mut attributes = BTreeMap::new();
         attributes.insert("width".to_string(), format!("{}rem", width));
         Self { attributes }
-    }
-    /// Add an attribute to the operator.
-    pub fn add_attribute<K, V>(&mut self, key: K, value: V)
-    where
-        K: ToString,
-        V: ToString,
-    {
-        self.attributes.insert(key.to_string(), value.to_string());
-    }
-    /// Modify all attributes directly
-    pub fn mut_attributes(&mut self) -> &mut BTreeMap<String, String> {
-        &mut self.attributes
     }
 }
 

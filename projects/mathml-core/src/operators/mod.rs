@@ -1,6 +1,6 @@
 use crate::{
     helpers::{safe_html_char, safe_html_str},
-    MathML,
+    MathElement, MathML,
 };
 use std::{
     collections::BTreeMap,

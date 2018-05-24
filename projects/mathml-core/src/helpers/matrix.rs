@@ -1,4 +1,5 @@
 use super::*;
+use crate::MathElement;
 // noinspection SpellCheckingInspection
 /// Renders a matrix with vertical bars.
 ///
