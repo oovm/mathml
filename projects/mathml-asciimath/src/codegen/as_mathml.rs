@@ -1,34 +1,34 @@
 use super::*;
-use crate::{block::LaTeXCommand, LaTeXBlock};
+use crate::{block::LaTeXCommand, AsciiBlock};
 use mathml_core::{
     helpers::{binom, bmatrix, cases, dfrac, frac, matrix, pmatrix, vmatrix, Bmatrix, Pmatrix, Vmatrix},
     MathFunction, MathIdentifier, MathML, MathMultiScript, MathNumber, MathOperator, MathRoot, MathRow, MathSpace,
 };
 
-impl<'i> LaTeXNode<'i> {
+impl<'i> AsciiNode<'i> {
     pub fn as_mathml(&self, context: &LaTeXEngine) -> MathML {
         match self {
-            LaTeXNode::Root { children } => MathRoot::new(children.iter().map(|node| node.as_mathml(context))).into(),
-            LaTeXNode::Row { children } => MathRow::new(children.iter().map(|node| node.as_mathml(context))).into(),
-            LaTeXNode::Block(block) => block.as_mathml(context),
-            LaTeXNode::Command(cmd) => cmd.as_mathml(context),
-            LaTeXNode::Text { .. } => {
+            AsciiNode::Root { children } => MathRoot::new(children.iter().map(|node| node.as_mathml(context))).into(),
+            AsciiNode::Row { children } => MathRow::new(children.iter().map(|node| node.as_mathml(context))).into(),
+            AsciiNode::Block(block) => block.as_mathml(context),
+            AsciiNode::Command(cmd) => cmd.as_mathml(context),
+            AsciiNode::Text { .. } => {
                 todo!()
             }
-            LaTeXNode::Number { number } => MathML::Number(Box::new(MathNumber::new(number))),
+            AsciiNode::Number { number } => MathML::Number(Box::new(MathNumber::new(number))),
 
-            LaTeXNode::Letter { identifier } => MathIdentifier::italic(identifier).into(),
-            LaTeXNode::Operation { operator } => MathOperator::new(operator).into(),
-            LaTeXNode::Superscript { lhs, rhs } => {
+            AsciiNode::Letter { identifier } => MathIdentifier::italic(identifier).into(),
+            AsciiNode::Operation { operator } => MathOperator::new(operator).into(),
+            AsciiNode::Superscript { lhs, rhs } => {
                 MathMultiScript::super_script(lhs.as_mathml(context), rhs.as_mathml(context)).into()
             }
-            LaTeXNode::NewLine => MathML::NewLine,
-            LaTeXNode::Ampersand => MathML::Ampersand,
+            AsciiNode::NewLine => MathML::NewLine,
+            AsciiNode::Ampersand => MathML::Ampersand,
         }
     }
 }
 
-impl<'i> LaTeXBlock<'i> {
+impl<'i> AsciiBlock<'i> {
     pub fn as_mathml(&self, context: &LaTeXEngine) -> MathML {
         let stream = self.children.iter().map(|node| node.as_mathml(context));
         match self.kind {

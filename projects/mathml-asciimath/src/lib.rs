@@ -4,7 +4,7 @@ mod definitions;
 mod parser;
 
 pub use crate::{
-    block::LaTeXBlock,
+    block::AsciiBlock,
     definitions::LaTeXEngine,
-    parser::{parse_latex, LaTeXNode},
+    parser::{parse_latex, AsciiNode},
 };

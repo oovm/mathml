@@ -1,4 +1,5 @@
 use super::*;
+use crate::LaTeXBlock;
 
 impl<'i> LaTeXNode<'i> {
     pub fn as_identifier(&self) -> &'i str {
@@ -13,7 +14,13 @@ impl<'i> LaTeXNode<'i> {
 impl<'i> Display for LaTeXNode<'i> {
     fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
         match self {
-            LaTeXNode::Root { .. } => {
+            LaTeXNode::ArticleRoot { .. } => {
+                todo!()
+            }
+            LaTeXNode::ArticleText { .. } => {
+                todo!()
+            }
+            LaTeXNode::MathRoot { .. } => {
                 todo!()
             }
             LaTeXNode::Row { children } => {
@@ -22,13 +29,11 @@ impl<'i> Display for LaTeXNode<'i> {
                 }
                 Ok(())
             }
-            LaTeXNode::Block(_) => {
-                todo!()
-            }
+            LaTeXNode::Block(v) => Display::fmt(v, f),
             LaTeXNode::Command { .. } => {
                 todo!()
             }
-            LaTeXNode::Text { .. } => {
+            LaTeXNode::MathText { .. } => {
                 todo!()
             }
             LaTeXNode::Number { number } => f.write_str(number),
@@ -44,5 +49,15 @@ impl<'i> Display for LaTeXNode<'i> {
             LaTeXNode::NewLine => f.write_str("\\\\"),
             LaTeXNode::Ampersand => f.write_str("&"),
         }
+    }
+}
+
+impl<'i> Display for LaTeXBlock<'i> {
+    fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
+        writeln!(f, "\\begin{{{}}}", self.kind)?;
+        for child in &self.children {
+            write!(f, "{}", child)?;
+        }
+        writeln!(f, "\\end{{{}}}", self.kind)
     }
 }

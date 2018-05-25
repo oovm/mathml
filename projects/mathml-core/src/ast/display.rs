@@ -24,6 +24,7 @@ impl Display for MathML {
             MathML::Undefined(_) => {
                 todo!()
             }
+            MathML::Nothing => Ok(()),
         }
     }
 }

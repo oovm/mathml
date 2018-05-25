@@ -50,6 +50,8 @@ pub enum MathML {
     Table(Box<MathTable>),
     /// Used for unknown element
     Undefined(String),
+    /// Used for compatibility of `&nbsp;` in HTML
+    Nothing,
     /// Used for compatibility of `&` in LaTeX
     Ampersand,
     /// Used for compatibility of `\\` in LaTeX
@@ -82,7 +84,7 @@ macro_rules! make_number {
 
 impl From<char> for MathML {
     fn from(value: char) -> Self {
-        MathML::identifier(value).into()
+        MathML::identifier(value)
     }
 }
 

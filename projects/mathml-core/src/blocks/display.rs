@@ -76,6 +76,6 @@ impl Display for MathTable {
             }
         }
         f.write_str("</mtd></mtr>")?;
-        write_tag_start(f, self)
+        write_tag_close(f, self)
     }
 }

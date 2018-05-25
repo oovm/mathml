@@ -8,11 +8,11 @@ use mathml_core::{
 impl<'i> LaTeXNode<'i> {
     pub fn as_mathml(&self, context: &LaTeXEngine) -> MathML {
         match self {
-            LaTeXNode::Root { children } => MathRoot::new(children.iter().map(|node| node.as_mathml(context))).into(),
+            LaTeXNode::MathRoot { children } => MathRoot::new(children.iter().map(|node| node.as_mathml(context))).into(),
             LaTeXNode::Row { children } => MathRow::new(children.iter().map(|node| node.as_mathml(context))).into(),
             LaTeXNode::Block(block) => block.as_mathml(context),
             LaTeXNode::Command(cmd) => cmd.as_mathml(context),
-            LaTeXNode::Text { .. } => {
+            LaTeXNode::MathText { .. } => {
                 todo!()
             }
             LaTeXNode::Number { number } => MathML::Number(Box::new(MathNumber::new(number))),
@@ -24,6 +24,12 @@ impl<'i> LaTeXNode<'i> {
             }
             LaTeXNode::NewLine => MathML::NewLine,
             LaTeXNode::Ampersand => MathML::Ampersand,
+            LaTeXNode::ArticleRoot { .. } => {
+                todo!()
+            }
+            LaTeXNode::ArticleText { .. } => {
+                todo!()
+            }
         }
     }
 }
@@ -48,6 +54,13 @@ impl<'i> LaTeXBlock<'i> {
 impl<'i> LaTeXCommand<'i> {
     pub fn as_mathml(&self, context: &LaTeXEngine) -> MathML {
         match self.name {
+            "usepackage" => return MathML::Nothing,
+            "operatorname" => match self.children.as_slice() {
+                [] => panic!("operatorname command must have exactly one argument"),
+                [head, rest @ ..] => {
+                    return MathFunction::new(head.as_identifier(), rest.iter().map(|node| node.as_mathml(context))).into();
+                }
+            },
             kind @ ("frac" | "dfrac") => match self.children.as_slice() {
                 [] => panic!("frac command must have at least two arguments"),
                 [numerator] => panic!("frac command must have at least two arguments"),
@@ -65,23 +78,19 @@ impl<'i> LaTeXCommand<'i> {
                     return terms.into();
                 }
             },
-            _ => {}
-        }
-        if self.name.eq("binom") {
-            match self.children.as_slice() {
-                [numerator, denominator] => {
-                    return binom(numerator.as_mathml(context), denominator.as_mathml(context));
+            "binom" => match self.children.as_slice() {
+                [numerator, denominator, rest @ ..] => {
+                    let term = binom(numerator.as_mathml(context), denominator.as_mathml(context));
+                    if rest.len() == 0 {
+                        return term;
+                    }
+                    let mut terms = MathRow::new(vec![term]);
+                    terms.mut_items().extend(rest.iter().map(|node| node.as_mathml(context)));
+                    return terms.into();
                 }
                 _ => panic!("binom command must have exactly two arguments"),
-            }
-        }
-        if self.name.eq("operatorname") {
-            match self.children.as_slice() {
-                [] => panic!("operatorname command must have exactly one argument"),
-                [head, rest @ ..] => {
-                    return MathFunction::new(head.as_identifier(), rest.iter().map(|node| node.as_mathml(context))).into();
-                }
-            }
+            },
+            _ => {}
         }
         if let Some(s) = context.get_function(&self.name) {
             return MathFunction::new(s, self.children.iter().map(|node| node.as_mathml(context))).into();

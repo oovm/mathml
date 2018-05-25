@@ -1,14 +1,14 @@
 use super::*;
 
-impl<'i> LaTeXBlock<'i> {
-    pub fn parse(input: ParseState<'i>) -> ParseResult<LaTeXBlock<'i>> {
+impl<'i> AsciiBlock<'i> {
+    pub fn parse(input: ParseState<'i>) -> ParseResult<AsciiBlock<'i>> {
         let (state, begin) = input.skip(whitespace).match_fn(parse_begin)?;
-        let (state, children) = state.skip(whitespace).match_repeats(LaTeXNode::parse_atomic)?;
+        let (state, children) = state.skip(whitespace).match_repeats(AsciiNode::parse_atomic)?;
         let (state, end) = state.skip(whitespace).match_fn(parse_end)?;
         if begin != end {
             tracing::warn!("Mismatched begin/end: {} vs {}", begin, end);
         }
-        state.finish(LaTeXBlock { kind: begin, children })
+        state.finish(AsciiBlock { kind: begin, children })
     }
 }
 

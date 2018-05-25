@@ -16,18 +16,39 @@ pub fn parse_latex(s: &str) -> Result<LaTeXNode, StopBecause> {
 
 #[derive(Clone, Debug)]
 pub enum LaTeXNode<'i> {
-    Root { children: Vec<LaTeXNode<'i>> },
-    Row { children: Vec<LaTeXNode<'i>> },
+    ArticleRoot {
+        children: Vec<LaTeXNode<'i>>,
+    },
+    ArticleText {
+        text: &'i str,
+    },
+    MathRoot {
+        children: Vec<LaTeXNode<'i>>,
+    },
+    Row {
+        children: Vec<LaTeXNode<'i>>,
+    },
     Block(LaTeXBlock<'i>),
     Command(LaTeXCommand<'i>),
-    Text { text: &'i str },
-    Number { number: &'i str },
-    Operation { operator: &'i str },
-    Superscript { lhs: Box<LaTeXNode<'i>>, rhs: Box<LaTeXNode<'i>> },
-    Letter { identifier: &'i str },
-    // `\\`
+    MathText {
+        text: &'i str,
+    },
+    Number {
+        number: &'i str,
+    },
+    Operation {
+        operator: &'i str,
+    },
+    Superscript {
+        lhs: Box<LaTeXNode<'i>>,
+        rhs: Box<LaTeXNode<'i>>,
+    },
+    Letter {
+        identifier: &'i str,
+    },
+    /// `\\`
     NewLine,
-    // `&`
+    /// `&`
     Ampersand,
 }
 

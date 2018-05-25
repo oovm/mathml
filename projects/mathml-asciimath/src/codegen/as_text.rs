@@ -1,48 +1,48 @@
 use super::*;
 
-impl<'i> LaTeXNode<'i> {
+impl<'i> AsciiNode<'i> {
     pub fn as_identifier(&self) -> &'i str {
         match self {
-            LaTeXNode::Letter { identifier } => identifier,
-            LaTeXNode::Operation { operator } => operator,
+            AsciiNode::Letter { identifier } => identifier,
+            AsciiNode::Operation { operator } => operator,
             _ => "",
         }
     }
 }
 
-impl<'i> Display for LaTeXNode<'i> {
+impl<'i> Display for AsciiNode<'i> {
     fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
         match self {
-            LaTeXNode::Root { .. } => {
+            AsciiNode::Root { .. } => {
                 todo!()
             }
-            LaTeXNode::Row { children } => {
+            AsciiNode::Row { children } => {
                 for child in children {
                     write!(f, "{}", child)?;
                 }
                 Ok(())
             }
-            LaTeXNode::Block(_) => {
+            AsciiNode::Block(_) => {
                 todo!()
             }
-            LaTeXNode::Command { .. } => {
+            AsciiNode::Command { .. } => {
                 todo!()
             }
-            LaTeXNode::Text { .. } => {
+            AsciiNode::Text { .. } => {
                 todo!()
             }
-            LaTeXNode::Number { number } => f.write_str(number),
-            LaTeXNode::Operation { .. } => {
+            AsciiNode::Number { number } => f.write_str(number),
+            AsciiNode::Operation { .. } => {
                 todo!()
             }
-            LaTeXNode::Superscript { .. } => {
+            AsciiNode::Superscript { .. } => {
                 todo!()
             }
-            LaTeXNode::Letter { .. } => {
+            AsciiNode::Letter { .. } => {
                 todo!()
             }
-            LaTeXNode::NewLine => f.write_str("\\\\"),
-            LaTeXNode::Ampersand => f.write_str("&"),
+            AsciiNode::NewLine => f.write_str("\\\\"),
+            AsciiNode::Ampersand => f.write_str("&"),
         }
     }
 }

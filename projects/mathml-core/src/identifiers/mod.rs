@@ -104,24 +104,24 @@ impl MathText {
 
 impl MathML {
     /// Creates a new [`MathIdentifier`] with the [`FontVariant::Italic`] variant.
-    pub fn identifier<S>(text: S) -> MathIdentifier
+    pub fn identifier<S>(text: S) -> Self
     where
         S: ToString,
     {
-        MathIdentifier::italic(text)
+        MathIdentifier::italic(text).into()
     }
     /// Creates a new [`MathIdentifier`] with the [`FontVariant::Normal`] variant.
-    pub fn text<S>(text: S) -> MathText
+    pub fn text<S>(text: S) -> Self
     where
         S: ToString,
     {
-        MathText::text(text)
+        MathText::text(text).into()
     }
     /// Creates a new [`MathText`] with the [`FontVariant::Normal`] variant.
-    pub fn string<S>(text: S) -> MathText
+    pub fn string<S>(text: S) -> Self
     where
         S: ToString,
     {
-        MathText::string(text)
+        MathText::string(text).into()
     }
 }

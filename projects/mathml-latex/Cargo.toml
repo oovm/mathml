@@ -1,6 +1,6 @@
 [package]
 name = "mathml-latex"
-version = "0.0.1"
+version = "0.0.2"
 authors = ["Aster <192607617@qq.com>"]
 description = "Convert between MathML and LaTeX."
 repository = "https://github.com/oovm/mathml"
@@ -13,14 +13,15 @@ edition = "2021"
 tracing = "0.1.37"
 
 [dependencies.pex]
-version = "0.0.7"
+version = "0.0.8"
 #path = "C:\\Users\\Dell\\CLionProjects\\pex\\projects\\pex-core"
 
 [dependencies.mathml-core]
-version = "0.0.*"
+version = "0.1.*"
 path = "../mathml-core"
 
 [dev-dependencies]
 
 [features]
 default = []
+

@@ -1,4 +1,4 @@
-use crate::{LaTeXEngine, LaTeXNode};
+use crate::{AsciiNode, LaTeXEngine};
 
 use std::fmt::{Display, Formatter};
 
