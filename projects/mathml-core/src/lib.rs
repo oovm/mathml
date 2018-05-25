@@ -16,10 +16,10 @@ pub mod helpers;
 
 pub use crate::{
     ast::MathML,
-    blocks::{MathFunction, MathPhantom, MathRoot, MathRow, MathTable},
+    blocks::{MathFunction, MathPhantom, MathRoot, MathRow, MathStyle, MathTable},
     fractions::{LineThickness, MathFraction},
-    identifiers::{FontVariant, MathIdentifier},
-    numbers::MathNumber,
-    operators::{MathFenced, MathMultiScript, MathOperator, MathSpace, MathUnderOver},
+    identifiers::{FontVariant, MathIdentifier, MathText},
+    numbers::{MathError, MathNumber},
+    operators::{MathFenced, MathMultiScript, MathOperator, MathSpace, MathSqrt, MathUnderOver},
     traits::MathElement,
 };

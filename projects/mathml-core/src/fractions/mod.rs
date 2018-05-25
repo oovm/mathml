@@ -1,6 +1,9 @@
-use crate::MathML;
-use std::fmt::{Display, Formatter};
-
+use crate::{MathElement, MathML};
+use std::{
+    collections::BTreeMap,
+    fmt::{Display, Formatter},
+};
+mod constructors;
 mod display;
 
 /// The [`<mfrac>`](https://developer.mozilla.org/en-US/docs/Web/MathML/Element/mfrac) element is used to display fractions.
@@ -30,29 +33,4 @@ pub enum LineThickness {
     Thick,
     /// <math><mfrac linethickness="length">1</mfrac></math>
     Length(u8),
-}
-
-impl Default for LineThickness {
-    fn default() -> Self {
-        LineThickness::Medium
-    }
-}
-
-impl MathFraction {
-    /// Creates a new [`MathFraction`].
-    pub fn new<N, D>(numerator: N, denominator: D) -> Self
-    where
-        N: Into<MathML>,
-        D: Into<MathML>,
-    {
-        Self { numerator: numerator.into(), denominator: denominator.into(), line_thickness: Default::default() }
-    }
-    /// Creates a new [`MathFraction`] with the given [`LineThickness`].
-    pub fn with_thickness<T>(mut self, line_thickness: T) -> Self
-    where
-        T: Into<LineThickness>,
-    {
-        self.line_thickness = line_thickness.into();
-        self
-    }
 }

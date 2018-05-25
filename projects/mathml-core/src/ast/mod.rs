@@ -1,11 +1,8 @@
 mod display;
 
 use crate::{
-    blocks::{MathRow, MathStyle},
-    identifiers::MathText,
-    operators::{MathOperator, MathSqrt, MathUnderOver},
-    MathFenced, MathFraction, MathFunction, MathIdentifier, MathMultiScript, MathNumber, MathPhantom, MathRoot, MathSpace,
-    MathTable,
+    MathError, MathFenced, MathFraction, MathFunction, MathIdentifier, MathMultiScript, MathNumber, MathOperator, MathPhantom,
+    MathRoot, MathRow, MathSpace, MathSqrt, MathStyle, MathTable, MathText, MathUnderOver,
 };
 use std::fmt::{Display, Formatter};
 
@@ -34,7 +31,7 @@ pub enum MathML {
     MultiScripts(Box<MathMultiScript>),
     /// [`<munder>`](https://developer.mozilla.org/en-US/docs/Web/MathML/Element/munder) / [`<mover>`](https://developer.mozilla.org/en-US/docs/Web/MathML/Element/mover) / [`<munderover>`](https://developer.mozilla.org/en-US/docs/Web/MathML/Element/munderover)
     UnderOver(Box<MathUnderOver>),
-    /// Used for compatibility of `\operatorname` in LaTeX
+    /// Used for compatibility of [`\operatorname`]() in LaTeX
     Function(Box<MathFunction>),
     /// [`<msqrt>`](https://developer.mozilla.org/en-US/docs/Web/MathML/Element/msqrt)
     Sqrt(Box<MathSqrt>),
@@ -49,13 +46,13 @@ pub enum MathML {
     /// [`<mtable>`](https://developer.mozilla.org/en-US/docs/Web/MathML/Element/mtable)
     Table(Box<MathTable>),
     /// Used for unknown element
-    Undefined(String),
-    /// Used for compatibility of `&nbsp;` in HTML
-    Nothing,
+    Undefined(Box<MathError>),
     /// Used for compatibility of `&` in LaTeX
     Ampersand,
     /// Used for compatibility of `\\` in LaTeX
     NewLine,
+    /// Used for compatibility of `&nbsp;` in HTML
+    Nothing,
 }
 
 macro_rules! make_mathml {
@@ -112,5 +109,7 @@ make_mathml! {
     MathFraction    => Frac,
     MathPhantom     => Phantom,
     MathStyle       => Style,
-    MathFenced      => Fenced
+    MathFenced      => Fenced,
+    
+    MathError       => Undefined
 }

@@ -12,6 +12,7 @@ pub struct MathIdentifier {
     variant: FontVariant,
 }
 
+/// The [`<mtext>`](https://developer.mozilla.org/en-US/docs/Web/MathML/Element/mtext) element is used to display text in a math formula.
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub struct MathText {
     is_string: bool,
