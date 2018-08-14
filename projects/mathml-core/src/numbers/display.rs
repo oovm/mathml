@@ -13,6 +13,7 @@ impl Display for MathError {
     }
 }
 
+// noinspection SpellCheckingInspection
 impl Display for MathFraction {
     fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
         match self.line_thickness {

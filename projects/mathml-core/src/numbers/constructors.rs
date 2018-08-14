@@ -1,7 +1,7 @@
 use super::*;
 
 impl MathError {
-    /// Creates a new [`MathError`].
+    /// Creates a new [`MathError`] with the given message.
     pub fn new<S>(message: S) -> Self
     where
         S: ToString,
@@ -11,7 +11,7 @@ impl MathError {
 }
 
 impl MathNumber {
-    /// Creates a new [`MathNumber`] with the given number.
+    /// Creates a new [`MathNumber`] with the given value.
     pub fn new<S>(text: S) -> Self
     where
         S: ToString,
@@ -52,7 +52,7 @@ impl MathElement for MathFraction {
 }
 
 impl MathFraction {
-    /// Creates a new [`MathFraction`].
+    /// Creates a new [`MathFraction`] with the given numerator and denominator.
     pub fn new<N, D>(numerator: N, denominator: D) -> Self
     where
         N: Into<MathML>,
@@ -60,7 +60,7 @@ impl MathFraction {
     {
         Self { numerator: numerator.into(), denominator: denominator.into(), line_thickness: Default::default() }
     }
-    /// Creates a new [`MathFraction`] with the given [`LineThickness`].
+    /// Config the thickness of the line between the numerator and denominator, zero means no line.
     pub fn with_thickness<T>(mut self, line_thickness: T) -> Self
     where
         T: Into<LineThickness>,
@@ -83,6 +83,14 @@ impl MathML {
         N: Into<MathNumber>,
     {
         n.into().into()
+    }
+    /// Creates a new [`MathFraction`] with the given numerator and denominator.
+    pub fn fraction<N, D>(numerator: N, denominator: D) -> Self
+    where
+        N: Into<MathML>,
+        D: Into<MathML>,
+    {
+        MathFraction::new(numerator, denominator).into()
     }
     /// Creates a new [`MathError`] with the given message.
     pub fn error<S>(message: S) -> Self

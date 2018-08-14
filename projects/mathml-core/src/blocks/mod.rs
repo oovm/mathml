@@ -8,6 +8,7 @@ mod display;
 
 /// <https://developer.mozilla.org/en-US/docs/Web/MathML/Element/math>
 #[derive(Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
 pub struct MathRoot {
     children: Vec<MathML>,
     attributes: BTreeMap<String, String>,
@@ -15,6 +16,7 @@ pub struct MathRoot {
 
 /// <https://developer.mozilla.org/en-US/docs/Web/MathML/Element/mi>
 #[derive(Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
 pub struct MathFunction {
     name: String,
     body: Vec<MathML>,
@@ -29,19 +31,22 @@ pub struct MathFunction {
 /// - It can improve the display by possibly affecting spacing and preventing line breaks.
 /// - It simplifies the interpretation of the expression by automated systems such as computer algebra systems and audio renderers.
 #[derive(Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
 pub struct MathRow {
+    grouped: bool,
     children: Vec<MathML>,
-    has_grouping: bool,
 }
 
 /// The [`<mphantom>`](https://developer.mozilla.org/en-US/docs/Web/MathML/Element/mphantom) element is rendered invisibly, but dimensions (such as height, width, and baseline position) are still kept.
 #[derive(Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
 pub struct MathPhantom {
     inner: MathML,
 }
 
 /// The [`<mspace>`](https://developer.mozilla.org/en-US/docs/Web/MathML/Element/mspace) element is used to insert space characters into a mathematical formula.
 #[derive(Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
 pub struct MathStyle {
     base: MathML,
     attributes: BTreeMap<String, String>,
@@ -51,6 +56,7 @@ pub struct MathStyle {
 ///
 /// These elements are similar to `<table>`, `<tr>` and `<td>` elements of HTML.
 #[derive(Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
 pub struct MathTable {
     stream: Vec<MathML>,
     attributes: BTreeMap<String, String>,

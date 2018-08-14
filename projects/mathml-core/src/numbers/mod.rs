@@ -11,6 +11,7 @@ mod display;
 ///
 /// However, it is also allowed to have arbitrary text in it which is actually a numeric quantity, for example "eleven".
 #[derive(Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
 pub struct MathNumber {
     number: String,
 }
@@ -19,6 +20,7 @@ pub struct MathNumber {
 ///
 /// It can also be used to mark up fraction-like objects such as binomial coefficients and Legendre symbols.
 #[derive(Clone, Debug, PartialEq)]
+#[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
 pub struct MathFraction {
     numerator: MathML,
     denominator: MathML,
@@ -26,13 +28,14 @@ pub struct MathFraction {
 }
 
 // noinspection SpellCheckingInspection
-/// Line thickness for [`<mmfraci>`](https://developer.mozilla.org/en-US/docs/Web/MathML/Element/mfrac),
-/// used as [`linethickness`](https://developer.mozilla.org/en-US/docs/Web/MathML/Global_attributes/mathvariant) attribute.
+/// Line thickness for [`<mfrac>`](https://developer.mozilla.org/en-US/docs/Web/MathML/Element/mfrac),
+/// used as [`linethickness`](https://developer.mozilla.org/en-US/docs/Web/MathML/Values#legacy_mathml_lengths) attribute.
 ///
 /// ## Polyfill
 ///
 /// We provide a polyfill for this attribute, which supports deprecated values `thin`, `medium`, `thick` and `length`.
 #[derive(Debug, Clone, Copy, PartialEq)]
+#[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
 pub enum LineThickness {
     /// `1rem`
     Thin,
@@ -44,8 +47,11 @@ pub enum LineThickness {
     Length(u8),
 }
 
-/// The [`<merror>`](https://developer.mozilla.org/en-US/docs/Web/MathML/Element/merror) element is used to display fractions.
+/// The [`<merror>`](https://developer.mozilla.org/en-US/docs/Web/MathML/Element/merror) element is used to display contents as error messages.
+///
+/// The intent of this element is to provide a standard way for programs that generate MathML from other input to report syntax errors.
 #[derive(Clone, Debug, PartialEq)]
+#[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
 pub struct MathError {
     message: String,
 }

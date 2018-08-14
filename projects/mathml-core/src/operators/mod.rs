@@ -15,6 +15,7 @@ mod display;
 ///
 /// Besides operators in strict mathematical meaning, this element also includes "operators" like parentheses, separators like comma and semicolon, or "absolute value" bars.
 #[derive(Clone, Debug, PartialEq)]
+#[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
 pub struct MathOperator {
     operator: String,
     attributes: BTreeMap<String, String>,
@@ -22,12 +23,14 @@ pub struct MathOperator {
 
 /// The [`<mspace>`](https://developer.mozilla.org/en-US/docs/Web/MathML/Element/mspace) element is used to display a blank space, whose size is set by its attributes.
 #[derive(Clone, Debug, PartialEq)]
+#[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
 pub struct MathSpace {
     attributes: BTreeMap<String, String>,
 }
 
 /// The [`<mroot>`](https://developer.mozilla.org/en-US/docs/Web/MathML/Element/mroot) or [`<msqrt>`](https://developer.mozilla.org/en-US/docs/Web/MathML/Element/msqrt) element is used to display roots with an explicit index.
 #[derive(Clone, Debug, PartialEq)]
+#[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
 pub struct MathSqrt {
     base: MathML,
     surd: Option<MathML>,
@@ -35,6 +38,7 @@ pub struct MathSqrt {
 
 /// The [`<mmultiscripts>`](https://developer.mozilla.org/en-US/docs/Web/MathML/Element/mmultiscripts) element is used to attach an arbitrary number of subscripts and superscripts to an expression at once
 #[derive(Clone, Debug, PartialEq)]
+#[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
 pub struct MathMultiScript {
     base: MathML,
     ru: Vec<MathML>,
@@ -46,6 +50,7 @@ pub struct MathMultiScript {
 
 /// The [`<munderover>`](https://developer.mozilla.org/en-US/docs/Web/MathML/Element/munderover) element is used to attach accents or limits both under and over an expression.
 #[derive(Clone, Debug, PartialEq)]
+#[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
 pub struct MathUnderOver {
     base: MathML,
     under: Option<MathML>,
@@ -59,6 +64,7 @@ pub struct MathUnderOver {
 ///
 /// Since it is deprecated by the MathML standard, we provide a polyfill to `<mrow>` for this element.
 #[derive(Clone, Debug, PartialEq)]
+#[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
 pub struct MathFenced {
     base: Vec<MathML>,
     open: char,

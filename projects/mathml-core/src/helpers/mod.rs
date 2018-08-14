@@ -23,7 +23,7 @@ where
     N: Into<MathML>,
     D: Into<MathML>,
 {
-    MathFraction::new(numerator, denominator).into()
+    MathML::fraction(numerator, denominator)
 }
 
 // noinspection SpellCheckingInspection

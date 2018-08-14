@@ -9,6 +9,7 @@ use std::fmt::{Display, Formatter};
 // noinspection SpellCheckingInspection
 /// Represent the [MathML](https://w3c.github.io/mathml/) AST node, For semantic considerations, not exactly the same as the standard.
 #[derive(Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
 pub enum MathML {
     /// [`<math>`](https://developer.mozilla.org/en-US/docs/Web/MathML/Element/math)
     Root(Box<MathRoot>),

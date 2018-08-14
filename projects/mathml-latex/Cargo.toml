@@ -19,6 +19,7 @@ version = "0.0.8"
 [dependencies.mathml-core]
 version = "0.1.*"
 path = "../mathml-core"
+features = ["serde"]
 
 [dev-dependencies]
 

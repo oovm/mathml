@@ -1,19 +1,23 @@
 use crate::{helpers::safe_html_str, MathML};
 use std::fmt::{Display, Formatter};
 
+mod constructors;
 mod display;
 
 /// The [`<mi>`](https://developer.mozilla.org/en-US/docs/Web/MathML/Element/mi) element indicates that the content should be rendered as an identifier such as function names, variables or symbolic constants.
 ///
 /// You can also have arbitrary text in it to mark up terms.
 #[derive(Debug, Clone, PartialEq, Eq)]
+#[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
 pub struct MathIdentifier {
     identifier: String,
     variant: FontVariant,
 }
 
+// noinspection SpellCheckingInspection
 /// The [`<mtext>`](https://developer.mozilla.org/en-US/docs/Web/MathML/Element/mtext) element is used to display text in a math formula.
 #[derive(Debug, Clone, PartialEq, Eq)]
+#[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
 pub struct MathText {
     is_string: bool,
     text: String,
@@ -22,7 +26,9 @@ pub struct MathText {
 // noinspection SpellCheckingInspection
 /// Font variant for [`<mi>`](https://developer.mozilla.org/en-US/docs/Web/MathML/Element/mi),
 /// used as [`mathvariant`](https://developer.mozilla.org/en-US/docs/Web/MathML/Global_attributes/mathvariant) attribute.
+#[repr(u8)]
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
+#[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
 pub enum FontVariant {
     /// <math><mi mathvariant="normal">ABCDEFGHIJKLMNOPQRSTUVWXYZ</mi></math>
     Normal,
@@ -52,77 +58,4 @@ pub enum FontVariant {
     SansSerifBoldItalic,
     /// <math><mi mathvariant="monospace">ABCDEFGHIJKLMNOPQRSTUVWXYZ</mi></math>
     Monospace,
-}
-
-impl MathIdentifier {
-    /// Creates a new [`MathIdentifier`] with the given [`FontVariant`].
-    pub fn new<S>(text: S, variant: FontVariant) -> Self
-    where
-        S: ToString,
-    {
-        Self { identifier: text.to_string(), variant }
-    }
-    /// Creates a new [`MathIdentifier`] with the [`FontVariant::Normal`] variant.
-    pub fn normal<S>(text: S) -> Self
-    where
-        S: ToString,
-    {
-        Self { identifier: text.to_string(), variant: FontVariant::Normal }
-    }
-    /// Creates a new [`MathIdentifier`] with the [`FontVariant::Italic`] variant.
-    pub fn italic<S>(text: S) -> Self
-    where
-        S: ToString,
-    {
-        Self { identifier: text.to_string(), variant: FontVariant::Italic }
-    }
-    /// Gets the font variant of the identifier.
-    pub fn get_variant(&self) -> FontVariant {
-        self.variant
-    }
-    /// Gets the identifier of the identifier.
-    pub fn get_identifier(&self) -> &str {
-        &self.identifier
-    }
-}
-
-impl MathText {
-    /// Creates a new [`MathText`] with the given [`FontVariant`].
-    pub fn text<S>(text: S) -> Self
-    where
-        S: ToString,
-    {
-        Self { text: text.to_string(), is_string: false }
-    }
-    /// Creates a new [`MathText`] with the [`FontVariant::Normal`] variant.
-    pub fn string<S>(text: S) -> Self
-    where
-        S: ToString,
-    {
-        Self { text: text.to_string(), is_string: true }
-    }
-}
-
-impl MathML {
-    /// Creates a new [`MathIdentifier`] with the [`FontVariant::Italic`] variant.
-    pub fn identifier<S>(text: S) -> Self
-    where
-        S: ToString,
-    {
-        MathIdentifier::italic(text).into()
-    }
-    /// Creates a new [`MathIdentifier`] with the [`FontVariant::Normal`] variant.
-    pub fn text<S>(text: S) -> Self
-    where
-        S: ToString,
-    {
-        MathText::text(text).into()
-    }
-    /// Creates a new [`MathText`] with the [`FontVariant::Normal`] variant.
-    pub fn string<S>(text: S) -> Self
-    where
-        S: ToString,
-    {
-        MathText::string(text).into()
-    }
 }

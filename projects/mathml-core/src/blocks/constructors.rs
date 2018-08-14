@@ -45,14 +45,14 @@ impl MathRow {
     where
         I: IntoIterator<Item = MathML>,
     {
-        Self { children: items.into_iter().collect(), has_grouping: false }
+        Self { children: items.into_iter().collect(), grouped: false }
     }
     /// Create a simple math space without any attributes, the unit is `rem`.
     pub fn group<I>(items: I) -> Self
     where
         I: IntoIterator<Item = MathML>,
     {
-        Self { children: items.into_iter().collect(), has_grouping: true }
+        Self { children: items.into_iter().collect(), grouped: true }
     }
     /// Create a simple math space without any attributes, the unit is `rem`.
     pub fn get_items(&self) -> &[MathML] {
