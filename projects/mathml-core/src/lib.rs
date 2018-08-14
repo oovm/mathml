@@ -6,7 +6,6 @@
 
 mod ast;
 mod blocks;
-mod fractions;
 mod identifiers;
 mod numbers;
 mod operators;
@@ -17,9 +16,8 @@ pub mod helpers;
 pub use crate::{
     ast::MathML,
     blocks::{MathFunction, MathPhantom, MathRoot, MathRow, MathStyle, MathTable},
-    fractions::{LineThickness, MathFraction},
     identifiers::{FontVariant, MathIdentifier, MathText},
-    numbers::{MathError, MathNumber},
+    numbers::{LineThickness, MathError, MathFraction, MathNumber},
     operators::{MathFenced, MathMultiScript, MathOperator, MathSpace, MathSqrt, MathUnderOver},
     traits::MathElement,
 };
