@@ -8,6 +8,7 @@ documentation = "https://docs.rs/mathml-latex"
 readme = "Readme.md"
 license = "MPL-2.0"
 edition = "2021"
+exclude = ["tests/**"]
 
 [dependencies]
 tracing = "0.1.37"

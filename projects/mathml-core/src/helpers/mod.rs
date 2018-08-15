@@ -100,7 +100,7 @@ where
 ///
 /// # Input
 ///
-/// ```
+/// ```no_run
 /// # use mathml_core::helpers::legendre_symbols;
 /// legendre_symbols('a', 'b');
 /// ```
