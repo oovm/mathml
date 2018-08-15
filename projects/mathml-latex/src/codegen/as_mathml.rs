@@ -1,11 +1,12 @@
 use super::*;
 use crate::{block::LaTeXCommand, LaTeXBlock};
 use mathml_core::{
-    helpers::{binom, bmatrix, cases, dfrac, frac, matrix, pmatrix, vmatrix, Bmatrix, Pmatrix, Vmatrix},
+    helpers::{binom, bmatrix, cases, dfrac, frac, matrix, pmatrix, vmatrix, Bmatrix, Vmatrix},
     MathFunction, MathIdentifier, MathML, MathMultiScript, MathNumber, MathOperator, MathRoot, MathRow, MathSpace,
 };
 
 impl<'i> LaTeXNode<'i> {
+    /// Converts the LaTeX node into a MathML node.
     pub fn as_mathml(&self, context: &LaTeXEngine) -> MathML {
         match self {
             LaTeXNode::MathRoot { children } => MathRoot::new(children.iter().map(|node| node.as_mathml(context))).into(),
@@ -41,7 +42,6 @@ impl<'i> LaTeXBlock<'i> {
             "matrix" => matrix(stream),
             "Bmatrix" => Bmatrix(stream),
             "bmatrix" => bmatrix(stream),
-            "Pmatrix" => Pmatrix(stream),
             "pmatrix" => pmatrix(stream),
             "Vmatrix" => Vmatrix(stream),
             "vmatrix" => vmatrix(stream),

@@ -57,7 +57,7 @@ impl MathML {
     {
         MathIdentifier::italic(text).into()
     }
-    /// Creates a new [`MathIdentifier`] with the [`FontVariant::Normal`] variant.
+    /// Creates a new [`MathText`] with the [`FontVariant::Normal`] variant.
     pub fn text<S>(text: S) -> Self
     where
         S: ToString,

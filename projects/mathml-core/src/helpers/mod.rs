@@ -1,12 +1,9 @@
 #![allow(non_snake_case)]
 #![allow(unused_variables)]
 #![doc = include_str!("readme.md")]
-
 mod matrix;
-
-use crate::{blocks::MathStyle, LineThickness, MathFraction, MathML, MathMultiScript, MathRow, MathTable};
-
 pub use self::matrix::*;
+use crate::{blocks::MathStyle, LineThickness, MathElement, MathFraction, MathML, MathMultiScript, MathRow, MathTable};
 
 /// Build a normal fraction.
 ///
@@ -103,13 +100,18 @@ where
 ///
 /// # Input
 ///
-/// ```tex
-/// \begin{vmatrix} a & b \\ c & d \end{vmatrix}
+/// ```
+/// # use mathml_core::helpers::legendre_symbols;
+/// legendre_symbols('a', 'b');
 /// ```
 ///
 /// # Output
 #[doc = include_str!("vmatrix.xml")]
-pub fn legendre_symbols(numerator: MathML, denominator: MathML) -> MathML {
+pub fn legendre_symbols<N, D>(numerator: N, denominator: D) -> MathML
+where
+    N: Into<MathML>,
+    D: Into<MathML>,
+{
     todo!()
 }
 

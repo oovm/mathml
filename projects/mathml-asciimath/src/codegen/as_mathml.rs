@@ -1,7 +1,7 @@
 use super::*;
 use crate::{block::LaTeXCommand, AsciiBlock};
 use mathml_core::{
-    helpers::{binom, bmatrix, cases, dfrac, frac, matrix, pmatrix, vmatrix, Bmatrix, Pmatrix, Vmatrix},
+    helpers::{binom, bmatrix, cases, dfrac, frac, matrix, pmatrix, vmatrix, Bmatrix, Vmatrix},
     MathFunction, MathIdentifier, MathML, MathMultiScript, MathNumber, MathOperator, MathRoot, MathRow, MathSpace,
 };
 
@@ -35,7 +35,6 @@ impl<'i> AsciiBlock<'i> {
             "matrix" => matrix(stream),
             "Bmatrix" => Bmatrix(stream),
             "bmatrix" => bmatrix(stream),
-            "Pmatrix" => Pmatrix(stream),
             "pmatrix" => pmatrix(stream),
             "Vmatrix" => Vmatrix(stream),
             "vmatrix" => vmatrix(stream),

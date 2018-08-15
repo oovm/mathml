@@ -52,12 +52,12 @@ pub fn test_matrix() {
         "<mtable><mtr><mtd><mi>a</mi></mtd><mtd><mi>b</mi></mtd></mtr><mtr><mtd><mi>c</mi></mtd><mtd><mi>d</mi></mtd></mtr></mtable>",
     )
     .unwrap();
-    assert_mathml(r#"\begin{bmatrix} a & b \\ c & d \end{bmatrix}"#, "<mrow><mo>[</mo><mtable><mtr><mtd><mi>a</mi></mtd><mtd><mi>b</mi></mtd></mtr><mtr><mtd><mi>c</mi></mtd><mtd><mi>d</mi></mtd></mtr></mtable><mo>]</mo></mrow>").unwrap();
-    assert_mathml(r#"\begin{Bmatrix} a & b \\ c & d \end{Bmatrix}"#, "<mrow><mo>{</mo><mtable><mtr><mtd><mi>a</mi></mtd><mtd><mi>b</mi></mtd></mtr><mtr><mtd><mi>c</mi></mtd><mtd><mi>d</mi></mtd></mtr></mtable><mo>}</mo></mrow>").unwrap();
-    assert_mathml(r#"\begin{vmatrix} a & b \\ c & d \end{vmatrix}"#, "<mrow><mo>|</mo><mtable><mtr><mtd><mi>a</mi></mtd><mtd><mi>b</mi></mtd></mtr><mtr><mtd><mi>c</mi></mtd><mtd><mi>d</mi></mtd></mtr></mtable><mo>|</mo></mrow>").unwrap();
-    assert_mathml(r#"\begin{Vmatrix} a & b \\ c & d \end{Vmatrix}"#, "<mrow><mo>‖</mo><mtable><mtr><mtd><mi>a</mi></mtd><mtd><mi>b</mi></mtd></mtr><mtr><mtd><mi>c</mi></mtd><mtd><mi>d</mi></mtd></mtr></mtable><mo>‖</mo></mrow>").unwrap();
+    assert_refine(r#"\begin{bmatrix} a & b \\ c & d \end{bmatrix}"#, include_str!("bmatrix.xml")).unwrap();
+    assert_refine(r#"\begin{Bmatrix} a & b \\ c & d \end{Bmatrix}"#, include_str!("bmatrix2.xml")).unwrap();
+    assert_refine(r#"\begin{vmatrix} a & b \\ c & d \end{vmatrix}"#, include_str!("vmatrix.xml")).unwrap();
+    assert_refine(r#"\begin{Vmatrix} a & b \\ c & d \end{Vmatrix}"#, include_str!("vmatrix2.xml")).unwrap();
     assert_refine(include_str!("matrix_nested.tex"), include_str!("matrix_nested.xml")).unwrap();
-    assert_mathml(r#"\begin{cases} a & b & c\\ d & e & f \\ \end{cases}"#, r#"<mrow><mo>{</mo><mtable columnalign="left"><mtr><mtd><mi>a</mi></mtd><mtd><mi>b</mi></mtd><mtd><mi>c</mi></mtd></mtr><mtr><mtd><mi>d</mi></mtd><mtd><mi>e</mi></mtd><mtd><mi>f</mi></mtd></mtr><mtr><mtd></mtd></mtr></mtable></mrow>"#).unwrap();
+    assert_refine(include_str!("piece_cases.tex"), include_str!("piece_cases.xml")).unwrap();
 }
 
 pub fn assert_mathml(source: &str, target: &str) -> Result<(), StopBecause> {
@@ -65,12 +65,14 @@ pub fn assert_mathml(source: &str, target: &str) -> Result<(), StopBecause> {
     Ok(())
 }
 
+#[track_caller]
 pub fn render_mathml(source: &str) -> Result<String, StopBecause> {
     let context = LaTeXEngine::builtin();
     let mathml = parse_latex(source)?.as_mathml(&context);
     Ok(format!("{}", mathml))
 }
 
+#[track_caller]
 pub fn assert_refine(source: &str, target: &str) -> Result<(), StopBecause> {
     assert_eq!(refine_string(&render_mathml(source)?), refine_string(target));
     Ok(())
