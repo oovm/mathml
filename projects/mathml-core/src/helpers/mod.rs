@@ -3,7 +3,9 @@
 #![doc = include_str!("readme.md")]
 mod matrix;
 pub use self::matrix::*;
-use crate::{blocks::MathStyle, LineThickness, MathElement, MathFraction, MathML, MathMultiScript, MathRow, MathTable};
+use crate::{
+    blocks::MathStyle, LineThickness, MathElement, MathFenced, MathFraction, MathML, MathMultiScript, MathRow, MathTable,
+};
 
 /// Build a normal fraction.
 ///
@@ -14,7 +16,7 @@ use crate::{blocks::MathStyle, LineThickness, MathElement, MathFraction, MathML,
 /// ```
 ///
 /// # Output
-#[doc = include_str!("vmatrix.xml")]
+#[doc = include_str!("isotope.xml")]
 pub fn frac<N, D>(numerator: N, denominator: D) -> MathML
 where
     N: Into<MathML>,
@@ -33,7 +35,7 @@ where
 /// ```
 ///
 /// # Output
-#[doc = include_str!("vmatrix.xml")]
+#[doc = include_str!("isotope.xml")]
 pub fn dfrac<N, D>(numerator: N, denominator: D) -> MathML
 where
     N: Into<MathML>,
@@ -51,7 +53,7 @@ where
 /// ```
 ///
 /// # Output
-#[doc = include_str!("vmatrix.xml")]
+#[doc = include_str!("isotope.xml")]
 pub fn cfrac(numerator: MathML, denominator: MathML) -> MathML {
     todo!()
 }
@@ -66,7 +68,7 @@ pub fn cfrac(numerator: MathML, denominator: MathML) -> MathML {
 /// ```
 ///
 /// # Output
-#[doc = include_str!("vmatrix.xml")]
+#[doc = include_str!("isotope.xml")]
 pub fn binom<N, D>(numerator: N, denominator: D) -> MathML
 where
     N: Into<MathML>,
@@ -86,7 +88,7 @@ where
 /// ```
 ///
 /// # Output
-#[doc = include_str!("vmatrix.xml")]
+#[doc = include_str!("isotope.xml")]
 pub fn cbinom<N, D>(numerator: N, denominator: D) -> MathML
 where
     N: Into<MathML>,
@@ -106,13 +108,13 @@ where
 /// ```
 ///
 /// # Output
-#[doc = include_str!("vmatrix.xml")]
-pub fn legendre_symbols<N, D>(numerator: N, denominator: D) -> MathML
+#[doc = include_str!("isotope.xml")]
+pub fn legendre_symbols<N, D>(numerator: N, denominator: D) -> MathFenced
 where
     N: Into<MathML>,
     D: Into<MathML>,
 {
-    todo!()
+    MathFenced::new(vec![MathFraction::new(numerator.into(), denominator.into()).into()], '(', ')')
 }
 
 /// Build a isotopic symbol.
